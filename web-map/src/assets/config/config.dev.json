@@ -1,0 +1,5 @@
+{
+    "name": "dev mapper",
+    "logging": true,
+    "apiUrl": "dev.somewhere.com"
+}

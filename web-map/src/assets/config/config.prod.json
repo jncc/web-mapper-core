@@ -1,0 +1,5 @@
+{
+    "name": "prod mapper",
+    "logging": false,
+    "apiUrl": "prod.somewhere.com"
+}
