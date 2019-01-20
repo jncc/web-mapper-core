@@ -1,0 +1,13 @@
+<div id="mapInstances">
+  <div class="container-header">
+    <h6>Map Instances</h6>
+  </div>
+  <div class="container-body">
+    <ul>
+      <li *ngFor="let mapInstance of mapInstances">
+        <h6>{{mapInstance.name}}</h6>
+        <div [innerHTML]="mapInstance.description"></div>
+      </li>
+    </ul>
+  </div>
+</div>

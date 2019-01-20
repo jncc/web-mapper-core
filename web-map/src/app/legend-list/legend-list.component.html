@@ -1,0 +1,16 @@
+<div id="legendList">
+  <div class="container-header">
+      <h6 (click)="toggleShow()">
+        <i *ngIf="show" class="btn fa fa-caret-up"></i>
+        <i *ngIf="!show" class="btn fa fa-caret-down"></i>
+        LEGEND
+      </h6>
+  </div>
+  <div [ngClass]="{'d-none': !show}" class="container-body">
+      <ul>
+          <li *ngFor="let legend of legends">
+            <app-legend-item [legendItem]="legend"></app-legend-item>
+          </li>
+        </ul>
+  </div>
+</div>

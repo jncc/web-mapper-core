@@ -1,0 +1,6 @@
+#controlsToolbar {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    box-shadow: var(--container-shadow);
+}

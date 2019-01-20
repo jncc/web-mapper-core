@@ -15,6 +15,7 @@ import Style from 'ol/style/style';
 import Icon from 'ol/style/icon';
 import Select from 'ol/interaction/select';
 import condition from 'ol/events/condition';
+import OverviewMap from 'ol/control/OverviewMap';
 
 
 
@@ -42,6 +43,12 @@ export class MapComponent implements OnInit, AfterViewInit {
   private setupMap() {
     this.map = new Map({
       target: 'map',
+      controls: [
+        new OverviewMap({
+          collapsed: false,
+          collapsible: false
+        })
+      ],
       layers: [
         new Tile({
           source: new OSM()
