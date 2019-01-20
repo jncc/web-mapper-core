@@ -27,13 +27,9 @@ html {
 
 body {
   font-family: var(--main-font-family);
-  background-color: white;
   font-weight: 400;
 }
 
-div {
-  background-color: white;
-}
   
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--heading-font-family);
@@ -73,6 +69,7 @@ img {
   border-radius: var(--container-border-radius);
   box-shadow: var(--container-shadow);
   width: 250px;
+  background-color: white;
 }
  
 .container-header {
