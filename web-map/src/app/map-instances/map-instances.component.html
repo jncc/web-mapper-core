@@ -1,8 +1,12 @@
-<div id="mapInstances">
+<div id="mapInstances" class="widget-container">
   <div class="container-header">
-    <h6>Map Instances</h6>
+    <h6 (click)="toggleShow()">
+      <i *ngIf="show" class="btn fa fa-caret-up"></i>
+      <i *ngIf="!show" class="btn fa fa-caret-down"></i>
+      Map Instances
+    </h6>
   </div>
-  <div class="container-body">
+  <div [ngClass]="{'d-none': !show}" class="container-body">
     <ul>
       <li *ngFor="let mapInstance of mapInstances">
         <h6>{{mapInstance.name}}</h6>

@@ -11,11 +11,16 @@ import { IMapConfig } from '../models/map-config.model';
 export class MapInstancesComponent implements OnInit {
 
   mapInstances: IMapInstance[];
+  show = true;
 
   constructor(private mapConfigService: MapConfigService) { }
 
   ngOnInit() {
    this.mapConfigService.config.subscribe((data: IMapConfig) => this.mapInstances = data.mapInstances);
+  }
+
+  toggleShow() {
+    this.show = !this.show;
   }
 
 }
