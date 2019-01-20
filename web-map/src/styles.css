@@ -78,7 +78,7 @@ img {
 .container-header {
     padding: var(--container-padding);
     border-bottom: 1px solid var(--border-color);
-    background-color: darkolivegreen;
+    background-color: midnightblue;
     border-radius: var(--container-border-radius);
     cursor: pointer;
 }
