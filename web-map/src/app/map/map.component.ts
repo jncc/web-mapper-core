@@ -16,8 +16,7 @@ import Icon from 'ol/style/icon';
 import Select from 'ol/interaction/select';
 import condition from 'ol/events/condition';
 import OverviewMap from 'ol/control/OverviewMap';
-
-
+import { MapService } from '../map.service';
 
 @Component({
   selector: 'app-map',
@@ -30,7 +29,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
 
-  constructor() { }
+  constructor(private mapService: MapService) { }
 
   ngOnInit() {
   }
@@ -60,6 +59,7 @@ export class MapComponent implements OnInit, AfterViewInit {
       })
     });
     this.map.getView().fit(this.mapExtent);
+    this.mapService.mapReady(this.map);
   }
 
   private addWMS() {
