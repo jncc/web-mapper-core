@@ -2,14 +2,31 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build",
+            "label": "Build",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/JNCCMapConfigEditor.csproj"
+                "${workspaceFolder}/jncc-web-api.csproj"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Deploy to Server",
+            "type": "shell",
+            "command": ".vscode/deploy.sh",
+            "windows": {
+                "command": "c:\\Program Files\\Git\\bin\\bash.exe .vscode\\deploy.sh"
+            },
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
         }
     ]
 }
