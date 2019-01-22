@@ -1,0 +1,60 @@
+@page
+@model JNCCMapConfigEditor.Pages.MapLayerItem.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>MapLayerItem</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MapLayerItem.MapLayerId" />
+            <div class="form-group">
+                <label asp-for="MapLayerItem.LayerOrder" class="control-label"></label>
+                <input asp-for="MapLayerItem.LayerOrder" class="form-control" />
+                <span asp-validation-for="MapLayerItem.LayerOrder" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="MapLayerItem.LayerVisible" /> @Html.DisplayNameFor(model => model.MapLayerItem.LayerVisible)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="MapLayerItem.Comment" class="control-label"></label>
+                <input asp-for="MapLayerItem.Comment" class="form-control" />
+                <span asp-validation-for="MapLayerItem.Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MapLayerItem.UpdatedDate" class="control-label"></label>
+                <input asp-for="MapLayerItem.UpdatedDate" class="form-control" />
+                <span asp-validation-for="MapLayerItem.UpdatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MapLayerItem.MapId" class="control-label"></label>
+                <select asp-for="MapLayerItem.MapId" class="form-control" asp-items="ViewBag.MapId"></select>
+                <span asp-validation-for="MapLayerItem.MapId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MapLayerItem.LayerId" class="control-label"></label>
+                <select asp-for="MapLayerItem.LayerId" class="form-control" asp-items="ViewBag.LayerId"></select>
+                <span asp-validation-for="MapLayerItem.LayerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

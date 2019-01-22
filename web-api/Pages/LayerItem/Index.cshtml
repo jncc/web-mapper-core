@@ -1,0 +1,54 @@
+@page
+@model JNCCMapConfigEditor.Pages.LayerItem.IndexModel
+
+@{
+    ViewData["Title"] = "Layer Index";
+}
+
+<h1>Layer Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LayerItem[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LayerItem[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LayerItem[0].ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LayerItem[0].UpdatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.LayerItem) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedDate)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.LayerId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.LayerId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.LayerId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
