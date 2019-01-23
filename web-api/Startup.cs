@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Test.Models;
 using MapConfig.Models;
 
 namespace JNCCMapConfigEditor
@@ -34,6 +35,9 @@ namespace JNCCMapConfigEditor
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            
+            services.AddDbContext<TestContext>(opt =>
+                opt.UseInMemoryDatabase("Test"));
 
             services.AddEntityFrameworkNpgsql().AddDbContext<MapConfigContext>(config =>
                 config.UseNpgsql(Configuration.GetConnectionString("JNCCWebApiDatabase")));
