@@ -63,7 +63,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   private addWMS() {
-    const wmsURl = 'https://staging.ows.emodnet-seabedhabitats.eu/emodnet/wms';
+    const wmsURl = 'https://ows.emodnet-seabedhabitats.eu/emodnet/wms';
 
     const substrateSource = new TileWMS({
       url: wmsURl,
