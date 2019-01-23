@@ -18,7 +18,7 @@
             "type": "shell",
             "command": ".vscode/deploy.sh",
             "windows": {
-                "command": "c:\\Program Files\\Git\\bin\\bash.exe .vscode\\deploy.sh"
+                "command": ".vscode\\\\deploy.sh"
             },
             "group": "test",
             "presentation": {
