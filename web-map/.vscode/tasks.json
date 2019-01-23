@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "command": "ng",
+            "type": "process",
+            "args": [
+                "serve --open"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Deploy to Server",
+            "type": "shell",
+            "command": ".vscode/deploy.sh",
+            "windows": {
+                "command": "c:\\Program Files\\Git\\bin\\bash.exe .vscode\\deploy.sh"
+            },
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}

@@ -27,6 +27,7 @@ speed-measure-plugin.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/deploy.sh
 .history/*
 
 # misc
