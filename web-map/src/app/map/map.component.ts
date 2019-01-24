@@ -55,13 +55,7 @@ export class MapComponent implements OnInit {
 
     this.map = new Map({
       target: 'map',
-      controls: [
-        new OverviewMap({
-          collapsed: false,
-          collapsible: false,
-          layers: [baseLayer]
-        })
-      ],
+      controls: [],
       layers: [
         baseLayer
       ],
@@ -69,6 +63,10 @@ export class MapComponent implements OnInit {
     });
     this.map.getView().fit(this.mapExtent);
     this.mapService.mapReady(this.map);
+
+    this.map.on('click', () => {
+      this.mapService.getFeatureInfo();
+    });
   }
 
   private addWMS() {
