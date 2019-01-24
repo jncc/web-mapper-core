@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
  import Map from 'ol/map';
 import View from 'ol/view';
@@ -17,53 +17,63 @@ import Select from 'ol/interaction/select';
 import condition from 'ol/events/condition';
 import OverviewMap from 'ol/control/OverviewMap';
 import { MapService } from '../map.service';
-
+import ImageLayer from 'ol/layer/image';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements OnInit {
 
   map: Map;
 
-  mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
+   mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
 
-  constructor(private mapService: MapService) { }
-
-  ngOnInit() {
+  constructor(private mapService: MapService) {
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.setupMap();
     this.addWMS();
+
+    // setTimeout(() => {
+    //   this.map.updateSize();
+    //  }, 500);
   }
 
   private setupMap() {
+    const view = new View({
+      center: proj.fromLonLat([0, 50]),
+      zoom: 4,
+      maxZoom: 17,
+      minZoom: 3
+  });
+
+  const baseLayer = new Tile({
+    source: new OSM()
+  });
+
     this.map = new Map({
       target: 'map',
       controls: [
         new OverviewMap({
           collapsed: false,
-          collapsible: false
+          collapsible: false,
+          layers: [baseLayer]
         })
       ],
       layers: [
-        new Tile({
-          source: new OSM()
-        })
+        baseLayer
       ],
-      view: new View({
-        center: [0, 0],
-        zoom: 2
-      })
+      view: view
     });
     this.map.getView().fit(this.mapExtent);
     this.mapService.mapReady(this.map);
   }
 
   private addWMS() {
-    const wmsURl = 'https://ows.emodnet-seabedhabitats.eu/emodnet/wms';
+    // const wmsURl = 'https://ows.emodnet-seabedhabitats.eu/emodnet/wms';
+    const wmsURl = 'https://jnccdev-geo.esdm.co.uk/emodnet/wms';
 
     const substrateSource = new TileWMS({
       url: wmsURl,
@@ -72,12 +82,20 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     const biologicalZoneSource = new TileWMS({
       url: wmsURl,
-      params: {'LAYERS': 'eusm_bio', 'TILED': true},
+      params: {'LAYERS': 'eusm_bio'},
     });
 
     const substrateLayer = new Tile({
       source: substrateSource
     });
+
+    // const imageLayer =  new ImageLayer({
+    //   source: new ImageWMS({
+    //     url: wmsURl,
+    //     params: {'LAYERS': 'eusm_sub'},
+    //     ratio: 1
+    //   })
+    // });
 
     const biologicalZoneLayer = new Tile({
       source: biologicalZoneSource
