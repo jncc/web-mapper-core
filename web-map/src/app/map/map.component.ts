@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
- import Map from 'ol/map';
+import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
 import VectorLayer from 'ol/layer/vector';
@@ -16,9 +17,11 @@ import Icon from 'ol/style/icon';
 import Select from 'ol/interaction/select';
 import condition from 'ol/events/condition';
 import OverviewMap from 'ol/control/OverviewMap';
-import { MapService } from '../map.service';
 import ImageLayer from 'ol/layer/image';
-import { Subscription } from 'rxjs';
+import DragZoom from 'ol/interaction/DragZoom';
+
+import { MapService } from '../map.service';
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -60,6 +63,9 @@ export class MapComponent implements OnInit, OnDestroy {
       view: view
     });
     this.map.getView().fit(this.mapExtent);
+
+    this.map.addInteraction(new DragZoom());
+
     this.mapService.mapReady(this.map);
 
     this.map.on('click', () => {

@@ -9,7 +9,7 @@ export class MapService {
 
   map: any;
 
-  zoomExtent = new Subject<null>()
+  zoomExtent = new Subject<null>();
 
   constructor(private http: HttpClient) { }
 
