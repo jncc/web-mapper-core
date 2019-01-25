@@ -1,6 +1,8 @@
+@import '../../variables.scss';
+
 #mapInstances {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    box-shadow: var(--container-shadow);
+    box-shadow: $container-shadow;
 }

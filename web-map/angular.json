@@ -46,7 +46,7 @@
             ],
             "styles": [
               "node_modules/font-awesome/css/font-awesome.min.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -102,7 +102,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": [],
             "assets": [
@@ -154,5 +154,10 @@
       }
     }
   },
-  "defaultProject": "web-map"
+  "defaultProject": "web-map",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

@@ -18,14 +18,14 @@ import Select from 'ol/interaction/select';
 import condition from 'ol/events/condition';
 import OverviewMap from 'ol/control/OverviewMap';
 import ImageLayer from 'ol/layer/image';
-import DragZoom from 'ol/interaction/DragZoom';
+import DragZoom from 'ol/interaction/dragzoom';
 
 import { MapService } from '../map.service';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, OnDestroy {
 

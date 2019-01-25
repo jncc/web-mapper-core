@@ -4,7 +4,7 @@ import { MapService } from '../map.service';
 @Component({
   selector: 'app-controls-toolbar',
   templateUrl: './controls-toolbar.component.html',
-  styleUrls: ['./controls-toolbar.component.css']
+  styleUrls: ['./controls-toolbar.component.scss']
 })
 export class ControlsToolbarComponent implements OnInit {
 

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-legend-list',
   templateUrl: './legend-list.component.html',
-  styleUrls: ['./legend-list.component.css']
+  styleUrls: ['./legend-list.component.scss']
 })
 export class LegendListComponent implements OnInit {
 
