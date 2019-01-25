@@ -35,10 +35,6 @@ export class MapComponent implements OnInit {
   ngOnInit() {
     this.setupMap();
     this.addWMS();
-
-    // setTimeout(() => {
-    //   this.map.updateSize();
-    //  }, 500);
   }
 
   private setupMap() {
