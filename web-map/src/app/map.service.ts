@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 export class MapService {
 
   map: any;
+
+  zoomExtent = new Subject<null>()
 
   constructor(private http: HttpClient) { }
 
@@ -20,6 +23,10 @@ export class MapService {
 
   zoomout() {
     this.map.getView().setZoom(this.map.getView().getZoom() - 1);
+  }
+
+  zoomToExtent() {
+    this.zoomExtent.next();
   }
 
   getFeatureInfo() {

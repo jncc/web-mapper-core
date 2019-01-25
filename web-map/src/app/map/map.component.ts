@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
  import Map from 'ol/map';
 import View from 'ol/view';
@@ -18,16 +18,18 @@ import condition from 'ol/events/condition';
 import OverviewMap from 'ol/control/OverviewMap';
 import { MapService } from '../map.service';
 import ImageLayer from 'ol/layer/image';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
+  private zoomExtentSubscription: Subscription;
 
-   mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
+  mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
 
   constructor(private mapService: MapService) {
   }
@@ -63,6 +65,16 @@ export class MapComponent implements OnInit {
     this.map.on('click', () => {
       this.mapService.getFeatureInfo();
     });
+
+    this.zoomExtentSubscription = this.mapService.zoomExtent.subscribe(() =>
+      this.map.getView().fit(this.mapExtent)
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.zoomExtentSubscription) {
+      this.zoomExtentSubscription.unsubscribe();
+    }
   }
 
   private addWMS() {

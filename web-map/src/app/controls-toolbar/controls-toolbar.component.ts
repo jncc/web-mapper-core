@@ -21,4 +21,8 @@ export class ControlsToolbarComponent implements OnInit {
     this.mapService.zoomout();
   }
 
+  zoomToExtent() {
+    this.mapService.zoomToExtent();
+  }
+
 }
