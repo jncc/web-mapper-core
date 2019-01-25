@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ILayerConfig } from 'src/app/models/layer-config.model';
 
 @Component({
   selector: 'app-layer-item',
@@ -7,11 +8,15 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LayerItemComponent implements OnInit {
 
-  @Input() layer: string;
+  @Input() layer: ILayerConfig;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onChange(event) {
+    console.log(event);
   }
 
 }
