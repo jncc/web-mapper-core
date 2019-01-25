@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-legend-list',
-  templateUrl: './legend-list.component.html',
-  styleUrls: ['./legend-list.component.scss']
+  selector: 'app-legends',
+  templateUrl: './legends.component.html',
+  styleUrls: ['./legends.component.scss']
 })
-export class LegendListComponent implements OnInit {
+export class LegendsComponent implements OnInit {
 
   show = true;
 

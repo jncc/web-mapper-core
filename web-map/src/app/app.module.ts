@@ -6,10 +6,12 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { AppConfigService } from './app-config.service';
 import { HttpClientModule } from '@angular/common/http';
-import { LegendListComponent } from './legend-list/legend-list.component';
-import { LegendItemComponent } from './legend-item/legend-item.component';
+import { LegendsComponent } from './legends/legends.component';
+import { LegendItemComponent } from './legends/legend-item/legend-item.component';
 import { ControlsToolbarComponent } from './controls-toolbar/controls-toolbar.component';
 import { MapInstancesComponent } from './map-instances/map-instances.component';
+import { LayersComponent } from './layers/layers.component';
+import { LayerItemComponent } from './layers/layer-item/layer-item.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -18,10 +20,12 @@ export function initializeApp(appConfig: AppConfigService) {
   declarations: [
     AppComponent,
     MapComponent,
-    LegendListComponent,
+    LegendsComponent,
     LegendItemComponent,
     ControlsToolbarComponent,
-    MapInstancesComponent
+    MapInstancesComponent,
+    LayersComponent,
+    LayerItemComponent
   ],
   imports: [
     BrowserModule,

@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LegendItemComponent implements OnInit {
 
-  @Input() legendItem: string;
+  @Input() legend: string;
 
   constructor() { }
 
