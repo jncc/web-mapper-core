@@ -9,6 +9,6 @@ import { AppConfigService } from './app-config.service';
 export class AppComponent {
 
   constructor() {
-    console.log(AppConfigService.settings);
+    // console.log(AppConfigService.settings);
   }
 }

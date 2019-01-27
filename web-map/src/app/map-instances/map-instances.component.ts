@@ -18,9 +18,8 @@ export class MapInstancesComponent implements OnInit {
   ngOnInit() {
     this.mapService.mapConfig.subscribe((data: IMapConfig) => {
       this.mapInstances = data.mapInstances;
-      console.log(this.mapInstances);
-    }
-    );
+      // console.log(this.mapInstances);
+    });
   }
 
   toggleShow() {

@@ -15,7 +15,7 @@ export class LayersComponent implements OnInit {
 
   ngOnInit() {
     this.mapService.mapConfig.subscribe((data) => {
-      if (data.mapInstances) {
+      if (data.mapInstances.length) {
         this.layers = data.mapInstances[0].layers;
       }
     });

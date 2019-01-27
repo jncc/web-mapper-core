@@ -12,7 +12,6 @@ import { ControlsToolbarComponent } from './controls-toolbar/controls-toolbar.co
 import { MapInstancesComponent } from './map-instances/map-instances.component';
 import { LayersComponent } from './layers/layers.component';
 import { LayerItemComponent } from './layers/layer-item/layer-item.component';
-import { MapService } from './map.service';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -32,8 +31,10 @@ export function initializeApp(appConfig: AppConfigService) {
     BrowserModule,
     HttpClientModule
   ],
-  providers: [AppConfigService,
-  {provide: APP_INITIALIZER, useFactory: initializeApp, deps: [AppConfigService], multi: true}],
+  providers: [
+    AppConfigService,
+    {provide: APP_INITIALIZER, useFactory: initializeApp, deps: [AppConfigService], multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { MapConfigService } from './map-config.service';
+import { ApiService } from './api.service';
 import { IMapConfig } from './models/map-config.model';
 
 @Injectable({
@@ -22,17 +22,16 @@ export class MapService {
     return this._mapConfig.asObservable();
   }
 
-  constructor(private http: HttpClient, private mapConfigService: MapConfigService) {
+  constructor(private http: HttpClient, private apiService: ApiService) {
     this.dataStore = {
       mapConfig: { mapInstances: [] }
     };
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
-    this.mapConfigService.mapConfig.subscribe((data) => {
+    this.apiService.getConfig().subscribe((data) => {
       this.dataStore.mapConfig = data;
-      console.log(this.dataStore.mapConfig);
+      // console.log(this.dataStore.mapConfig);
       this._mapConfig.next(this.dataStore.mapConfig);
     }, error => console.log('Could not load map config.'));
-    this.mapConfigService.loadConfig();
   }
 
   mapReady(map: any) {
