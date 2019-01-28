@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+// TODO: remove unneeded imports
 import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
 import VectorLayer from 'ol/layer/vector';
 import VectorSource from 'ol/source/vector';
 import OSM from 'ol/source/OSM';
-// import TileWMS from 'ol/source/tilewms';
+import TileWMS from 'ol/source/tilewms';
 import Image from 'ol/layer/image';
 import ImageWMS from 'ol/source/imagewms';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -45,19 +46,14 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     });
 
-
     this.setupMap();
-    // this.addWMS();
   }
 
   private updateLayers(layersConfig: ILayerConfig[]): void {
     layersConfig.forEach( (layerConfig) => {
       this.map.addLayer(layerConfig.layer);
     });
-    // const currentLayers = this.map.getLayers();
-    // const length = currentLayers.getLength();
-    // currentLayers.removeAt(length - 1);
-    console.log(this.map.getLayers());
+    // console.log(this.map.getLayers());
   }
 
   private setupMap() {
@@ -100,38 +96,4 @@ export class MapComponent implements OnInit, OnDestroy {
       this.zoomExtentSubscription.unsubscribe();
     }
   }
-
-  private addWMS() {
-    // const wmsURl = 'https://ows.emodnet-seabedhabitats.eu/emodnet/wms';
-    const wmsURl = 'https://jnccdev-geo.esdm.co.uk/emodnet/wms';
-
-    const substrateSource = new TileWMS({
-      url: wmsURl,
-      params: {'LAYERS': 'eusm_sub'}
-    });
-
-    const biologicalZoneSource = new TileWMS({
-      url: wmsURl,
-      params: {'LAYERS': 'eusm_bio'},
-    });
-
-    const substrateLayer = new Tile({
-      source: substrateSource
-    });
-
-    // const imageLayer =  new ImageLayer({
-    //   source: new ImageWMS({
-    //     url: wmsURl,
-    //     params: {'LAYERS': 'eusm_sub'},
-    //     ratio: 1
-    //   })
-    // });
-
-    const biologicalZoneLayer = new Tile({
-      source: biologicalZoneSource
-    });
-
-    this.map.addLayer(substrateLayer);
-  }
-
 }

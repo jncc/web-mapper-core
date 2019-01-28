@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ILayerConfig } from 'src/app/models/layer-config.model';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ILayerConfig } from '../../models/layer-config.model';
 
 @Component({
   selector: 'app-layer-item',
@@ -9,6 +9,7 @@ import { ILayerConfig } from 'src/app/models/layer-config.model';
 export class LayerItemComponent implements OnInit {
 
   @Input() layer: ILayerConfig;
+  @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor() { }
 
@@ -16,7 +17,7 @@ export class LayerItemComponent implements OnInit {
   }
 
   onChange(event) {
-    console.log(event);
+    this.visibilityChanged.emit(event.target.checked);
   }
 
 }

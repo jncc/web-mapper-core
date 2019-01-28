@@ -9,7 +9,7 @@
   <div [ngClass]="{'d-none': !show}" class="container-body">
     <ul>
       <li *ngFor="let layer of layers">
-        <app-layer-item [layer]="layer"></app-layer-item>
+        <app-layer-item [layer]="layer" (visibilityChanged)="onVisibilityChanged(layer, $event)"></app-layer-item>
       </li>
     </ul>
   </div>

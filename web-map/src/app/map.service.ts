@@ -32,22 +32,26 @@ export class MapService {
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
     this.apiService.getConfig().subscribe((data) => {
       this.dataStore.mapConfig = data;
-      // move this to another service
-      this.dataStore.mapConfig.mapInstances[0].layers.forEach((layerConfig) => {
-        const source = new TileWMS({
-          url: layerConfig.url,
-          params: {'LAYERS': layerConfig.name}
-        });
-        layerConfig.layer = new Tile({
-          source: source
-        });
-        layerConfig.layer.setOpacity(layerConfig.opacity);
-        layerConfig.layer.setVisible(layerConfig.visible);
-      });
-
+      // TODO: move to another service
+      this.createLayersForConfig();
       // console.log(this.dataStore.mapConfig);
       this._mapConfig.next(this.dataStore.mapConfig);
     }, error => console.log('Could not load map config.'));
+  }
+
+  // TODO: move to another service
+  private createLayersForConfig(): void {
+    this.dataStore.mapConfig.mapInstances[0].layers.forEach((layerConfig) => {
+      const source = new TileWMS({
+        url: layerConfig.url,
+        params: {'LAYERS': layerConfig.name}
+      });
+      layerConfig.layer = new Tile({
+        source: source
+      });
+      layerConfig.layer.setOpacity(layerConfig.opacity);
+      layerConfig.layer.setVisible(layerConfig.visible);
+    });
   }
 
   mapReady(map: any) {
@@ -76,4 +80,11 @@ export class MapService {
     );
   }
 
+  changeLayerVisibility(layerId, visible) {
+    const layerConfig = this.dataStore.mapConfig.mapInstances[0].layers.find((l) => l.id === layerId);
+    if (layerConfig) {
+      layerConfig.visible = visible;
+      layerConfig.layer.setVisible(visible);
+    }
+  }
 }
