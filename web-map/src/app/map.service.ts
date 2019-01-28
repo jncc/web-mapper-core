@@ -4,6 +4,9 @@ import { Subject, BehaviorSubject } from 'rxjs';
 import { ApiService } from './api.service';
 import { IMapConfig } from './models/map-config.model';
 
+// TODO: move to another service
+import TileWMS from 'ol/source/tilewms';
+import Tile from 'ol/layer/tile';
 @Injectable({
   providedIn: 'root'
 })
@@ -29,6 +32,19 @@ export class MapService {
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
     this.apiService.getConfig().subscribe((data) => {
       this.dataStore.mapConfig = data;
+      // move this to another service
+      this.dataStore.mapConfig.mapInstances[0].layers.forEach((layerConfig) => {
+        const source = new TileWMS({
+          url: layerConfig.url,
+          params: {'LAYERS': layerConfig.name}
+        });
+        layerConfig.layer = new Tile({
+          source: source
+        });
+        layerConfig.layer.setOpacity(layerConfig.opacity);
+        layerConfig.layer.setVisible(layerConfig.visible);
+      });
+
       // console.log(this.dataStore.mapConfig);
       this._mapConfig.next(this.dataStore.mapConfig);
     }, error => console.log('Could not load map config.'));

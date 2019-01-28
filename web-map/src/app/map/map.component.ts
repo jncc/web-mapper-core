@@ -7,7 +7,7 @@ import Tile from 'ol/layer/tile';
 import VectorLayer from 'ol/layer/vector';
 import VectorSource from 'ol/source/vector';
 import OSM from 'ol/source/OSM';
-import TileWMS from 'ol/source/tilewms';
+// import TileWMS from 'ol/source/tilewms';
 import Image from 'ol/layer/image';
 import ImageWMS from 'ol/source/imagewms';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -52,16 +52,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private updateLayers(layersConfig: ILayerConfig[]): void {
     layersConfig.forEach( (layerConfig) => {
-      const source = new TileWMS({
-        url: layerConfig.url,
-        params: {'LAYERS': layerConfig.name}
-      });
-      const layer = new Tile({
-        source: source
-      });
-      layer.setOpacity(layerConfig.opacity);
-      layer.setVisible(layerConfig.visible);
-      this.map.addLayer(layer);
+      this.map.addLayer(layerConfig.layer);
     });
     // const currentLayers = this.map.getLayers();
     // const length = currentLayers.getLength();
