@@ -21,6 +21,7 @@ import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
 
 import { MapService } from '../map.service';
+import { ILayerConfig } from '../models/layer-config.model';
 
 @Component({
   selector: 'app-map',
@@ -38,8 +39,34 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mapService.mapConfig.subscribe((data) => {
+      if (data.mapInstances.length) {
+        this.updateLayers(data.mapInstances[0].layers);
+      }
+    });
+
+
     this.setupMap();
-    this.addWMS();
+    // this.addWMS();
+  }
+
+  private updateLayers(layersConfig: ILayerConfig[]): void {
+    layersConfig.forEach( (layerConfig) => {
+      const source = new TileWMS({
+        url: layerConfig.url,
+        params: {'LAYERS': layerConfig.name}
+      });
+      const layer = new Tile({
+        source: source
+      });
+      layer.setOpacity(layerConfig.opacity);
+      layer.setVisible(layerConfig.visible);
+      this.map.addLayer(layer);
+    });
+    // const currentLayers = this.map.getLayers();
+    // const length = currentLayers.getLength();
+    // currentLayers.removeAt(length - 1);
+    console.log(this.map.getLayers());
   }
 
   private setupMap() {

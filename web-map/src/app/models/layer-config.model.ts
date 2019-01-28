@@ -3,4 +3,6 @@ export interface ILayerConfig {
     name: string;
     displayName: string;
     url: string;
+    visible: boolean;
+    opacity: number;
 }
