@@ -10,7 +10,7 @@ namespace MapConfig.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public ICollection<LayerGroup> LayerGroups { get; set; }
+        public List<LayerGroup> LayerGroups { get; set; }
     }
 
     public class LayerGroup
@@ -20,8 +20,9 @@ namespace MapConfig.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        //public MapInstance MapId { get; set; }
-        public ICollection<Layer> Layers { get; set; }
+        public long MapId { get; set; }
+        public MapInstance Map { get; set; }
+        public List<Layer> Layers { get; set; }
     }
 
     public class Layer {
@@ -36,8 +37,9 @@ namespace MapConfig.Models
         public Byte Opacity { get; set; }
         public string FilterDefinition { get; set; }
 
-        //public LayerGroup LayerGroupId { get; set; }
-        public ICollection<Filter> Filters { get; set; }     
+        public long LayerGroupId { get; set; }
+        public LayerGroup LayerGroup { get; set; }
+        public List<Filter> Filters { get; set; }     
     }
 
     public class Filter {
@@ -48,7 +50,9 @@ namespace MapConfig.Models
         public string Type { get; set; } //can be one of 'Lookup' (as in select box),'LookupMulti' (multi select box),'Date','Boolean','text'
         public string Property { get; set; } // name of the property to lookup
         public string LookupSrc { get; set; } //url of lookup endpoint
+        
 
-        //public Layer LayerId { get; set; } 
+        public long LayerId { get; set; }
+        public Layer Layer { get; set; } 
     }
 }

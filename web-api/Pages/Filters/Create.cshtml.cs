@@ -20,6 +20,7 @@ namespace jncc_web_api.Pages.Filters
 
         public IActionResult OnGet()
         {
+        ViewData["LayerId"] = new SelectList(_context.Layer, "LayerId", "LayerId");
             return Page();
         }
 
@@ -33,7 +34,7 @@ namespace jncc_web_api.Pages.Filters
                 return Page();
             }
 
-            _context.Filters.Add(Filter);
+            _context.Filter.Add(Filter);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

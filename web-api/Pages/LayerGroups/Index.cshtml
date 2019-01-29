@@ -19,6 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.LayerGroup[0].Description)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LayerGroup[0].Map)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -30,6 +33,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Map.MapId)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.LayerGroupId">Edit</a> |

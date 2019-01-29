@@ -28,7 +28,8 @@ namespace jncc_web_api.Pages.Layers
                 return NotFound();
             }
 
-            Layer = await _context.Layers.FirstOrDefaultAsync(m => m.LayerId == id);
+            Layer = await _context.Layer
+                .Include(l => l.LayerGroup).FirstOrDefaultAsync(m => m.LayerId == id);
 
             if (Layer == null)
             {
@@ -44,11 +45,11 @@ namespace jncc_web_api.Pages.Layers
                 return NotFound();
             }
 
-            Layer = await _context.Layers.FindAsync(id);
+            Layer = await _context.Layer.FindAsync(id);
 
             if (Layer != null)
             {
-                _context.Layers.Remove(Layer);
+                _context.Layer.Remove(Layer);
                 await _context.SaveChangesAsync();
             }
 

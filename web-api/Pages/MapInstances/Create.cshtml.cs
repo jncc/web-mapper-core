@@ -33,7 +33,7 @@ namespace jncc_web_api.Pages.MapInstances
                 return Page();
             }
 
-            _context.MapInstances.Add(MapInstance);
+            _context.MapInstance.Add(MapInstance);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

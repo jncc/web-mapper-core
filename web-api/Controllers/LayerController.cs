@@ -22,16 +22,16 @@ namespace MapConfig.Controllers
 
         // GET: api/Layer
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Layer>>> GetLayers()
+        public async Task<ActionResult<IEnumerable<Layer>>> GetLayer()
         {
-            return await _context.Layers.ToListAsync();
+            return await _context.Layer.ToListAsync();
         }
 
         // GET: api/Layer/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Layer>> GetLayer(long id)
         {
-            var layer = await _context.Layers.FindAsync(id);
+            var layer = await _context.Layer.FindAsync(id);
 
             if (layer == null)
             {
@@ -75,7 +75,7 @@ namespace MapConfig.Controllers
         [HttpPost]
         public async Task<ActionResult<Layer>> PostLayer(Layer layer)
         {
-            _context.Layers.Add(layer);
+            _context.Layer.Add(layer);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetLayer", new { id = layer.LayerId }, layer);
@@ -85,13 +85,13 @@ namespace MapConfig.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Layer>> DeleteLayer(long id)
         {
-            var layer = await _context.Layers.FindAsync(id);
+            var layer = await _context.Layer.FindAsync(id);
             if (layer == null)
             {
                 return NotFound();
             }
 
-            _context.Layers.Remove(layer);
+            _context.Layer.Remove(layer);
             await _context.SaveChangesAsync();
 
             return layer;
@@ -99,7 +99,7 @@ namespace MapConfig.Controllers
 
         private bool LayerExists(long id)
         {
-            return _context.Layers.Any(e => e.LayerId == id);
+            return _context.Layer.Any(e => e.LayerId == id);
         }
     }
 }

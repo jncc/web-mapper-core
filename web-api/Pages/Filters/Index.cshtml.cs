@@ -22,7 +22,8 @@ namespace jncc_web_api.Pages.Filters
 
         public async Task OnGetAsync()
         {
-            Filter = await _context.Filters.ToListAsync();
+            Filter = await _context.Filter
+                .Include(f => f.Layer).ToListAsync();
         }
     }
 }

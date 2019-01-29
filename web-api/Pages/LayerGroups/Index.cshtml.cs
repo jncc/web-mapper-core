@@ -22,7 +22,8 @@ namespace jncc_web_api.Pages.LayerGroups
 
         public async Task OnGetAsync()
         {
-            LayerGroup = await _context.LayerGroups.ToListAsync();
+            LayerGroup = await _context.LayerGroup
+                .Include(l => l.Map).ToListAsync();
         }
     }
 }

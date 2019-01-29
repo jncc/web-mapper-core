@@ -9,10 +9,10 @@ namespace MapConfig.Models
         {
         }
 
-        public DbSet<MapConfig.Models.MapInstance> MapInstances { get; set; }
-        public DbSet<MapConfig.Models.LayerGroup> LayerGroups { get; set; }
-        public DbSet<MapConfig.Models.Layer> Layers { get; set; }
-        public DbSet<MapConfig.Models.Filter> Filters { get; set; }
+        public DbSet<MapConfig.Models.MapInstance> MapInstance { get; set; }
+        public DbSet<MapConfig.Models.LayerGroup> LayerGroup { get; set; }
+        public DbSet<MapConfig.Models.Layer> Layer { get; set; }
+        public DbSet<MapConfig.Models.Filter> Filter { get; set; }
 
     }
 }

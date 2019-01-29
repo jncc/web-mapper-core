@@ -20,6 +20,7 @@ namespace jncc_web_api.Pages.LayerGroups
 
         public IActionResult OnGet()
         {
+        ViewData["MapId"] = new SelectList(_context.MapInstance, "MapId", "MapId");
             return Page();
         }
 
@@ -33,7 +34,7 @@ namespace jncc_web_api.Pages.LayerGroups
                 return Page();
             }
 
-            _context.LayerGroups.Add(LayerGroup);
+            _context.LayerGroup.Add(LayerGroup);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

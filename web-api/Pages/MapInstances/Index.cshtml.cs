@@ -22,7 +22,7 @@ namespace jncc_web_api.Pages.MapInstances
 
         public async Task OnGetAsync()
         {
-            MapInstance = await _context.MapInstances.ToListAsync();
+            MapInstance = await _context.MapInstance.ToListAsync();
         }
     }
 }

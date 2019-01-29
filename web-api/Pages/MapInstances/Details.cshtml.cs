@@ -27,7 +27,7 @@ namespace jncc_web_api.Pages.MapInstances
                 return NotFound();
             }
 
-            MapInstance = await _context.MapInstances.FirstOrDefaultAsync(m => m.MapId == id);
+            MapInstance = await _context.MapInstance.FirstOrDefaultAsync(m => m.MapId == id);
 
             if (MapInstance == null)
             {

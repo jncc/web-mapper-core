@@ -29,12 +29,14 @@ namespace jncc_web_api.Pages.LayerGroups
                 return NotFound();
             }
 
-            LayerGroup = await _context.LayerGroups.FirstOrDefaultAsync(m => m.LayerGroupId == id);
+            LayerGroup = await _context.LayerGroup
+                .Include(l => l.Map).FirstOrDefaultAsync(m => m.LayerGroupId == id);
 
             if (LayerGroup == null)
             {
                 return NotFound();
             }
+           ViewData["MapId"] = new SelectList(_context.MapInstance, "MapId", "MapId");
             return Page();
         }
 
@@ -68,7 +70,7 @@ namespace jncc_web_api.Pages.LayerGroups
 
         private bool LayerGroupExists(long id)
         {
-            return _context.LayerGroups.Any(e => e.LayerGroupId == id);
+            return _context.LayerGroup.Any(e => e.LayerGroupId == id);
         }
     }
 }

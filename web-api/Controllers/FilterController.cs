@@ -22,16 +22,16 @@ namespace MapConfig.Controllers
 
         // GET: api/Filter
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Filter>>> GetFilters()
+        public async Task<ActionResult<IEnumerable<Filter>>> GetFilter()
         {
-            return await _context.Filters.ToListAsync();
+            return await _context.Filter.ToListAsync();
         }
 
         // GET: api/Filter/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Filter>> GetFilter(long id)
         {
-            var filter = await _context.Filters.FindAsync(id);
+            var filter = await _context.Filter.FindAsync(id);
 
             if (filter == null)
             {
@@ -75,7 +75,7 @@ namespace MapConfig.Controllers
         [HttpPost]
         public async Task<ActionResult<Filter>> PostFilter(Filter filter)
         {
-            _context.Filters.Add(filter);
+            _context.Filter.Add(filter);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetFilter", new { id = filter.FilterId }, filter);
@@ -85,13 +85,13 @@ namespace MapConfig.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Filter>> DeleteFilter(long id)
         {
-            var filter = await _context.Filters.FindAsync(id);
+            var filter = await _context.Filter.FindAsync(id);
             if (filter == null)
             {
                 return NotFound();
             }
 
-            _context.Filters.Remove(filter);
+            _context.Filter.Remove(filter);
             await _context.SaveChangesAsync();
 
             return filter;
@@ -99,7 +99,7 @@ namespace MapConfig.Controllers
 
         private bool FilterExists(long id)
         {
-            return _context.Filters.Any(e => e.FilterId == id);
+            return _context.Filter.Any(e => e.FilterId == id);
         }
     }
 }

@@ -27,7 +27,8 @@ namespace jncc_web_api.Pages.Filters
                 return NotFound();
             }
 
-            Filter = await _context.Filters.FirstOrDefaultAsync(m => m.FilterId == id);
+            Filter = await _context.Filter
+                .Include(f => f.Layer).FirstOrDefaultAsync(m => m.FilterId == id);
 
             if (Filter == null)
             {

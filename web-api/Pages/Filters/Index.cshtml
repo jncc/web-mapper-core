@@ -28,6 +28,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Filter[0].LookupSrc)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Filter[0].Layer)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -48,6 +51,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LookupSrc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Layer.LayerId)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.FilterId">Edit</a> |

@@ -37,6 +37,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].FilterDefinition)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Layer[0].LayerGroup)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -66,6 +69,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FilterDefinition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LayerGroup.LayerGroupId)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.LayerId">Edit</a> |

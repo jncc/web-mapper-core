@@ -29,12 +29,14 @@ namespace jncc_web_api.Pages.Filters
                 return NotFound();
             }
 
-            Filter = await _context.Filters.FirstOrDefaultAsync(m => m.FilterId == id);
+            Filter = await _context.Filter
+                .Include(f => f.Layer).FirstOrDefaultAsync(m => m.FilterId == id);
 
             if (Filter == null)
             {
                 return NotFound();
             }
+           ViewData["LayerId"] = new SelectList(_context.Layer, "LayerId", "LayerId");
             return Page();
         }
 
@@ -68,7 +70,7 @@ namespace jncc_web_api.Pages.Filters
 
         private bool FilterExists(long id)
         {
-            return _context.Filters.Any(e => e.FilterId == id);
+            return _context.Filter.Any(e => e.FilterId == id);
         }
     }
 }

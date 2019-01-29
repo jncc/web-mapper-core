@@ -28,7 +28,8 @@ namespace jncc_web_api.Pages.Filters
                 return NotFound();
             }
 
-            Filter = await _context.Filters.FirstOrDefaultAsync(m => m.FilterId == id);
+            Filter = await _context.Filter
+                .Include(f => f.Layer).FirstOrDefaultAsync(m => m.FilterId == id);
 
             if (Filter == null)
             {
@@ -44,11 +45,11 @@ namespace jncc_web_api.Pages.Filters
                 return NotFound();
             }
 
-            Filter = await _context.Filters.FindAsync(id);
+            Filter = await _context.Filter.FindAsync(id);
 
             if (Filter != null)
             {
-                _context.Filters.Remove(Filter);
+                _context.Filter.Remove(Filter);
                 await _context.SaveChangesAsync();
             }
 

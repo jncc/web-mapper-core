@@ -22,16 +22,16 @@ namespace MapConfig.Controllers
 
         // GET: api/MapInstance
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstances()
+        public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstance()
         {
-            return await _context.MapInstances.ToListAsync();
+            return await _context.MapInstance.ToListAsync();
         }
 
         // GET: api/MapInstance/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MapInstance>> GetMapInstance(long id)
         {
-            var mapInstance = await _context.MapInstances.FindAsync(id);
+            var mapInstance = await _context.MapInstance.FindAsync(id);
 
             if (mapInstance == null)
             {
@@ -75,7 +75,7 @@ namespace MapConfig.Controllers
         [HttpPost]
         public async Task<ActionResult<MapInstance>> PostMapInstance(MapInstance mapInstance)
         {
-            _context.MapInstances.Add(mapInstance);
+            _context.MapInstance.Add(mapInstance);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMapInstance", new { id = mapInstance.MapId }, mapInstance);
@@ -85,13 +85,13 @@ namespace MapConfig.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<MapInstance>> DeleteMapInstance(long id)
         {
-            var mapInstance = await _context.MapInstances.FindAsync(id);
+            var mapInstance = await _context.MapInstance.FindAsync(id);
             if (mapInstance == null)
             {
                 return NotFound();
             }
 
-            _context.MapInstances.Remove(mapInstance);
+            _context.MapInstance.Remove(mapInstance);
             await _context.SaveChangesAsync();
 
             return mapInstance;
@@ -99,7 +99,7 @@ namespace MapConfig.Controllers
 
         private bool MapInstanceExists(long id)
         {
-            return _context.MapInstances.Any(e => e.MapId == id);
+            return _context.MapInstance.Any(e => e.MapId == id);
         }
     }
 }

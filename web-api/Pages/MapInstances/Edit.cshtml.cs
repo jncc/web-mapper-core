@@ -29,7 +29,7 @@ namespace jncc_web_api.Pages.MapInstances
                 return NotFound();
             }
 
-            MapInstance = await _context.MapInstances.FirstOrDefaultAsync(m => m.MapId == id);
+            MapInstance = await _context.MapInstance.FirstOrDefaultAsync(m => m.MapId == id);
 
             if (MapInstance == null)
             {
@@ -68,7 +68,7 @@ namespace jncc_web_api.Pages.MapInstances
 
         private bool MapInstanceExists(long id)
         {
-            return _context.MapInstances.Any(e => e.MapId == id);
+            return _context.MapInstance.Any(e => e.MapId == id);
         }
     }
 }

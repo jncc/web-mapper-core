@@ -27,7 +27,8 @@ namespace jncc_web_api.Pages.LayerGroups
                 return NotFound();
             }
 
-            LayerGroup = await _context.LayerGroups.FirstOrDefaultAsync(m => m.LayerGroupId == id);
+            LayerGroup = await _context.LayerGroup
+                .Include(l => l.Map).FirstOrDefaultAsync(m => m.LayerGroupId == id);
 
             if (LayerGroup == null)
             {

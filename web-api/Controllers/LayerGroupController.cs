@@ -22,16 +22,16 @@ namespace MapConfig.Controllers
 
         // GET: api/LayerGroup
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LayerGroup>>> GetLayerGroups()
+        public async Task<ActionResult<IEnumerable<LayerGroup>>> GetLayerGroup()
         {
-            return await _context.LayerGroups.ToListAsync();
+            return await _context.LayerGroup.ToListAsync();
         }
 
         // GET: api/LayerGroup/5
         [HttpGet("{id}")]
         public async Task<ActionResult<LayerGroup>> GetLayerGroup(long id)
         {
-            var layerGroup = await _context.LayerGroups.FindAsync(id);
+            var layerGroup = await _context.LayerGroup.FindAsync(id);
 
             if (layerGroup == null)
             {
@@ -75,7 +75,7 @@ namespace MapConfig.Controllers
         [HttpPost]
         public async Task<ActionResult<LayerGroup>> PostLayerGroup(LayerGroup layerGroup)
         {
-            _context.LayerGroups.Add(layerGroup);
+            _context.LayerGroup.Add(layerGroup);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetLayerGroup", new { id = layerGroup.LayerGroupId }, layerGroup);
@@ -85,13 +85,13 @@ namespace MapConfig.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<LayerGroup>> DeleteLayerGroup(long id)
         {
-            var layerGroup = await _context.LayerGroups.FindAsync(id);
+            var layerGroup = await _context.LayerGroup.FindAsync(id);
             if (layerGroup == null)
             {
                 return NotFound();
             }
 
-            _context.LayerGroups.Remove(layerGroup);
+            _context.LayerGroup.Remove(layerGroup);
             await _context.SaveChangesAsync();
 
             return layerGroup;
@@ -99,7 +99,7 @@ namespace MapConfig.Controllers
 
         private bool LayerGroupExists(long id)
         {
-            return _context.LayerGroups.Any(e => e.LayerGroupId == id);
+            return _context.LayerGroup.Any(e => e.LayerGroupId == id);
         }
     }
 }
