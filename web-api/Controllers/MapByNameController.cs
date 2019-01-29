@@ -11,16 +11,16 @@ namespace MapConfig.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MapController : Controller
+    public class MapByNameController : Controller
     {
         private readonly MapConfigContext _context;
 
-        public MapController(MapConfigContext context)
+        public MapByNameController(MapConfigContext context)
         {
             _context = context;
         }
 
-        // GET: api/Map
+        // GET: api/MapByName
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstances()
         {
@@ -28,15 +28,15 @@ namespace MapConfig.Controllers
             return Json( new { mapInstances = maps });
         }
 
-        // GET: api/Map/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MapInstance>> GetMapInstances(long id)
+        // GET: api/MapByName/Test
+        [HttpGet("{name}")]
+        public async Task<ActionResult<MapInstance>> GetMapInstances(string name)
         {
             var map = await _context.MapInstance
                 .Include(m => m.LayerGroups)
                 .ThenInclude(l => l.Layers)
                 .ThenInclude(f => f.Filters)
-                .SingleOrDefaultAsync(i => i.MapId == id);        
+                .SingleOrDefaultAsync(m => m.Name == name);        
 
             if (map == null)
             {
@@ -45,9 +45,9 @@ namespace MapConfig.Controllers
             return Json( new { mapInstance = map });
         }
 
-        private bool MapExists(long id)
+        private bool MapExists(string name)
         {
-            return _context.MapInstance.Any(e => e.MapId == id);
+            return _context.MapInstance.Any(m => m.Name == name);
         }
     }
 }
