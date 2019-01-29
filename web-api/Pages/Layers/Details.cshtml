@@ -1,0 +1,67 @@
+@page
+@model jncc_web_api.Pages.Layers.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Layer</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Order)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Order)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Src)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Src)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Visible)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Visible)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Opacity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Opacity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.FilterDefinition)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.FilterDefinition)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Layer.LayerId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

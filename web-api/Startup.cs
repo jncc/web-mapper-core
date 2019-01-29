@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -35,13 +36,19 @@ namespace JNCCMapConfigEditor
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            
+
             services.AddDbContext<TestContext>(opt =>
                 opt.UseInMemoryDatabase("Test"));
 
             services.AddEntityFrameworkNpgsql().AddDbContext<MapConfigContext>(config =>
                 config.UseNpgsql(Configuration.GetConnectionString("JNCCWebApiDatabase")));
 
+            services.AddCors(options => 
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder.AllowAnyOrigin());
+    
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -68,7 +75,7 @@ namespace JNCCMapConfigEditor
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseCors("AllowAllOrigins");
             app.UseMvc();
         }
     }

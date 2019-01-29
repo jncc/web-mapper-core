@@ -1,0 +1,70 @@
+@page
+@model jncc_web_api.Pages.Layers.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Layer</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Order)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Order)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Src)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Src)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Visible)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Visible)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Opacity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Opacity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.FilterDefinition)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.FilterDefinition)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Layer.LayerId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

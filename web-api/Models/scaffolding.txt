@@ -1,0 +1,3 @@
+// database scaffolded with:
+dotnet ef migrations add InitialCreate --context MapConfigContext
+dotnet ef database update --context MapConfigContext

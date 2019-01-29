@@ -1,0 +1,70 @@
+@page
+@model jncc_web_api.Pages.Layers.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Layer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Layer.LayerId" />
+            <div class="form-group">
+                <label asp-for="Layer.Name" class="control-label"></label>
+                <input asp-for="Layer.Name" class="form-control" />
+                <span asp-validation-for="Layer.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.Description" class="control-label"></label>
+                <input asp-for="Layer.Description" class="form-control" />
+                <span asp-validation-for="Layer.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.Order" class="control-label"></label>
+                <input asp-for="Layer.Order" class="form-control" />
+                <span asp-validation-for="Layer.Order" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.Type" class="control-label"></label>
+                <input asp-for="Layer.Type" class="form-control" />
+                <span asp-validation-for="Layer.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.Src" class="control-label"></label>
+                <input asp-for="Layer.Src" class="form-control" />
+                <span asp-validation-for="Layer.Src" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Layer.Visible" /> @Html.DisplayNameFor(model => model.Layer.Visible)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.Opacity" class="control-label"></label>
+                <input asp-for="Layer.Opacity" class="form-control" />
+                <span asp-validation-for="Layer.Opacity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.FilterDefinition" class="control-label"></label>
+                <input asp-for="Layer.FilterDefinition" class="form-control" />
+                <span asp-validation-for="Layer.FilterDefinition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

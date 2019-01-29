@@ -9,11 +9,10 @@ namespace MapConfig.Models
         {
         }
 
-        public DbSet<MapConfig.Models.MapItem> MapItem { get; set; }
-        public DbSet<MapConfig.Models.MapConfigItem> MapConfigItem { get; set; }
-        public DbSet<MapConfig.Models.LayerItem> LayerItem { get; set; }
-        public DbSet<MapConfig.Models.LayerConfigItem> LayerConfigItem { get; set; }
-        public DbSet<MapConfig.Models.MapLayerItem> MapLayerItem { get; set; }
+        public DbSet<MapConfig.Models.MapInstance> MapInstances { get; set; }
+        public DbSet<MapConfig.Models.LayerGroup> LayerGroups { get; set; }
+        public DbSet<MapConfig.Models.Layer> Layers { get; set; }
+        public DbSet<MapConfig.Models.Filter> Filters { get; set; }
 
     }
 }

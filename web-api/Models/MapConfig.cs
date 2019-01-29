@@ -3,84 +3,52 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 namespace MapConfig.Models
 {
-    public class MapItem
+    public class MapInstance
     {
         [Key]
         public long MapId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime ReleaseDate { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime UpdatedDate { get; set; } 
-
-        public List<MapConfig.Models.MapConfigItem> MapConfigItems { get; set; }
+        public ICollection<LayerGroup> LayerGroups { get; set; }
     }
 
-
-    public class MapConfigItem
+    public class LayerGroup
     {
         [Key]
-        public long MapConfigId { get; set; }
+        public long LayerGroupId { get; set; }
         public string Name { get; set; }
-        public string Value { get; set; }
-        public string Comment { get; set; }
+        public string Description { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime UpdatedDate { get; set; } 
-
-        //foreign keys
-        public long MapId { get; set; }
-        public MapConfig.Models.MapItem MapItem { get; set; }
+        //public MapInstance MapId { get; set; }
+        public ICollection<Layer> Layers { get; set; }
     }
 
-    public class LayerItem
-    {
+    public class Layer {
         [Key]
         public long LayerId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public long Order { get; set; }
+        public string Type { get; set; }
+        public string Src { get; set; }
+        public Boolean Visible { get; set; }
+        public Byte Opacity { get; set; }
+        public string FilterDefinition { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime ReleaseDate { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime UpdatedDate { get; set; } 
-
-        public List<MapConfig.Models.LayerConfigItem> LayerConfigItems { get; set; }       
+        //public LayerGroup LayerGroupId { get; set; }
+        public ICollection<Filter> Filters { get; set; }     
     }
 
-    public class LayerConfigItem
-    {
+    public class Filter {
         [Key]
-        public long LayerConfigId { get; set; }
+        public long FilterId { get; set; }
         public string Name { get; set; }
-        public string Value { get; set; }
-        public string Comment { get; set; }
+        public string Description { get; set; }
+        public string Type { get; set; } //can be one of 'Lookup' (as in select box),'LookupMulti' (multi select box),'Date','Boolean','text'
+        public string Property { get; set; } // name of the property to lookup
+        public string LookupSrc { get; set; } //url of lookup endpoint
 
-        [DataType(DataType.Date)]
-        public DateTime UpdatedDate { get; set; } 
-
-        //foreign keys
-        public long LayerId { get; set; }
-        public MapConfig.Models.LayerItem LayerItem { get; set; }
-    }
-
-    public class MapLayerItem
-    {
-        [Key]
-        public long MapLayerId { get; set; }
-        public int LayerOrder { get; set; }
-        public bool LayerVisible { get; set; }
-        public string Comment { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime UpdatedDate { get; set; } 
-
-        //foreign keys
-        public long MapId { get; set; }
-        public MapConfig.Models.MapItem MapItem { get; set; }
-        public long LayerId { get; set; }
-        public MapConfig.Models.LayerItem LayerItem { get; set; }
+        //public Layer LayerId { get; set; } 
     }
 }
