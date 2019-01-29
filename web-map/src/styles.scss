@@ -2,15 +2,9 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
 
-:root {
-  --main-font-family: 'Open Sans', sans-serif;
-  --heading-font-family: 'Montserrat', sans-serif;
-  --border-color: rgb(190, 190, 190);
-  --container-padding: 0.5rem;
-  --button-padding: 0.25rem;
-  --container-shadow: 0 1px 3px 0 rgba(0, 0, 0, .25);
-  --container-border-radius: 3px 3px 0px 0px;
-}
+@import url('https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v4.6.5/css/ol.css');
+
+@import './variables.scss';
 
 html, body {
   height: 100%;
@@ -26,13 +20,13 @@ html {
 }
 
 body {
-  font-family: var(--main-font-family);
+  font-family: $main-font-family;
   font-weight: 400;
 }
 
   
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--heading-font-family);
+  font-family: $heading-font-family;
   font-weight: 600;
 }
 
@@ -61,22 +55,22 @@ img {
   display: inline-block;
   vertical-align: middle;
   cursor: pointer;
-  padding: var(--button-padding);
+  padding: $button-padding;
 }
 
 .widget-container {
   user-select: none;
-  border-radius: var(--container-border-radius);
-  box-shadow: var(--container-shadow);
+  border-radius: $container-border-radius;
+  box-shadow: $container-shadow;
   width: 250px;
   background-color: white;
 }
  
 .container-header {
-    padding: var(--container-padding);
-    border-bottom: 1px solid var(--border-color);
+    padding: $container-padding;
+    border-bottom: 1px solid $border-color;
     background-color: midnightblue;
-    border-radius: var(--container-border-radius);
+    border-radius: $container-border-radius;
     cursor: pointer;
 }
 
@@ -85,5 +79,10 @@ img {
 }
 
 .container-body {
-    padding: var(--container-padding);
+    padding: $container-padding;
+}
+
+.ol-dragzoom {
+  border: 2px midnightblue dashed;
+  background-color: rgba(255, 255, 255, 0.3);
 }

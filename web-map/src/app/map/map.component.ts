@@ -1,6 +1,7 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
- import Map from 'ol/map';
+import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
 import VectorLayer from 'ol/layer/vector';
@@ -16,54 +17,75 @@ import Icon from 'ol/style/icon';
 import Select from 'ol/interaction/select';
 import condition from 'ol/events/condition';
 import OverviewMap from 'ol/control/OverviewMap';
+import ImageLayer from 'ol/layer/image';
+import DragZoom from 'ol/interaction/dragzoom';
+
 import { MapService } from '../map.service';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
+  private zoomExtentSubscription: Subscription;
 
   mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
 
-  constructor(private mapService: MapService) { }
-
-  ngOnInit() {
+  constructor(private mapService: MapService) {
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.setupMap();
     this.addWMS();
   }
 
   private setupMap() {
+    const view = new View({
+      center: proj.fromLonLat([0, 50]),
+      zoom: 4,
+      maxZoom: 17,
+      minZoom: 3
+  });
+
+  const baseLayer = new Tile({
+    source: new OSM()
+  });
+
     this.map = new Map({
       target: 'map',
-      controls: [
-        new OverviewMap({
-          collapsed: false,
-          collapsible: false
-        })
-      ],
+      controls: [],
       layers: [
-        new Tile({
-          source: new OSM()
-        })
+        baseLayer
       ],
-      view: new View({
-        center: [0, 0],
-        zoom: 2
-      })
+      view: view
     });
     this.map.getView().fit(this.mapExtent);
+
+    this.map.addInteraction(new DragZoom());
+
     this.mapService.mapReady(this.map);
+
+    this.map.on('click', () => {
+      this.mapService.getFeatureInfo();
+    });
+
+    this.zoomExtentSubscription = this.mapService.zoomExtent.subscribe(() =>
+      this.map.getView().fit(this.mapExtent)
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.zoomExtentSubscription) {
+      this.zoomExtentSubscription.unsubscribe();
+    }
   }
 
   private addWMS() {
-    const wmsURl = 'https://ows.emodnet-seabedhabitats.eu/emodnet/wms';
+    // const wmsURl = 'https://ows.emodnet-seabedhabitats.eu/emodnet/wms';
+    const wmsURl = 'https://jnccdev-geo.esdm.co.uk/emodnet/wms';
 
     const substrateSource = new TileWMS({
       url: wmsURl,
@@ -72,12 +94,20 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     const biologicalZoneSource = new TileWMS({
       url: wmsURl,
-      params: {'LAYERS': 'eusm_bio', 'TILED': true},
+      params: {'LAYERS': 'eusm_bio'},
     });
 
     const substrateLayer = new Tile({
       source: substrateSource
     });
+
+    // const imageLayer =  new ImageLayer({
+    //   source: new ImageWMS({
+    //     url: wmsURl,
+    //     params: {'LAYERS': 'eusm_sub'},
+    //     ratio: 1
+    //   })
+    // });
 
     const biologicalZoneLayer = new Tile({
       source: biologicalZoneSource

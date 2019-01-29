@@ -6,7 +6,7 @@ import { IMapConfig } from '../models/map-config.model';
 @Component({
   selector: 'app-map-instances',
   templateUrl: './map-instances.component.html',
-  styleUrls: ['./map-instances.component.css']
+  styleUrls: ['./map-instances.component.scss']
 })
 export class MapInstancesComponent implements OnInit {
 
