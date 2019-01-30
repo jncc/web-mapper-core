@@ -36,7 +36,7 @@ namespace jncc_web_api.Pages.LayerGroups
             {
                 return NotFound();
             }
-           ViewData["MapId"] = new SelectList(_context.MapInstance, "MapId", "MapId");
+           ViewData["MapInstanceId"] = new SelectList(_context.MapInstance, "MapInstanceId", "MapInstanceId");
             return Page();
         }
 

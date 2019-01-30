@@ -45,7 +45,7 @@ namespace MapConfig.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMapInstance(long id, MapInstance mapInstance)
         {
-            if (id != mapInstance.MapId)
+            if (id != mapInstance.MapInstanceId)
             {
                 return BadRequest();
             }
@@ -78,7 +78,7 @@ namespace MapConfig.Controllers
             _context.MapInstance.Add(mapInstance);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMapInstance", new { id = mapInstance.MapId }, mapInstance);
+            return CreatedAtAction("GetMapInstance", new { id = mapInstance.MapInstanceId }, mapInstance);
         }
 
         // DELETE: api/MapInstance/5
@@ -99,7 +99,7 @@ namespace MapConfig.Controllers
 
         private bool MapInstanceExists(long id)
         {
-            return _context.MapInstance.Any(e => e.MapId == id);
+            return _context.MapInstance.Any(e => e.MapInstanceId == id);
         }
     }
 }

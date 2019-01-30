@@ -20,13 +20,16 @@
                 @Html.DisplayNameFor(model => model.Filter[0].Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Filter[0].MetadataUrl)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Filter[0].Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Filter[0].Property)
+                @Html.DisplayNameFor(model => model.Filter[0].Attribute)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Filter[0].LookupSrc)
+                @Html.DisplayNameFor(model => model.Filter[0].LookupCategory)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Filter[0].Layer)
@@ -44,13 +47,16 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.MetadataUrl)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Property)
+                @Html.DisplayFor(modelItem => item.Attribute)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LookupSrc)
+                @Html.DisplayFor(modelItem => item.LookupCategory)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Layer.LayerId)

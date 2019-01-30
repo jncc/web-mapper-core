@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MapConfig.Models;
 
-namespace jncc_web_api.Pages.MapInstances
+namespace jncc_web_api.Pages.BaseLayerss
 {
     public class EditModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace jncc_web_api.Pages.MapInstances
         }
 
         [BindProperty]
-        public MapInstance MapInstance { get; set; }
+        public BaseLayer BaseLayer { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long? id)
         {
@@ -29,9 +29,9 @@ namespace jncc_web_api.Pages.MapInstances
                 return NotFound();
             }
 
-            MapInstance = await _context.MapInstance.FirstOrDefaultAsync(m => m.MapInstanceId == id);
+            BaseLayer = await _context.BaseLayer.FirstOrDefaultAsync(m => m.BaseLayerId == id);
 
-            if (MapInstance == null)
+            if (BaseLayer == null)
             {
                 return NotFound();
             }
@@ -45,7 +45,7 @@ namespace jncc_web_api.Pages.MapInstances
                 return Page();
             }
 
-            _context.Attach(MapInstance).State = EntityState.Modified;
+            _context.Attach(BaseLayer).State = EntityState.Modified;
 
             try
             {
@@ -53,7 +53,7 @@ namespace jncc_web_api.Pages.MapInstances
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MapInstanceExists(MapInstance.MapInstanceId))
+                if (!BaseLayerExists(BaseLayer.BaseLayerId))
                 {
                     return NotFound();
                 }
@@ -66,9 +66,9 @@ namespace jncc_web_api.Pages.MapInstances
             return RedirectToPage("./Index");
         }
 
-        private bool MapInstanceExists(long id)
+        private bool BaseLayerExists(long id)
         {
-            return _context.MapInstance.Any(e => e.MapInstanceId == id);
+            return _context.BaseLayer.Any(e => e.BaseLayerId == id);
         }
     }
 }

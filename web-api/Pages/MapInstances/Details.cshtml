@@ -23,9 +23,27 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.MapInstance.Description)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MapInstance.Centre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MapInstance.Centre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MapInstance.Zoom)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MapInstance.Zoom)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MapInstance.BaseLayerList)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MapInstance.BaseLayerList)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.MapInstance.MapId">Edit</a> |
+    <a asp-page="./Edit" asp-route-id="@Model.MapInstance.MapInstanceId">Edit</a> |
     <a asp-page="./Index">Back to List</a>
 </div>

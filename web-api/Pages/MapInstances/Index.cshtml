@@ -19,6 +19,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.MapInstance[0].Description)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MapInstance[0].Centre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MapInstance[0].Zoom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MapInstance[0].BaseLayerList)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -32,9 +41,18 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.MapId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.MapId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.MapId">Delete</a>
+                @Html.DisplayFor(modelItem => item.Centre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Zoom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseLayerList)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.MapInstanceId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.MapInstanceId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.MapInstanceId">Delete</a>
             </td>
         </tr>
 }

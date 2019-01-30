@@ -25,10 +25,16 @@
             @Html.DisplayFor(model => model.Layer.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Layer.Order)
+            @Html.DisplayNameFor(model => model.Layer.MetadataUrl)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Layer.Order)
+            @Html.DisplayFor(model => model.Layer.MetadataUrl)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.SubLayerGroup)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.SubLayerGroup)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.Type)
@@ -37,10 +43,16 @@
             @Html.DisplayFor(model => model.Layer.Type)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Layer.Src)
+            @Html.DisplayNameFor(model => model.Layer.Url)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Layer.Src)
+            @Html.DisplayFor(model => model.Layer.Url)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Order)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Order)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.Visible)
@@ -53,12 +65,6 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Layer.Opacity)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Layer.FilterDefinition)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Layer.FilterDefinition)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.LayerGroup)

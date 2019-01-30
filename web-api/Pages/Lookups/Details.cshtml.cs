@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MapConfig.Models;
 
-namespace jncc_web_api.Pages.MapInstances
+namespace jncc_web_api.Pages.Lookups
 {
     public class DetailsModel : PageModel
     {
@@ -18,7 +18,7 @@ namespace jncc_web_api.Pages.MapInstances
             _context = context;
         }
 
-        public MapInstance MapInstance { get; set; }
+        public Lookup Lookup { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long? id)
         {
@@ -27,9 +27,9 @@ namespace jncc_web_api.Pages.MapInstances
                 return NotFound();
             }
 
-            MapInstance = await _context.MapInstance.FirstOrDefaultAsync(m => m.MapInstanceId == id);
+            Lookup = await _context.Lookup.FirstOrDefaultAsync(m => m.LookupId == id);
 
-            if (MapInstance == null)
+            if (Lookup == null)
             {
                 return NotFound();
             }

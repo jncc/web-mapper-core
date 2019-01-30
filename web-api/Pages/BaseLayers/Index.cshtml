@@ -1,0 +1,60 @@
+@page
+@model jncc_web_api.Pages.BaseLayerss.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseLayer[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseLayer[0].MetadataUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseLayer[0].Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseLayer[0].Url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseLayer[0].Visible)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.BaseLayer) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MetadataUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Url)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Visible)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.BaseLayerId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.BaseLayerId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.BaseLayerId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

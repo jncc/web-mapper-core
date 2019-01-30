@@ -24,22 +24,28 @@
             @Html.DisplayFor(model => model.Filter.Description)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Filter.MetadataUrl)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Filter.MetadataUrl)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Filter.Type)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Filter.Type)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Filter.Property)
+            @Html.DisplayNameFor(model => model.Filter.Attribute)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Filter.Property)
+            @Html.DisplayFor(model => model.Filter.Attribute)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Filter.LookupSrc)
+            @Html.DisplayNameFor(model => model.Filter.LookupCategory)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Filter.LookupSrc)
+            @Html.DisplayFor(model => model.Filter.LookupCategory)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Filter.Layer)

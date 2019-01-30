@@ -1,5 +1,7 @@
 // Razor CRUD pages for testing build with:
 dotnet aspnet-codegenerator razorpage -m MapInstance -dc MapConfigContext -udl -outDir Pages/MapInstances --referenceScriptLibraries
+dotnet aspnet-codegenerator razorpage -m BaseLayer -dc MapConfigContext -udl -outDir Pages/BaseLayers --referenceScriptLibraries
 dotnet aspnet-codegenerator razorpage -m LayerGroup -dc MapConfigContext -udl -outDir Pages/LayerGroups --referenceScriptLibraries
 dotnet aspnet-codegenerator razorpage -m Layer -dc MapConfigContext -udl -outDir Pages/Layers --referenceScriptLibraries
 dotnet aspnet-codegenerator razorpage -m Filter -dc MapConfigContext -udl -outDir Pages/Filters --referenceScriptLibraries
+dotnet aspnet-codegenerator razorpage -m Lookup -dc MapConfigContext -udl -outDir Pages/Lookups --referenceScriptLibraries

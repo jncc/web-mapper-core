@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MapConfig.Models;
 
-namespace jncc_web_api.Pages.MapInstances
+namespace jncc_web_api.Pages.BaseLayerss
 {
     public class DeleteModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace jncc_web_api.Pages.MapInstances
         }
 
         [BindProperty]
-        public MapInstance MapInstance { get; set; }
+        public BaseLayer BaseLayer { get; set; }
 
         public async Task<IActionResult> OnGetAsync(long? id)
         {
@@ -28,9 +28,9 @@ namespace jncc_web_api.Pages.MapInstances
                 return NotFound();
             }
 
-            MapInstance = await _context.MapInstance.FirstOrDefaultAsync(m => m.MapInstanceId == id);
+            BaseLayer = await _context.BaseLayer.FirstOrDefaultAsync(m => m.BaseLayerId == id);
 
-            if (MapInstance == null)
+            if (BaseLayer == null)
             {
                 return NotFound();
             }
@@ -44,11 +44,11 @@ namespace jncc_web_api.Pages.MapInstances
                 return NotFound();
             }
 
-            MapInstance = await _context.MapInstance.FindAsync(id);
+            BaseLayer = await _context.BaseLayer.FindAsync(id);
 
-            if (MapInstance != null)
+            if (BaseLayer != null)
             {
-                _context.MapInstance.Remove(MapInstance);
+                _context.BaseLayer.Remove(BaseLayer);
                 await _context.SaveChangesAsync();
             }
 

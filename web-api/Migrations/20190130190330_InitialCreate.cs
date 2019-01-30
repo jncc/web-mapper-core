@@ -8,17 +8,52 @@ namespace jnccwebapi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "MapInstance",
+                name: "BaseLayer",
                 columns: table => new
                 {
-                    MapId = table.Column<long>(nullable: false)
+                    BaseLayerId = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    MetadataUrl = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    Visible = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MapInstance", x => x.MapId);
+                    table.PrimaryKey("PK_BaseLayer", x => x.BaseLayerId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lookup",
+                columns: table => new
+                {
+                    LookupId = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Code = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    LookupCategory = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lookup", x => x.LookupId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MapInstance",
+                columns: table => new
+                {
+                    MapInstanceId = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Centre = table.Column<string>(nullable: true),
+                    Zoom = table.Column<int>(nullable: false),
+                    BaseLayerList = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MapInstance", x => x.MapInstanceId);
                 });
 
             migrationBuilder.CreateTable(
@@ -29,16 +64,16 @@ namespace jnccwebapi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    MapId = table.Column<long>(nullable: false)
+                    MapInstanceId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LayerGroup", x => x.LayerGroupId);
                     table.ForeignKey(
-                        name: "FK_LayerGroup_MapInstance_MapId",
-                        column: x => x.MapId,
+                        name: "FK_LayerGroup_MapInstance_MapInstanceId",
+                        column: x => x.MapInstanceId,
                         principalTable: "MapInstance",
-                        principalColumn: "MapId",
+                        principalColumn: "MapInstanceId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -50,12 +85,13 @@ namespace jnccwebapi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Order = table.Column<long>(nullable: false),
+                    MetadataUrl = table.Column<string>(nullable: true),
+                    SubLayerGroup = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
-                    Src = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    Order = table.Column<long>(nullable: false),
                     Visible = table.Column<bool>(nullable: false),
-                    Opacity = table.Column<byte>(nullable: false),
-                    FilterDefinition = table.Column<string>(nullable: true),
+                    Opacity = table.Column<float>(nullable: false),
                     LayerGroupId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -77,9 +113,10 @@ namespace jnccwebapi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    MetadataUrl = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
-                    Property = table.Column<string>(nullable: true),
-                    LookupSrc = table.Column<string>(nullable: true),
+                    Attribute = table.Column<string>(nullable: true),
+                    LookupCategory = table.Column<string>(nullable: true),
                     LayerId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -104,15 +141,21 @@ namespace jnccwebapi.Migrations
                 column: "LayerGroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LayerGroup_MapId",
+                name: "IX_LayerGroup_MapInstanceId",
                 table: "LayerGroup",
-                column: "MapId");
+                column: "MapInstanceId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BaseLayer");
+
+            migrationBuilder.DropTable(
                 name: "Filter");
+
+            migrationBuilder.DropTable(
+                name: "Lookup");
 
             migrationBuilder.DropTable(
                 name: "Layer");

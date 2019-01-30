@@ -13,7 +13,7 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MapInstance.MapId" />
+            <input type="hidden" asp-for="MapInstance.MapInstanceId" />
             <div class="form-group">
                 <label asp-for="MapInstance.Name" class="control-label"></label>
                 <input asp-for="MapInstance.Name" class="form-control" />
@@ -23,6 +23,21 @@
                 <label asp-for="MapInstance.Description" class="control-label"></label>
                 <input asp-for="MapInstance.Description" class="form-control" />
                 <span asp-validation-for="MapInstance.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MapInstance.Centre" class="control-label"></label>
+                <input asp-for="MapInstance.Centre" class="form-control" />
+                <span asp-validation-for="MapInstance.Centre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MapInstance.Zoom" class="control-label"></label>
+                <input asp-for="MapInstance.Zoom" class="form-control" />
+                <span asp-validation-for="MapInstance.Zoom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MapInstance.BaseLayerList" class="control-label"></label>
+                <input asp-for="MapInstance.BaseLayerList" class="form-control" />
+                <span asp-validation-for="MapInstance.BaseLayerList" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

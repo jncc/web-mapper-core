@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MapConfig.Models;
 
-namespace jncc_web_api.Pages.LayerGroups
+namespace jncc_web_api.Pages.BaseLayerss
 {
     public class CreateModel : PageModel
     {
@@ -20,12 +20,11 @@ namespace jncc_web_api.Pages.LayerGroups
 
         public IActionResult OnGet()
         {
-        ViewData["MapInstanceId"] = new SelectList(_context.MapInstance, "MapInstanceId", "MapInstanceId");
             return Page();
         }
 
         [BindProperty]
-        public LayerGroup LayerGroup { get; set; }
+        public BaseLayer BaseLayer { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -34,7 +33,7 @@ namespace jncc_web_api.Pages.LayerGroups
                 return Page();
             }
 
-            _context.LayerGroup.Add(LayerGroup);
+            _context.BaseLayer.Add(BaseLayer);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

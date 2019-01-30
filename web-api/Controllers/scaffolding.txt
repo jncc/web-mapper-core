@@ -1,5 +1,7 @@
 // initial created with dotnet core scaffolding:
 dotnet aspnet-codegenerator controller -api -async -name MapInstanceController -m MapConfig.Models.MapInstance -dc MapConfigContext -outDir Controllers -namespace MapConfig.Controllers
+dotnet aspnet-codegenerator controller -api -async -name BaseLayerController -m MapConfig.Models.BaseLayer -dc MapConfigContext -outDir Controllers -namespace MapConfig.Controllers
 dotnet aspnet-codegenerator controller -api -async -name LayerGroupController -m MapConfig.Models.LayerGroup -dc MapConfigContext -outDir Controllers -namespace MapConfig.Controllers
 dotnet aspnet-codegenerator controller -api -async -name LayerController -m MapConfig.Models.Layer -dc MapConfigContext -outDir Controllers -namespace MapConfig.Controllers
 dotnet aspnet-codegenerator controller -api -async -name FilterController -m MapConfig.Models.Filter -dc MapConfigContext -outDir Controllers -namespace MapConfig.Controllers
+dotnet aspnet-codegenerator controller -api -async -name LookupController -m MapConfig.Models.Lookup -dc MapConfigContext -outDir Controllers -namespace MapConfig.Controllers

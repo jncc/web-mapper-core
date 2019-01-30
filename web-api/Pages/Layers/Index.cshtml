@@ -20,22 +20,25 @@
                 @Html.DisplayNameFor(model => model.Layer[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Layer[0].Order)
+                @Html.DisplayNameFor(model => model.Layer[0].MetadataUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Layer[0].SubLayerGroup)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Layer[0].Src)
+                @Html.DisplayNameFor(model => model.Layer[0].Url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Layer[0].Order)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].Visible)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].Opacity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Layer[0].FilterDefinition)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].LayerGroup)
@@ -53,22 +56,25 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Order)
+                @Html.DisplayFor(modelItem => item.MetadataUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubLayerGroup)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Src)
+                @Html.DisplayFor(modelItem => item.Url)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Visible)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Opacity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FilterDefinition)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LayerGroup.LayerGroupId)

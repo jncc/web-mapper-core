@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace jnccwebapi.Migrations
 {
     [DbContext(typeof(MapConfigContext))]
-    [Migration("20190129192628_InitialCreate")]
+    [Migration("20190130190330_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,20 +20,42 @@ namespace jnccwebapi.Migrations
                 .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            modelBuilder.Entity("MapConfig.Models.BaseLayer", b =>
+                {
+                    b.Property<long>("BaseLayerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("MetadataUrl");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Type");
+
+                    b.Property<string>("Url");
+
+                    b.Property<bool>("Visible");
+
+                    b.HasKey("BaseLayerId");
+
+                    b.ToTable("BaseLayer");
+                });
+
             modelBuilder.Entity("MapConfig.Models.Filter", b =>
                 {
                     b.Property<long>("FilterId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Attribute");
+
                     b.Property<string>("Description");
 
                     b.Property<long>("LayerId");
 
-                    b.Property<string>("LookupSrc");
+                    b.Property<string>("LookupCategory");
+
+                    b.Property<string>("MetadataUrl");
 
                     b.Property<string>("Name");
-
-                    b.Property<string>("Property");
 
                     b.Property<string>("Type");
 
@@ -51,19 +73,21 @@ namespace jnccwebapi.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("FilterDefinition");
-
                     b.Property<long>("LayerGroupId");
+
+                    b.Property<string>("MetadataUrl");
 
                     b.Property<string>("Name");
 
-                    b.Property<byte>("Opacity");
+                    b.Property<float>("Opacity");
 
                     b.Property<long>("Order");
 
-                    b.Property<string>("Src");
+                    b.Property<string>("SubLayerGroup");
 
                     b.Property<string>("Type");
+
+                    b.Property<string>("Url");
 
                     b.Property<bool>("Visible");
 
@@ -81,27 +105,49 @@ namespace jnccwebapi.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<long>("MapId");
+                    b.Property<long>("MapInstanceId");
 
                     b.Property<string>("Name");
 
                     b.HasKey("LayerGroupId");
 
-                    b.HasIndex("MapId");
+                    b.HasIndex("MapInstanceId");
 
                     b.ToTable("LayerGroup");
                 });
 
+            modelBuilder.Entity("MapConfig.Models.Lookup", b =>
+                {
+                    b.Property<long>("LookupId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Code");
+
+                    b.Property<string>("LookupCategory");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("LookupId");
+
+                    b.ToTable("Lookup");
+                });
+
             modelBuilder.Entity("MapConfig.Models.MapInstance", b =>
                 {
-                    b.Property<long>("MapId")
+                    b.Property<long>("MapInstanceId")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("BaseLayerList");
+
+                    b.Property<string>("Centre");
 
                     b.Property<string>("Description");
 
                     b.Property<string>("Name");
 
-                    b.HasKey("MapId");
+                    b.Property<int>("Zoom");
+
+                    b.HasKey("MapInstanceId");
 
                     b.ToTable("MapInstance");
                 });
@@ -126,7 +172,7 @@ namespace jnccwebapi.Migrations
                 {
                     b.HasOne("MapConfig.Models.MapInstance", "Map")
                         .WithMany("LayerGroups")
-                        .HasForeignKey("MapId")
+                        .HasForeignKey("MapInstanceId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
