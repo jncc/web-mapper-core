@@ -11,7 +11,7 @@ namespace MapConfig.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LookupController : ControllerBase
+    public class LookupController : Controller
     {
         private readonly MapConfigContext _context;
 
@@ -24,82 +24,29 @@ namespace MapConfig.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Lookup>>> GetLookup()
         {
-            return await _context.Lookup.ToListAsync();
+            var lookups = await _context.Lookup
+                .Select(l => l.LookupCategory)
+                .Distinct()
+                .ToListAsync();
+
+            return Json( new { LookupCategories = lookups });
         }
 
-        // GET: api/Lookup/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Lookup>> GetLookup(long id)
+        // GET: api/Lookup/Habitat
+        [HttpGet("{lookupCategory}")]
+        public async Task<ActionResult<Lookup>> GetLookup(string lookupCategory)
         {
-            var lookup = await _context.Lookup.FindAsync(id);
+            var lookups = await _context.Lookup
+                .Where(m => m.LookupCategory == lookupCategory)
+                .ToListAsync();
 
-            if (lookup == null)
+            if (lookups == null)
             {
                 return NotFound();
             }
 
-            return lookup;
+            return Json( new { LookupResults = lookups });
         }
 
-        // PUT: api/Lookup/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLookup(long id, Lookup lookup)
-        {
-            if (id != lookup.LookupId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(lookup).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LookupExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Lookup
-        [HttpPost]
-        public async Task<ActionResult<Lookup>> PostLookup(Lookup lookup)
-        {
-            _context.Lookup.Add(lookup);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetLookup", new { id = lookup.LookupId }, lookup);
-        }
-
-        // DELETE: api/Lookup/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Lookup>> DeleteLookup(long id)
-        {
-            var lookup = await _context.Lookup.FindAsync(id);
-            if (lookup == null)
-            {
-                return NotFound();
-            }
-
-            _context.Lookup.Remove(lookup);
-            await _context.SaveChangesAsync();
-
-            return lookup;
-        }
-
-        private bool LookupExists(long id)
-        {
-            return _context.Lookup.Any(e => e.LookupId == id);
-        }
     }
 }
