@@ -7,13 +7,13 @@ namespace MapConfig.Models
     public class MapInstance
     {
         [Key]
-        public long MapInstanceId { get; set; } //Unique Map Instance ID
-        public string Name { get; set; }        //Map name
-        public string Description { get; set; } //Map description (may contain HTML)
-        public string Centre { get; set; }      //Initial Map Centre in EPSG:4326, e.g. [-3.5,52.25]
-        public int Zoom { get; set; }           //Initial Zoom Level 1-22
-        public string BaseLayerList { get; set; }//Comma separated list of either BaseLayerIds or Names
-        public string VisibleBaseLayer { get; set; } //which BaseLayer is initially visible?
+        public long MapInstanceId { get; set; }     //Unique Map Instance ID
+        public string Name { get; set; }            //Map name
+        public string Description { get; set; }     //Map description (may contain HTML)
+        public string Centre { get; set; }          //Initial Map Centre in EPSG:4326, e.g. [-3.5,52.25]
+        public int Zoom { get; set; }               //Initial Zoom Level 1-22
+        public string BaseLayerList { get; set; }   //Comma separated list of (either BaseLayerIds or Names)
+        public string VisibleBaseLayer { get; set; }//which BaseLayer is initially visible? (either BaseLayerId or Name)
 
         [NotMapped]
         public List<BaseLayer> BaseLayers { get; set; }
