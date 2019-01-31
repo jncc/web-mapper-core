@@ -24,7 +24,9 @@ namespace MapConfig.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstances()
         {
-            var maps = await _context.MapInstance.ToListAsync();
+            var maps = await _context.MapInstance
+                .Select(l => new { l.MapInstanceId, l.Name, l.Description })
+                .ToListAsync();
             return Json( new { mapInstances = maps });
         }
 
