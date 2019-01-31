@@ -10,9 +10,10 @@ namespace MapConfig.Models
         public long MapInstanceId { get; set; } //Unique Map Instance ID
         public string Name { get; set; }        //Map name
         public string Description { get; set; } //Map description (may contain HTML)
-        public string Centre { get; set; }      //Initial Map Centre in EPSG:4326, e.g. [52.0,-3.0]
+        public string Centre { get; set; }      //Initial Map Centre in EPSG:4326, e.g. [-3.5,52.25]
         public int Zoom { get; set; }           //Initial Zoom Level 1-22
         public string BaseLayerList { get; set; }//Comma separated list of either BaseLayerIds or Names
+        public string VisibleBaseLayer { get; set; } //which BaseLayer is initially visible?
 
         [NotMapped]
         public List<BaseLayer> BaseLayers { get; set; }
@@ -29,7 +30,8 @@ namespace MapConfig.Models
         public string MetadataUrl { get; set; } //could be used for BaseLayer attribution?
         public string Type { get; set; }        //the type of layer, e.g. OSM, Bing, Tile etc.
         public string Url { get; set; }         //the source Url for the layer
-        public Boolean Visible { get; set; }    //is the layer visible initially?
+        [NotMapped]
+        public Boolean Visible {get; set;}      //set by the /api/Map endpoint if this baselayer is the default visible
     }
 
     public class LayerGroup

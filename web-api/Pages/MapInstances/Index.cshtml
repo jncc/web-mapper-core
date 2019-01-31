@@ -28,6 +28,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.MapInstance[0].BaseLayerList)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MapInstance[0].VisibleBaseLayer)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -48,6 +51,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BaseLayerList)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VisibleBaseLayer)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.MapInstanceId">Edit</a> |

@@ -1,5 +1,5 @@
 @page
-@model jncc_web_api.Pages.BaseLayerss.IndexModel
+@model jncc_web_api.Pages.BaseLayers.IndexModel
 
 @{
     ViewData["Title"] = "Index";
@@ -25,9 +25,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.BaseLayer[0].Url)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BaseLayer[0].Visible)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -45,9 +42,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Url)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Visible)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.BaseLayerId">Edit</a> |

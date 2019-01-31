@@ -46,7 +46,7 @@ namespace MapConfig.Controllers
             }
 
             List<BaseLayer> baseLayers = new List<BaseLayer>();
-
+            //split the list of BaseLayer Names or Ids into an array and remove leading and trailing spaces
             var baseLayersList = map.BaseLayerList
                 .Split(",")
                 .Select(e => e.Trim())
@@ -55,15 +55,22 @@ namespace MapConfig.Controllers
             if(baseLayersList.Count()>0) {
                 foreach(string baseLayerName in baseLayersList) {
                     BaseLayer baseLayer;
-                    try {
+                    try { //try Ids
                         uint baseLayerId = Convert.ToUInt32(baseLayerName, 10);
                         baseLayer = await _context.BaseLayer
                             .SingleOrDefaultAsync(b => b.BaseLayerId == baseLayerId);
-                    } catch {
+                    } catch { //or Names
                         baseLayer = await _context.BaseLayer
                             .SingleOrDefaultAsync(b => b.Name == baseLayerName);
                     }
-                    if(baseLayer.BaseLayerId > 0) {
+                    if(baseLayer.BaseLayerId > 0) { //we found the baselayer
+                        baseLayer.Visible=false;
+                        try { //is it marked visible by Id?
+                            uint visibleLayerId = Convert.ToUInt32(map.VisibleBaseLayer, 10);
+                            if(visibleLayerId == baseLayer.BaseLayerId) baseLayer.Visible=true;                  
+                        } catch { //or by Name?
+                            if(map.VisibleBaseLayer == baseLayer.Name) baseLayer.Visible=true;
+                        }
                         baseLayers.Add(baseLayer);
                     }
                 }

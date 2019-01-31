@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MapConfig.Models;
 
-namespace jncc_web_api.Pages.BaseLayerss
+namespace jncc_web_api.Pages.BaseLayers
 {
     public class DeleteModel : PageModel
     {

@@ -28,15 +28,13 @@ namespace MapConfig.Controllers
                 Name = "OpenStreetMap",
                 MetadataUrl = "http://openstreetmap.org",
                 Type = "OSM",
-                Url = "//{a-f}.osm.esdm.co.uk/osm/900913/c/{z}/{x}/{y}.png",
-                Visible = true 
+                Url = "//{a-f}.osm.esdm.co.uk/osm/900913/c/{z}/{x}/{y}.png"
             };
             var bl2 = new BaseLayer { 
                 Name = "OpenTopoMap",
                 MetadataUrl = "http://opentopomap.org",
                 Type = "OSM",
-                Url = "//{a-f}.osm.esdm.co.uk/osm/900913/tc/{z}/{x}/{y}.png",
-                Visible = true 
+                Url = "//{a-f}.osm.esdm.co.uk/osm/900913/tc/{z}/{x}/{y}.png"
             };
 
             if (_context.BaseLayer.Count() == 0)
@@ -50,16 +48,18 @@ namespace MapConfig.Controllers
             var map1 = new MapInstance { 
                 Name = "EMODnet",
                 Description = "<p>Configurable <strong>EMODnet</strong> description.</p><p><a href=\"http://www.emodnet.eu/\" target=\"_blank\">EMODnet</a></p>",
-                Centre = "[52,-3]",
+                Centre = "[-3.507729, 52.304535]",
                 Zoom = 6,
-                BaseLayerList = "OpenStreetMap,OpenTopoMap"
+                BaseLayerList = "OpenStreetMap,OpenTopoMap",
+                VisibleBaseLayer = "OpenStreetMap"
              };
             var map2 = new MapInstance { 
                 Name = "OSPAR", 
                 Description = "<p>Configurable <strong>OSPAR</strong> description.</p><p><a href=\"https://www.ospar.org/\" target=\"_blank\">OSPAR</a></p>",
-                Centre = "[52,-3]",
+                Centre = "[-3.507729, 52.304535]",
                 Zoom = 6,
-                BaseLayerList = "OpenStreetMap,OpenTopoMap"                
+                BaseLayerList = "OpenStreetMap,OpenTopoMap",
+                VisibleBaseLayer = "OpenTopoMap"               
             };           
 
             if (_context.MapInstance.Count() == 0)
