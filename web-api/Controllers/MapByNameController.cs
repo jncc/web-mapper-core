@@ -42,6 +42,32 @@ namespace MapConfig.Controllers
             {
                 return NotFound();
             }
+
+            List<BaseLayer> baseLayers = new List<BaseLayer>();
+
+            var baseLayersList = map.BaseLayerList
+                .Split(",")
+                .Select(e => e.Trim())
+                .Distinct();
+            
+            if(baseLayersList.Count()>0) {
+                foreach(string baseLayerName in baseLayersList) {
+                    BaseLayer baseLayer;
+                    try {
+                        uint baseLayerId = Convert.ToUInt32(baseLayerName, 10);
+                        baseLayer = await _context.BaseLayer
+                            .SingleOrDefaultAsync(b => b.BaseLayerId == baseLayerId);
+                    } catch {
+                        baseLayer = await _context.BaseLayer
+                            .SingleOrDefaultAsync(b => b.Name == baseLayerName);
+                    }
+                    if(baseLayer.BaseLayerId > 0) {
+                        baseLayers.Add(baseLayer);
+                    }
+                }
+                map.BaseLayers = baseLayers;
+            }
+
             return Json( new { mapInstance = map });
         }
 
