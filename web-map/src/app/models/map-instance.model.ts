@@ -1,6 +1,6 @@
-import { ILayerConfig } from './layer-config.model';
+import { ILayerGroupConfig } from './layer-group-config';
 export interface IMapInstance {
         name: string;
         description: string;
-        layers: ILayerConfig[];
+        layerGroups: ILayerGroupConfig[];
 }

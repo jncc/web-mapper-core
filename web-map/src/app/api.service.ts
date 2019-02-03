@@ -26,9 +26,7 @@ export class ApiService {
     // TODO:
     // const mapInstanceConfigUrl = this.apiUrl; // TODO:  + '/mapbyname/EMODnet';
 
-    return this.http.get<IMapInstance>(this.mapInstanceConfigUrl).subscribe((mapInstance) => {
-      console.log(mapInstance);
-    });
+    return this.http.get<IMapInstance>(this.mapInstanceConfigUrl);
   }
 
 }

@@ -1,5 +1,5 @@
 export interface ILayerConfig {
-    id: number;
+    layerId: number;
     name: string;
     displayName: string;
     url: string;

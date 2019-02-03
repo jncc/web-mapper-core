@@ -40,13 +40,18 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.mapService.mapConfig.subscribe((data) => {
-      if (data.mapInstances.length) {
-        this.updateLayers(data.mapInstances[0].layers);
-      }
-    });
-
     this.setupMap();
+    this.mapService.mapConfig.subscribe((data) => {
+      if (data.mapInstance.layerGroups.length) {
+        const layers = data.mapInstance.layerGroups
+        .map((layerGroup) => layerGroup.layers)
+        .reduce((a, b) => a.concat(b));
+        this.updateLayers(layers);
+      }
+       // if (data.mapInstance.layerGroups.length) {
+      //   this.updateLayers(data.mapInstance.layerGroups[0].layers);
+      // }
+    });
   }
 
   private updateLayers(layersConfig: ILayerConfig[]): void {

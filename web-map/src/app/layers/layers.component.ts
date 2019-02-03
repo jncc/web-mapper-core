@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
+import { ILayerGroupConfig } from '../models/layer-group-config';
 
 @Component({
   selector: 'app-layers',
@@ -8,7 +9,9 @@ import { ILayerConfig } from '../models/layer-config.model';
   styleUrls: ['./layers.component.scss']
 })
 export class LayersComponent implements OnInit {
-  layers = [];
+  layerGroups = [{
+    name: 'andyb'
+  }];
 
   show = true;
 
@@ -16,14 +19,14 @@ export class LayersComponent implements OnInit {
 
   ngOnInit() {
     this.mapService.mapConfig.subscribe((data) => {
-      if (data.mapInstances.length) {
-        this.layers = data.mapInstances[0].layers;
+      if (data.mapInstance) {
+        this.layerGroups = data.mapInstance.layerGroups;
       }
     });
   }
 
-  onVisibilityChanged(layer: ILayerConfig, visible: boolean) {
-    this.mapService.changeLayerVisibility(layer.id, visible);
+  onLayerVisiblityChanged(event: {layerId: number, visible: boolean}) {
+    this.mapService.changeLayerVisibility(event.layerId, event.visible);
   }
 
   toggleShow() {

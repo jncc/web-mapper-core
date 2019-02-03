@@ -7,10 +7,10 @@
     </h6>
   </div>
   <div [ngClass]="{'d-none': !show}" class="container-body">
-    <ul>
-      <li *ngFor="let layer of layers">
-        <app-layer-item [layer]="layer" (visibilityChanged)="onVisibilityChanged(layer, $event)"></app-layer-item>
-      </li>
-    </ul>
+      <ul>
+          <li *ngFor="let layerGroup of layerGroups">
+            <app-layer-group [layerGroup]="layerGroup" (layerVisibilityChanged)="onLayerVisiblityChanged($event)"></app-layer-group>
+          </li>
+        </ul>
   </div>
 </div>

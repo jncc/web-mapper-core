@@ -14,10 +14,12 @@ export class LayerItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    // console.log(this.layer);
   }
 
   onChange(event) {
-    this.visibilityChanged.emit(event.target.checked);
+    const visible = event.target.checked;
+    this.visibilityChanged.emit(visible);
   }
 
 }

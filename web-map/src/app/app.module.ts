@@ -12,6 +12,7 @@ import { ControlsToolbarComponent } from './controls-toolbar/controls-toolbar.co
 import { MapInstancesComponent } from './map-instances/map-instances.component';
 import { LayersComponent } from './layers/layers.component';
 import { LayerItemComponent } from './layers/layer-item/layer-item.component';
+import { LayerGroupComponent } from './layers/layer-group/layer-group.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -25,7 +26,8 @@ export function initializeApp(appConfig: AppConfigService) {
     ControlsToolbarComponent,
     MapInstancesComponent,
     LayersComponent,
-    LayerItemComponent
+    LayerItemComponent,
+    LayerGroupComponent
   ],
   imports: [
     BrowserModule,

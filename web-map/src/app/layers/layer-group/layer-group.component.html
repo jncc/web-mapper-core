@@ -1,0 +1,6 @@
+{{ layerGroup.name }}
+<ul>
+    <li *ngFor="let layer of layerGroup.layers">
+        <app-layer-item [layer]="layer" (visibilityChanged)="onLayerVisibilityChanged(layer, $event)"></app-layer-item>
+    </li>
+</ul>
