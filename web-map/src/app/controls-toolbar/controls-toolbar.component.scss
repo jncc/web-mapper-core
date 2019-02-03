@@ -1,5 +1,12 @@
+@import '../../variables.scss';
+
 #controlsToolbar {
     position: absolute;
     left: 1rem;
     top: 1rem;
+}
+
+.controls-toolbar {
+    background-color: white;
+    padding: $container-padding;
 }

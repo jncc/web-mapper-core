@@ -1,6 +1,19 @@
-{{ layerGroup.name }}
-<ul>
-    <li *ngFor="let layer of layerGroup.layers">
-        <app-layer-item [layer]="layer" (visibilityChanged)="onLayerVisibilityChanged(layer, $event)"></app-layer-item>
-    </li>
-</ul>
+<div class="layer-group">
+    <div class="layer-group-header" (click)="toggleShow()">
+        <h6>
+            <i *ngIf="show" class="btn fa fa-caret-down"></i>
+            <i *ngIf="!show" class="btn fa fa-caret-right"></i>
+            {{ layerGroup.name }}
+            <span *ngIf="visibleLayers" class="badge">
+                    {{ visibleLayers }}
+            </span>
+        </h6>
+    </div>
+    <div [ngClass]="{'d-none': !show}" class="layer-group-body">
+        <ul>
+            <li *ngFor="let layer of layerGroup.layers">
+                <app-layer [layer]="layer" (visibilityChanged)="onLayerVisibilityChanged(layer, $event)"></app-layer>
+            </li>
+        </ul>
+    </div>
+</div>

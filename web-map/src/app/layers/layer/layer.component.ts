@@ -2,11 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ILayerConfig } from '../../models/layer-config.model';
 
 @Component({
-  selector: 'app-layer-item',
-  templateUrl: './layer-item.component.html',
-  styleUrls: ['./layer-item.component.scss']
+  selector: 'app-layer',
+  templateUrl: './layer.component.html',
+  styleUrls: ['./layer.component.scss']
 })
-export class LayerItemComponent implements OnInit {
+export class LayerComponent implements OnInit {
 
   @Input() layer: ILayerConfig;
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();

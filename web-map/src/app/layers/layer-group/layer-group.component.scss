@@ -1,0 +1,29 @@
+@import '../../../variables.scss';
+
+$layer-group-grey: rgb(245, 245, 245);
+
+.layer-group {
+    border: 1px solid $layer-group-grey;
+    margin-bottom: 0.25rem;
+    border-radius: 5px;
+}
+
+.layer-group-header {
+    cursor: pointer;
+    border-bottom: 1px solid $layer-group-grey;
+    background-color:$layer-group-grey;
+    line-height: 1rem;
+}
+
+span.badge {
+    font-size: 0.7rem;
+    background-color: $text-color;
+    color: #fff;
+    float: right;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+    text-align: center;
+    border-radius: 50%;
+    vertical-align: middle;
+    line-height: 1rem;
+}

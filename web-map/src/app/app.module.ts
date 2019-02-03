@@ -11,8 +11,9 @@ import { LegendItemComponent } from './legends/legend-item/legend-item.component
 import { ControlsToolbarComponent } from './controls-toolbar/controls-toolbar.component';
 import { MapInstancesComponent } from './map-instances/map-instances.component';
 import { LayersComponent } from './layers/layers.component';
-import { LayerItemComponent } from './layers/layer-item/layer-item.component';
+import { LayerComponent } from './layers/layer/layer.component';
 import { LayerGroupComponent } from './layers/layer-group/layer-group.component';
+import { ControlsContainerComponent } from './controls-container/controls-container.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -26,8 +27,9 @@ export function initializeApp(appConfig: AppConfigService) {
     ControlsToolbarComponent,
     MapInstancesComponent,
     LayersComponent,
-    LayerItemComponent,
-    LayerGroupComponent
+    LayerComponent,
+    LayerGroupComponent,
+    ControlsContainerComponent
   ],
   imports: [
     BrowserModule,
