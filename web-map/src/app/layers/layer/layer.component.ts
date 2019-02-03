@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { ILayerConfig } from '../../models/layer-config.model';
 
 @Component({
   selector: 'app-layer',
   templateUrl: './layer.component.html',
-  styleUrls: ['./layer.component.scss']
+  styleUrls: ['./layer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LayerComponent implements OnInit {
 
