@@ -1,5 +1,7 @@
 {
     "name": "dev mapper",
     "logging": true,
-    "apiUrl": "assets/config/map-config.json"
+    "apiUrl": "assets/config/map-config.json",
+    "mapInstanceConfigUrl": "assets/config/map-instance-config.json",
+    "mapInstance": "EMODnet"
 }

@@ -37,6 +37,12 @@ export class MapService {
       // console.log(this.dataStore.mapConfig);
       this._mapConfig.next(this.dataStore.mapConfig);
     }, error => console.log('Could not load map config.'));
+
+    this.getMapInstanceConfig();
+  }
+
+  getMapInstanceConfig() {
+    this.apiService.getMapInstanceConfig();
   }
 
   // TODO: move to another service

@@ -1,0 +1,99 @@
+{  
+   "mapInstance":{  
+      "mapInstanceId":1,
+      "name":"EMODnet",
+      "description":"<p>Configurable <strong>EMODnet</strong> description.</p><p><a href=\"http://www.emodnet.eu/\" target=\"_blank\">EMODnet</a></p>",
+      "centre":"[-3.507729, 52.304535]",
+      "zoom":6,
+      "baseLayerList":"OpenStreetMap,OpenTopoMap",
+      "visibleBaseLayer":"OpenStreetMap",
+      "baseLayers":[  
+         {  
+            "baseLayerId":1,
+            "name":"OpenStreetMap",
+            "metadataUrl":"http://openstreetmap.org",
+            "type":"OSM",
+            "url":"//{a-f}.osm.esdm.co.uk/osm/900913/c/{z}/{x}/{y}.png",
+            "visible":true
+         },
+         {  
+            "baseLayerId":2,
+            "name":"OpenTopoMap",
+            "metadataUrl":"http://opentopomap.org",
+            "type":"OSM",
+            "url":"//{a-f}.osm.esdm.co.uk/osm/900913/tc/{z}/{x}/{y}.png",
+            "visible":false
+         }
+      ],
+      "layerGroups":[  
+         {  
+            "layerGroupId":1,
+            "name":"Collection of Layers",
+            "description":"<p>Collection of <strong>Layers</strong></p>",
+            "mapInstanceId":1,
+            "layers":[  
+               {  
+                  "layerId":1,
+                  "name":"Overlay Layer 1",
+                  "description":"<p>An Overlay Layer</p>",
+                  "metadataUrl":null,
+                  "subLayerGroup":null,
+                  "type":"WMS",
+                  "url":"",
+                  "order":1,
+                  "visible":true,
+                  "opacity":0.5,
+                  "layerGroupId":1,
+                  "filters":[  
+                     {  
+                        "filterId":1,
+                        "name":"Habitat Filter",
+                        "description":"<p>A Filter for <strong>Habitats</strong></p>",
+                        "metadataUrl":"",
+                        "type":"Lookup",
+                        "attribute":"habitat",
+                        "lookupCategory":"Habitat",
+                        "layerId":1
+                     },
+                     {  
+                        "filterId":2,
+                        "name":"Species Filter",
+                        "description":"<p>A Filter for <strong>Species</strong></p>",
+                        "metadataUrl":"",
+                        "type":"Lookup",
+                        "attribute":"species",
+                        "lookupCategory":"Species",
+                        "layerId":1
+                     }
+                  ]
+               },
+               {  
+                  "layerId":2,
+                  "name":"Overlay Layer 2",
+                  "description":"<p>An Overlay Layer</p>",
+                  "metadataUrl":null,
+                  "subLayerGroup":null,
+                  "type":"WMS",
+                  "url":"",
+                  "order":2,
+                  "visible":true,
+                  "opacity":0.5,
+                  "layerGroupId":1,
+                  "filters":[  
+                     {  
+                        "filterId":3,
+                        "name":"Habitat Filter",
+                        "description":"<p>A Filter for <strong>Habitats</strong></p>",
+                        "metadataUrl":"",
+                        "type":"Lookup",
+                        "attribute":"habitat",
+                        "lookupCategory":"Habitat",
+                        "layerId":2
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+}

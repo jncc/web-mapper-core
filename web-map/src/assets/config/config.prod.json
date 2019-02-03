@@ -1,5 +1,6 @@
 {
     "name": "prod mapper",
     "logging": false,
-    "apiUrl": "//jnccdev-api.esdm.co.uk/api/Test"
+    "apiUrl": "//jnccdev-api.esdm.co.uk/api",
+    "mapInstance": "EMODnet"
 }
