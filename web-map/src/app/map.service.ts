@@ -33,7 +33,6 @@ export class MapService {
         mapInstance: {
           name: '',
           description: '',
-          layers: [],
           layerGroups: []
         }
       }

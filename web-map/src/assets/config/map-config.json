@@ -3,32 +3,12 @@
         {
             "id": 1,
             "name": "EMODnet",
-            "description": "<p>Configurable <strong>EMODnet</strong> description.</p><p><a href=\"http://www.emodnet.eu/\" target=\"_blank\">EMODnet</a></p>",
-            "layers": [
-                {
-                    "id": "1",
-                    "name": "eusm_sub",
-                    "displayName": "Substrate",
-                    "url": "https://jnccdev-geo.esdm.co.uk/emodnet/wms",
-                    "visible": false,
-                    "opacity": 0.8
-                },
-                {
-                    "id": 2,
-                    "name": "eusm_bio",
-                    "displayName": "Biological Zones",
-                    "url": "https://jnccdev-geo.esdm.co.uk/emodnet/wms",
-                    "visible": true,
-                    "opacity": 0.5
-                }
-            ]
+            "description": "<p>Configurable <strong>EMODnet</strong> description.</p><p><a href=\"http://www.emodnet.eu/\" target=\"_blank\">EMODnet</a></p>"
         },
         {
             "id": "2",
             "name": "OSPAR",
-            "description": "<p>Configurable <strong>OSPAR</strong> description.</p><p><a href=\"https://www.ospar.org/\" target=\"_blank\">OSPAR</a></p>",
-            "layers": [
-            ]
+            "description": "<p>Configurable <strong>OSPAR</strong> description.</p><p><a href=\"https://www.ospar.org/\" target=\"_blank\">OSPAR</a></p>"
         }
     ]
 }
