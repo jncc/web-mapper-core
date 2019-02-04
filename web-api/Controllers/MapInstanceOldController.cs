@@ -11,11 +11,11 @@ namespace MapConfig.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MapInstanceController : ControllerBase
+    public class MapInstanceOldController : ControllerBase
     {
         private readonly MapConfigContext _context;
 
-        public MapInstanceController(MapConfigContext context)
+        public MapInstanceOldController(MapConfigContext context)
         {
             _context = context;
         }
