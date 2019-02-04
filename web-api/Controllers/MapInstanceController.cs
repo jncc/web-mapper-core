@@ -11,7 +11,7 @@ namespace MapConfig.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MapInstanceController : ControllerBase
+    public class MapInstanceController : Controller
     {
         private readonly MapConfigContext _context;
 
@@ -20,86 +20,69 @@ namespace MapConfig.Controllers
             _context = context;
         }
 
-        // GET: api/MapInstance
+        // GET: api/Map
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstance()
+        public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstances()
         {
-            return await _context.MapInstance.ToListAsync();
+            var maps = await _context.MapInstance
+                .Select(l => new { l.MapInstanceId, l.Name, l.Description })
+                .ToListAsync();
+            return Json( new { mapInstances = maps });
         }
 
-        // GET: api/MapInstance/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MapInstance>> GetMapInstance(long id)
+        // GET: api/Map/Test
+        [HttpGet("{name}")]
+        public async Task<ActionResult<MapInstance>> GetMapInstances(string name)
         {
-            var mapInstance = await _context.MapInstance.FindAsync(id);
+            var map = await _context.MapInstance
+                .Include(m => m.LayerGroups)
+                .ThenInclude(l => l.Layers)
+                .ThenInclude(f => f.Filters)
+                .SingleOrDefaultAsync(m => m.Name.ToUpper() == name.ToUpper());        
 
-            if (mapInstance == null)
+            if (map == null)
             {
                 return NotFound();
             }
 
-            return mapInstance;
-        }
-
-        // PUT: api/MapInstance/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMapInstance(long id, MapInstance mapInstance)
-        {
-            if (id != mapInstance.MapInstanceId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(mapInstance).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MapInstanceExists(id))
-                {
-                    return NotFound();
+            List<BaseLayer> baseLayers = new List<BaseLayer>();
+            //split the list of BaseLayer Names or Ids into an array and remove leading and trailing spaces
+            var baseLayersList = map.BaseLayerList
+                .Split(",")
+                .Select(e => e.Trim())
+                .Distinct();
+            
+            if(baseLayersList.Count()>0) {
+                foreach(string baseLayerName in baseLayersList) {
+                    BaseLayer baseLayer;
+                    try { //try Ids
+                        uint baseLayerId = Convert.ToUInt32(baseLayerName, 10);
+                        baseLayer = await _context.BaseLayer
+                            .SingleOrDefaultAsync(b => b.BaseLayerId == baseLayerId);
+                    } catch { //or Names
+                        baseLayer = await _context.BaseLayer
+                            .SingleOrDefaultAsync(b => b.Name == baseLayerName);
+                    }
+                    if(baseLayer.BaseLayerId > 0) { //we found the baselayer
+                        baseLayer.Visible=false;
+                        try { //is it marked visible by Id?
+                            uint visibleLayerId = Convert.ToUInt32(map.VisibleBaseLayer, 10);
+                            if(visibleLayerId == baseLayer.BaseLayerId) baseLayer.Visible=true;                  
+                        } catch { //or by Name?
+                            if(map.VisibleBaseLayer == baseLayer.Name) baseLayer.Visible=true;
+                        }
+                        baseLayers.Add(baseLayer);
+                    }
                 }
-                else
-                {
-                    throw;
-                }
+                map.BaseLayers = baseLayers;
             }
 
-            return NoContent();
+            return Json( new { mapInstance = map });
         }
 
-        // POST: api/MapInstance
-        [HttpPost]
-        public async Task<ActionResult<MapInstance>> PostMapInstance(MapInstance mapInstance)
+        private bool MapExists(string name)
         {
-            _context.MapInstance.Add(mapInstance);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMapInstance", new { id = mapInstance.MapInstanceId }, mapInstance);
-        }
-
-        // DELETE: api/MapInstance/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<MapInstance>> DeleteMapInstance(long id)
-        {
-            var mapInstance = await _context.MapInstance.FindAsync(id);
-            if (mapInstance == null)
-            {
-                return NotFound();
-            }
-
-            _context.MapInstance.Remove(mapInstance);
-            await _context.SaveChangesAsync();
-
-            return mapInstance;
-        }
-
-        private bool MapInstanceExists(long id)
-        {
-            return _context.MapInstance.Any(e => e.MapInstanceId == id);
+            return _context.MapInstance.Any(m => m.Name == name);
         }
     }
 }
