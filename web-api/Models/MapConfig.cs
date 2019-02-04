@@ -40,6 +40,7 @@ namespace MapConfig.Models
         public long LayerGroupId { get; set; }   //Unique LayerGroup ID
         public string Name { get; set; }         //Layer Group Name
         public string Description { get; set; }  //Short Descriptive text about the LayerGroup (can contain HTML)
+        public long Order { get; set; }           //Initial Order for the Layer Group
 
         //foreign keys
         public long MapInstanceId { get; set; }  //Which MapInstance do I belong to?
@@ -50,16 +51,21 @@ namespace MapConfig.Models
     public class Layer {
         [Key]
         public long LayerId { get; set; }         //Unique Layer ID
-        public string Name { get; set; }          //Layer Name
-        public string Description { get; set; }   //Short Descriptive text about the layer (can contain HTML)
-        public string MetadataUrl { get; set; }   //(?) Icon after Layer Name to external page?
+        public string Name { get; set; }         //Short Descriptive text about the layer (can contain HTML)
+        public string MetadataDescription { get; set; } //(?) Icon after Layer Name to external page (hover text)
+        public string MetadataUrl { get; set; }   //(?) Icon after Layer Name to external page (link URL)
+        public string DownloadURL {get; set; }    //Link to download the dataset
         public string SubLayerGroup { get; set; } //Optional sub group to be grouped in or NULL
         public string Type { get; set; }          //Layer Source type e.g. WMS WMTS Tile etc.
         public string Url { get; set; }           //Base Url not including filter params
-        public long Order { get; set; }           //Initial Order in the Layer Group (or SubLayerGroup)
+        public string LayerName { get; set; }     //WMS or WMTS layer name
+        public string StyleName { get; set; }     //WMS or WMTS style name
+        public long Order { get; set; }           //Initial Order within the Layer Group (or SubLayerGroup)
         public Boolean Visible { get; set; }      //Initial Visibility
         [Range(0.0f,1.0f)]
         public float Opacity { get; set; }        //Initial Opacity
+        public string Centre { get; set; }        //Layer specific Centre in EPSG:4326, e.g. [-3.5,52.25]
+        public int Zoom { get; set; }             //Layer specific Zoom Level 1-22
 
         //foreign keys
         public long LayerGroupId { get; set; }    //which LayerGroup am I in?

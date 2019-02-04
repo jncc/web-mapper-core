@@ -19,14 +19,19 @@
                 <span asp-validation-for="Layer.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Layer.Description" class="control-label"></label>
-                <input asp-for="Layer.Description" class="form-control" />
-                <span asp-validation-for="Layer.Description" class="text-danger"></span>
+                <label asp-for="Layer.MetadataDescription" class="control-label"></label>
+                <input asp-for="Layer.MetadataDescription" class="form-control" />
+                <span asp-validation-for="Layer.MetadataDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Layer.MetadataUrl" class="control-label"></label>
                 <input asp-for="Layer.MetadataUrl" class="form-control" />
                 <span asp-validation-for="Layer.MetadataUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.DownloadURL" class="control-label"></label>
+                <input asp-for="Layer.DownloadURL" class="form-control" />
+                <span asp-validation-for="Layer.DownloadURL" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Layer.SubLayerGroup" class="control-label"></label>
@@ -44,6 +49,16 @@
                 <span asp-validation-for="Layer.Url" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Layer.LayerName" class="control-label"></label>
+                <input asp-for="Layer.LayerName" class="form-control" />
+                <span asp-validation-for="Layer.LayerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.StyleName" class="control-label"></label>
+                <input asp-for="Layer.StyleName" class="form-control" />
+                <span asp-validation-for="Layer.StyleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Layer.Order" class="control-label"></label>
                 <input asp-for="Layer.Order" class="form-control" />
                 <span asp-validation-for="Layer.Order" class="text-danger"></span>
@@ -57,6 +72,16 @@
                 <label asp-for="Layer.Opacity" class="control-label"></label>
                 <input asp-for="Layer.Opacity" class="form-control" />
                 <span asp-validation-for="Layer.Opacity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.Centre" class="control-label"></label>
+                <input asp-for="Layer.Centre" class="form-control" />
+                <span asp-validation-for="Layer.Centre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.Zoom" class="control-label"></label>
+                <input asp-for="Layer.Zoom" class="form-control" />
+                <span asp-validation-for="Layer.Zoom" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Layer.LayerGroupId" class="control-label"></label>

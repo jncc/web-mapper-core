@@ -2,15 +2,17 @@
 using MapConfig.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace jnccwebapi.Migrations
 {
     [DbContext(typeof(MapConfigContext))]
-    partial class MapConfigContextModelSnapshot : ModelSnapshot
+    [Migration("20190204174713_ModifyIndexesAndLayers")]
+    partial class ModifyIndexesAndLayers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,8 +74,6 @@ namespace jnccwebapi.Migrations
                     b.Property<long>("LayerId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Centre");
-
                     b.Property<string>("DownloadURL");
 
                     b.Property<long>("LayerGroupId");
@@ -99,8 +99,6 @@ namespace jnccwebapi.Migrations
                     b.Property<string>("Url");
 
                     b.Property<bool>("Visible");
-
-                    b.Property<int>("Zoom");
 
                     b.HasKey("LayerId");
 

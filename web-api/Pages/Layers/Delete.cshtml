@@ -19,16 +19,22 @@
             @Html.DisplayFor(model => model.Layer.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Layer.Description)
+            @Html.DisplayNameFor(model => model.Layer.MetadataDescription)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Layer.Description)
+            @Html.DisplayFor(model => model.Layer.MetadataDescription)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.MetadataUrl)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Layer.MetadataUrl)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.DownloadURL)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.DownloadURL)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.SubLayerGroup)
@@ -49,6 +55,18 @@
             @Html.DisplayFor(model => model.Layer.Url)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.LayerName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.LayerName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.StyleName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.StyleName)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.Order)
         </dt>
         <dd class="col-sm-10">
@@ -65,6 +83,18 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Layer.Opacity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Centre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Centre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.Zoom)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.Zoom)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.LayerGroup)

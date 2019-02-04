@@ -17,10 +17,13 @@
                 @Html.DisplayNameFor(model => model.Layer[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Layer[0].Description)
+                @Html.DisplayNameFor(model => model.Layer[0].MetadataDescription)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].MetadataUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Layer[0].DownloadURL)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].SubLayerGroup)
@@ -32,6 +35,12 @@
                 @Html.DisplayNameFor(model => model.Layer[0].Url)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Layer[0].LayerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Layer[0].StyleName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Layer[0].Order)
             </th>
             <th>
@@ -39,6 +48,12 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].Opacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Layer[0].Centre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Layer[0].Zoom)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].LayerGroup)
@@ -53,10 +68,13 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.MetadataDescription)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MetadataUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DownloadURL)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SubLayerGroup)
@@ -68,6 +86,12 @@
                 @Html.DisplayFor(modelItem => item.Url)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.LayerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StyleName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Order)
             </td>
             <td>
@@ -75,6 +99,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Opacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Centre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Zoom)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LayerGroup.LayerGroupId)

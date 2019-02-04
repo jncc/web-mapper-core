@@ -20,8 +20,8 @@ namespace MapConfig.Models
         // Fluent API ovverides for field definitions
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MapInstance>().HasIndex(m => m.Name);
-            modelBuilder.Entity<BaseLayer>().HasIndex(b => b.Name);
+            modelBuilder.Entity<MapInstance>().HasIndex(m => m.Name).IsUnique();
+            modelBuilder.Entity<BaseLayer>().HasIndex(b => b.Name).IsUnique();
             modelBuilder.Entity<Layer>().HasIndex(l => l.Name);
             modelBuilder.Entity<LayerGroup>().HasIndex(l => l.Name);
             modelBuilder.Entity<Filter>().HasIndex(f => f.Name);

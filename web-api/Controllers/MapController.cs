@@ -30,15 +30,15 @@ namespace MapConfig.Controllers
             return Json( new { mapInstances = maps });
         }
 
-        // GET: api/Map/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MapInstance>> GetMapInstances(long id)
+        // GET: api/Map/Test
+        [HttpGet("{name}")]
+        public async Task<ActionResult<MapInstance>> GetMapInstances(string name)
         {
             var map = await _context.MapInstance
                 .Include(m => m.LayerGroups)
                 .ThenInclude(l => l.Layers)
                 .ThenInclude(f => f.Filters)
-                .SingleOrDefaultAsync(i => i.MapInstanceId == id);                       
+                .SingleOrDefaultAsync(m => m.Name.ToUpper() == name.ToUpper());        
 
             if (map == null)
             {
@@ -80,9 +80,9 @@ namespace MapConfig.Controllers
             return Json( new { mapInstance = map });
         }
 
-        private bool MapExists(long id)
+        private bool MapExists(string name)
         {
-            return _context.MapInstance.Any(e => e.MapInstanceId == id);
+            return _context.MapInstance.Any(m => m.Name == name);
         }
     }
 }
