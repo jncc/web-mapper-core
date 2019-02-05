@@ -14,11 +14,24 @@
             }
         },
         {
-            "label": "Deploy to Server",
+            "label": "Deploy to Test Server",
             "type": "shell",
             "command": ".vscode/deploy.sh",
             "windows": {
                 "command": ".vscode\\\\deploy.sh"
+            },
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Deploy from Test to Live Server",
+            "type": "shell",
+            "command": ".vscode/deploy_to_live.sh",
+            "windows": {
+                "command": ".vscode\\\\deploy_to_live.sh"
             },
             "group": "test",
             "presentation": {

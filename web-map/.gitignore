@@ -28,6 +28,7 @@ speed-measure-plugin.json
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/deploy.sh
+!.vscode/deploy_to_live.sh
 .history/*
 
 # misc
