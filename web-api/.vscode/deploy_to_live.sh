@@ -7,5 +7,5 @@ user="esdm"
 remotepath="/home/esdm/dotnet-published"
 
 echo "Running Deploy to Live Task on server...."
-ssh $user@$host "mkdir $remotepath 2>/dev/null; rsync -e ssh -zauvE --delete --progress $remotepath/$project $user@$livehost:$remotepath"
+ssh $user@$host "mkdir $remotepath 2>/dev/null; rsync -e ssh -zauvE --delete --progress --exclude=appsettings.json $remotepath/$project $user@$livehost:$remotepath"
 [ $? -ne 0 ] && echo "Deploy to Live Task Failed!" && exit 1
