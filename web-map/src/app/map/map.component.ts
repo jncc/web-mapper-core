@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+// TODO: remove unneeded imports
 import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
@@ -21,6 +22,7 @@ import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
 
 import { MapService } from '../map.service';
+import { ILayerConfig } from '../models/layer-config.model';
 
 @Component({
   selector: 'app-map',
@@ -39,7 +41,24 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setupMap();
-    this.addWMS();
+    this.mapService.mapConfig.subscribe((data) => {
+      if (data.mapInstance.layerGroups.length) {
+        const layers = data.mapInstance.layerGroups
+        .map((layerGroup) => layerGroup.layers)
+        .reduce((a, b) => a.concat(b));
+        this.updateLayers(layers);
+      }
+       // if (data.mapInstance.layerGroups.length) {
+      //   this.updateLayers(data.mapInstance.layerGroups[0].layers);
+      // }
+    });
+  }
+
+  private updateLayers(layersConfig: ILayerConfig[]): void {
+    layersConfig.forEach( (layerConfig) => {
+      this.map.addLayer(layerConfig.layer);
+    });
+    // console.log(this.map.getLayers());
   }
 
   private setupMap() {
@@ -82,38 +101,4 @@ export class MapComponent implements OnInit, OnDestroy {
       this.zoomExtentSubscription.unsubscribe();
     }
   }
-
-  private addWMS() {
-    // const wmsURl = 'https://ows.emodnet-seabedhabitats.eu/emodnet/wms';
-    const wmsURl = 'https://jnccdev-geo.esdm.co.uk/emodnet/wms';
-
-    const substrateSource = new TileWMS({
-      url: wmsURl,
-      params: {'LAYERS': 'eusm_sub'}
-    });
-
-    const biologicalZoneSource = new TileWMS({
-      url: wmsURl,
-      params: {'LAYERS': 'eusm_bio'},
-    });
-
-    const substrateLayer = new Tile({
-      source: substrateSource
-    });
-
-    // const imageLayer =  new ImageLayer({
-    //   source: new ImageWMS({
-    //     url: wmsURl,
-    //     params: {'LAYERS': 'eusm_sub'},
-    //     ratio: 1
-    //   })
-    // });
-
-    const biologicalZoneLayer = new Tile({
-      source: biologicalZoneSource
-    });
-
-    this.map.addLayer(substrateLayer);
-  }
-
 }

@@ -1,0 +1,26 @@
+@import '../../variables.scss';
+
+.controls-container {
+    user-select: none;
+    border-radius: $container-border-radius;
+    box-shadow: $container-shadow;
+    min-width: 10rem;
+    max-width: 20rem;
+    background-color: white;
+  }
+   
+  .controls-container-header {
+      padding: $container-padding;
+      border-bottom: 1px solid $border-color;
+      background-color: midnightblue;
+      border-radius: $container-border-radius;
+      cursor: pointer;
+  }
+  
+  .controls-container-header h6 {
+    color: white;
+  }
+  
+  .controls-container-body {
+      padding: $container-padding;
+  }

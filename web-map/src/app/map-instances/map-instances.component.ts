@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IMapInstance } from '../models/map-instance.model';
-import { MapConfigService } from '../map-config.service';
 import { IMapConfig } from '../models/map-config.model';
+import { MapService } from '../map.service';
 
 @Component({
   selector: 'app-map-instances',
@@ -13,10 +13,13 @@ export class MapInstancesComponent implements OnInit {
   mapInstances: IMapInstance[];
   show = true;
 
-  constructor(private mapConfigService: MapConfigService) { }
+  constructor(private mapService: MapService) { }
 
   ngOnInit() {
-   this.mapConfigService.config.subscribe((data: IMapConfig) => this.mapInstances = data.mapInstances);
+    this.mapService.mapConfig.subscribe((data: IMapConfig) => {
+      this.mapInstances = data.mapInstances;
+      // console.log(this.mapInstances);
+    });
   }
 
   toggleShow() {

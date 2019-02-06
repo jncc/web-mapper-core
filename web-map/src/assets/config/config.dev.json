@@ -1,5 +1,6 @@
 {
     "name": "dev mapper",
     "logging": true,
-    "apiUrl": "assets/config/map-config.json"
+    "apiUrl": "//jnccdev-api.esdm.co.uk/api",
+    "mapInstance": "EMODnet"
 }
