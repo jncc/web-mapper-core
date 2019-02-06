@@ -14,19 +14,19 @@ export class ApiService {
 
   constructor(private http: HttpClient) {
     this.apiUrl = AppConfigService.settings.apiUrl;
-    this.mapInstanceConfigUrl = AppConfigService.settings.mapInstanceConfigUrl;
+    // this.mapInstanceConfigUrl = AppConfigService.settings.mapInstanceConfigUrl;
   }
 
   getConfig() {
-    const configUrl = this.apiUrl; // TODO: + '/test';
+    const configUrl = this.apiUrl + '/test';
     return this.http.get<IMapConfig>(configUrl);
   }
 
   getMapInstanceConfig() {
     // TODO:
-    // const mapInstanceConfigUrl = this.apiUrl; // TODO:  + '/mapbyname/EMODnet';
+    const mapInstanceConfigUrl = this.apiUrl + '/mapinstance/EMODnet';
 
-    return this.http.get<IMapInstance>(this.mapInstanceConfigUrl);
+    return this.http.get<IMapInstance>(mapInstanceConfigUrl);
   }
 
 }

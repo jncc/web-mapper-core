@@ -62,6 +62,7 @@ export class MapService {
 
   // TODO: move to another service
   private createLayersForConfig(): void {
+    console.log(this.dataStore);
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig) => {
       if (layerGroupConfig.layers.length) {
         layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
