@@ -1,7 +1,7 @@
 export interface ILayerConfig {
     layerId: number;
+    layerName: string;
     name: string;
-    displayName: string;
     url: string;
     visible: boolean;
     opacity: number;

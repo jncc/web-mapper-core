@@ -14,7 +14,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) {
     this.apiUrl = AppConfigService.settings.apiUrl;
-    // this.mapInstanceConfigUrl = AppConfigService.settings.mapInstanceConfigUrl;
   }
 
   getConfig() {
@@ -23,7 +22,6 @@ export class ApiService {
   }
 
   getMapInstanceConfig() {
-    // TODO:
     const mapInstanceConfigUrl = this.apiUrl + '/mapinstance/EMODnet';
 
     return this.http.get<IMapInstance>(mapInstanceConfigUrl);

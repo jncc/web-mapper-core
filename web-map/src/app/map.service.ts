@@ -62,13 +62,12 @@ export class MapService {
 
   // TODO: move to another service
   private createLayersForConfig(): void {
-    console.log(this.dataStore);
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig) => {
       if (layerGroupConfig.layers.length) {
         layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
           const source = new TileWMS({
             url: layerConfig.url,
-            params: { 'LAYERS': layerConfig.name }
+            params: { 'LAYERS': layerConfig.layerName }
           });
           layerConfig.layer = new Tile({
             source: source
