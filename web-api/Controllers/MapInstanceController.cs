@@ -77,7 +77,7 @@ namespace MapConfig.Controllers
                 map.BaseLayers = baseLayers;
             }
 
-            return Json( new { mapInstance = map });
+            return Json( map );
         }
 
         private bool MapExists(string name)
