@@ -1,0 +1,84 @@
+{
+    "d": [
+      {
+        "__type": "Habitat",
+        "Code": "carbmoun",
+        "Description": "Carbonate mounds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "coragard",
+        "Description": "Coral gardens"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "cymomead",
+        "Description": "Cymodocea meadows"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "deepspag",
+        "Description": "Deep-sea sponge aggregations"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "ocearidg",
+        "Description": "Oceanic ridges with hydrothermal vents/fields"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "lophpert",
+        "Description": "Lophelia pertusa reefs"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "ostredul",
+        "Description": "Ostrea edulis beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "seamount",
+        "Description": "Seamounts"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "seapenbm",
+        "Description": "Sea-pen and burrowing megafauna communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "zosterab",
+        "Description": "Zostera beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "intermud",
+        "Description": "Intertidal mudflats"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "litchalk",
+        "Description": "Littoral chalk communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "maerlbed",
+        "Description": "Maerl beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "modimodi",
+        "Description": "Modiolus modiolus horse mussel beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "sabspinu",
+        "Description": "Sabellaria spinulosa reefs"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "intermyt",
+        "Description": "Intertidal Mytilus edulis beds on mixed/sandy sediments"
+      }
+    ]
+  }

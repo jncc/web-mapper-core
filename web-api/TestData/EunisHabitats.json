@@ -1,0 +1,1159 @@
+{
+    "d": [
+      {
+        "__type": "Habitat",
+        "Code": "A1",
+        "Description": "A1-Littoral rock and other hard substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.1",
+        "Description": "A1.1-High energy littoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.11",
+        "Description": "A1.11-[Mytilus edulis] and/or barnacle communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.11+A1.16_FR01",
+        "Description": "A1.11+A1.16_FR01-Mosaic of [Mytilus edulis] and/or barnacle communities + the proposed EUNIS habitat of Ostreidae and/or barnacle communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.12",
+        "Description": "A1.12-Robust fucoid and/or red seaweed communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.15",
+        "Description": "A1.15-Fucoids in tide-swept conditions"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.2",
+        "Description": "A1.2-Moderate energy littoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.2+A1.3",
+        "Description": "A1.2+A1.3-Mosaic of Moderate energy littoral rock + Low energy littoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.21",
+        "Description": "A1.21-Barnacles and fucoids on moderately exposed shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.21/A1.31",
+        "Description": "A1.21/A1.31-Mapping unit: Barnacles and fucoids on moderately exposed shores or Fucoids on sheltered marine shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.22",
+        "Description": "A1.22-[Mytilus edulis] and fucoids on moderately exposed shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.3",
+        "Description": "A1.3-Low energy littoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.31",
+        "Description": "A1.31-Fucoids on sheltered marine shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.32",
+        "Description": "A1.32-Fucoids in variable salinity"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.33",
+        "Description": "A1.33-Red algal turf in lower eulittoral, sheltered from wave action"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.4",
+        "Description": "A1.4-Features of littoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.41",
+        "Description": "A1.41-Communities of littoral rockpools"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.42",
+        "Description": "A1.42-Communities of rockpools in the supralittoral zone"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.43",
+        "Description": "A1.43-Brackish permanent pools in the geolittoral zone"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.44",
+        "Description": "A1.44-Communities of littoral caves and overhangs"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.45",
+        "Description": "A1.45-Ephemeral green or red seaweeds (freshwater or sand-influenced) on non-mobile substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.46",
+        "Description": "A1.46-Hydrolittoral soft rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.47",
+        "Description": "A1.47-Hydrolittoral solid rock (bedrock)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.48",
+        "Description": "A1.48-Hydrolittoral hard clay"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.49",
+        "Description": "A1.49-Hydrolittoral mussel beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A1.4A",
+        "Description": "A1.4A-Hydrolittoral peat"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2",
+        "Description": "A2-Littoral sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.1",
+        "Description": "A2.1-Littoral coarse sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.11",
+        "Description": "A2.11-Shingle (pebble) and gravel shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.12",
+        "Description": "A2.12-Estuarine coarse sediment shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.2",
+        "Description": "A2.2-Littoral sand and muddy sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.21",
+        "Description": "A2.21-Strandline"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.22",
+        "Description": "A2.22-Barren or amphipod-dominated mobile sand shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.22+A2.23",
+        "Description": "A2.22+A2.23-Mosaic of A2.22 (Barren or Amphipod-dominated mobile sand shores) + A2.23 (Polychaete/Amphipod-dominated fine sand shores)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.23",
+        "Description": "A2.23-Polychaete/amphipod-dominated fine sand shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.24",
+        "Description": "A2.24-Polychaete/bivalve-dominated muddy sand shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.3",
+        "Description": "A2.3-Littoral mud"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.31",
+        "Description": "A2.31-Polychaete/bivalve-dominated mid estuarine mud shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.32",
+        "Description": "A2.32-Polychaete/oligochaete-dominated upper estuarine mud shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.33",
+        "Description": "A2.33-Marine mud shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.34",
+        "Description": "A2.34-[Corophium] spp. in soft mud shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.4",
+        "Description": "A2.4-Littoral mixed sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.41",
+        "Description": "A2.41-[Hediste diversicolor] dominated gravelly sandy mud shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.42",
+        "Description": "A2.42-Species-rich mixed sediment shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.43",
+        "Description": "A2.43-Species-poor mixed sediment shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.5",
+        "Description": "A2.5-Coastal saltmarshes and saline reedbeds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.51",
+        "Description": "A2.51-Saltmarsh driftlines"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.52",
+        "Description": "A2.52-Upper saltmarshes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.53",
+        "Description": "A2.53-Mid-upper saltmarshes and saline and brackish reed, rush and sedge beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.54",
+        "Description": "A2.54-Low-mid saltmarshes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.55",
+        "Description": "A2.55-Pioneer saltmarshes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.6",
+        "Description": "A2.6-Littoral sediments dominated by aquatic angiosperms"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.61",
+        "Description": "A2.61-Seagrass beds on littoral sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.62",
+        "Description": "A2.62-Marine [Cyperaceae] beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.7",
+        "Description": "A2.7-Littoral biogenic reefs"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.71",
+        "Description": "A2.71-Littoral [Sabellaria] reefs"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.72",
+        "Description": "A2.72-Littoral [Mytilus edulis] beds on sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.8",
+        "Description": "A2.8-Features of littoral sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.81",
+        "Description": "A2.81-Methane seeps in littoral sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.82",
+        "Description": "A2.82-Ephemeral green or red seaweeds (freshwater or sand-influenced) on mobile substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.83",
+        "Description": "A2.83-Hydrolittoral stony substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.84",
+        "Description": "A2.84-Hydrolittoral gravel substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.85",
+        "Description": "A2.85-Hydrolittoral sandy substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.86",
+        "Description": "A2.86-Hydrolittoral muddy substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A2.87",
+        "Description": "A2.87-Hydrolittoral mixed sediment substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3",
+        "Description": "A3-Infralittoral rock and other hard substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.1",
+        "Description": "A3.1-Atlantic and Mediterranean high energy infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.11",
+        "Description": "A3.11-Kelp with cushion fauna and/or foliose red seaweeds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.12",
+        "Description": "A3.12-Sediment-affected or disturbed kelp and seaweed communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.14",
+        "Description": "A3.14-Encrusting algal communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.15",
+        "Description": "A3.15-Frondose algal communities (other than kelp)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.2",
+        "Description": "A3.2-Atlantic and Mediterranean moderate energy infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.21",
+        "Description": "A3.21-Kelp and red seaweeds (moderate energy infralittoral rock)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.22",
+        "Description": "A3.22-Kelp and seaweed communities in tide-swept sheltered conditions"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.24",
+        "Description": "A3.24-Faunal communities on moderate energy infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.3",
+        "Description": "A3.3-Atlantic and Mediterranean low energy infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.31",
+        "Description": "A3.31-Silted kelp on low energy infralittoral rock with full salinity"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.32",
+        "Description": "A3.32-Kelp in variable salinity on low energy infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.34",
+        "Description": "A3.34-Submerged fucoids, green or red seaweeds (low salinity infralittoral rock)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.35",
+        "Description": "A3.35-Faunal communities on low energy infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.36",
+        "Description": "A3.36-Faunal communities on variable or reduced salinity infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.7",
+        "Description": "A3.7-Features of infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.71",
+        "Description": "A3.71-Robust faunal cushions and crusts in surge gullies and caves"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.72",
+        "Description": "A3.72-Infralittoral fouling seaweed communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3.73",
+        "Description": "A3.73-Vents and seeps in infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3/A4",
+        "Description": "A3/A4-Infralittoral or circalittoral rock and other hard substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3_FR01",
+        "Description": "A3_FR01-Proposed EUNIS habitat type : Kelp dominated infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A3_FR02",
+        "Description": "A3_FR02-Proposed EUNIS habitat type : Sparse kelp on infralittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4",
+        "Description": "A4-Circalittoral rock and other hard substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.1",
+        "Description": "A4.1-Atlantic and Mediterranean high energy circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.11",
+        "Description": "A4.11-Very tide-swept faunal communities on circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.12",
+        "Description": "A4.12-Sponge communities on deep circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.13",
+        "Description": "A4.13-Mixed faunal turf communities on circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.2",
+        "Description": "A4.2-Atlantic and Mediterranean moderate energy circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.21",
+        "Description": "A4.21-Echinoderms and crustose communities on circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.22",
+        "Description": "A4.22-[Sabellaria] reefs on circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.23",
+        "Description": "A4.23-Communities on soft circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.24",
+        "Description": "A4.24-Mussel beds on circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.25",
+        "Description": "A4.25-Circalittoral faunal communities in variable salinity"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.27",
+        "Description": "A4.27-Faunal communities on deep moderate energy circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.3",
+        "Description": "A4.3-Atlantic and Mediterranean low energy circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.31",
+        "Description": "A4.31-Brachiopod and ascidian communities on circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.33",
+        "Description": "A4.33-Faunal communities on deep low energy circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.7",
+        "Description": "A4.7-Features of circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.71",
+        "Description": "A4.71-Communities of circalittoral caves and overhangs"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.72",
+        "Description": "A4.72-Circalittoral fouling faunal communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A4.73",
+        "Description": "A4.73-Vents and seeps in circalittoral rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5",
+        "Description": "A5-Sublittoral sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.1",
+        "Description": "A5.1-Sublittoral coarse sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.11",
+        "Description": "A5.11-Infralittoral coarse sediment in reduced salinity"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.12",
+        "Description": "A5.12-Infralittoral coarse sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.13",
+        "Description": "A5.13-Circalittoral coarse sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.13_BE01",
+        "Description": "A5.13_BE01-Proposed EUNIS habitat type : [Ophelia Limacina] and other macrofauna in impoverished circalittoral coarse sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.14",
+        "Description": "A5.14-Deep circalittoral coarse sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.2",
+        "Description": "A5.2-Sublittoral sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.21",
+        "Description": "A5.21-Sublittoral sand in low or reduced salinity"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.22",
+        "Description": "A5.22-Sublittoral sand in variable salinity (estuaries)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.23",
+        "Description": "A5.23-Infralittoral fine sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.23+A5.12",
+        "Description": "A5.23+A5.12-Mosaic of A5.23 (Infralittoral fine sand) + A5.12 (Infralittoral coarse sediment)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.24",
+        "Description": "A5.24-Infralittoral muddy sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.25",
+        "Description": "A5.25-Circalittoral fine sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.25_BE01",
+        "Description": "A5.25_BE01-Proposed EUNIS habitat type : [Nepthys cirrosa] in fine to medium circalittoral sands with low mud content"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.26",
+        "Description": "A5.26-Circalittoral muddy sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.26_BE01",
+        "Description": "A5.26_BE01-Proposed EUNIS habitat type : [Abra alba] and [Mysella bidentata spp.] in circalittoral fine sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.27",
+        "Description": "A5.27-Deep circalittoral sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.3",
+        "Description": "A5.3-Sublittoral mud"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.31",
+        "Description": "A5.31-Sublittoral mud in low or reduced salinity (lagoons)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.32",
+        "Description": "A5.32-Sublittoral mud in variable salinity (estuaries)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.33",
+        "Description": "A5.33-Infralittoral sandy mud"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.34",
+        "Description": "A5.34-Infralittoral fine mud"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.35",
+        "Description": "A5.35-Circalittoral sandy mud"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.36",
+        "Description": "A5.36-Circalittoral fine mud"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.37",
+        "Description": "A5.37-Deep circalittoral mud"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.4",
+        "Description": "A5.4-Sublittoral mixed sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.41",
+        "Description": "A5.41-Sublittoral mixed sediment in low or reduced salinity (lagoons)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.42",
+        "Description": "A5.42-Sublittoral mixed sediment in variable salinity (estuaries)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.43",
+        "Description": "A5.43-Infralittoral mixed sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.44",
+        "Description": "A5.44-Circalittoral mixed sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.45",
+        "Description": "A5.45-Deep mixed sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.5",
+        "Description": "A5.5-Sublittoral macrophyte-dominated sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.51",
+        "Description": "A5.51-Maerl beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.52",
+        "Description": "A5.52-Kelp and seaweed communities on sublittoral sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.53",
+        "Description": "A5.53-Sublittoral seagrass beds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.54",
+        "Description": "A5.54-Angiosperm communities in reduced salinity"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.6",
+        "Description": "A5.6-Sublittoral biogenic reefs"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.61",
+        "Description": "A5.61-Sublittoral polychaete worm reefs on sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.62",
+        "Description": "A5.62-Sublittoral mussel beds on sediment"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.63",
+        "Description": "A5.63-Circalittoral coral reefs"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.7",
+        "Description": "A5.7-Features of sublittoral sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.71",
+        "Description": "A5.71-Seeps and vents in sublittoral sediments"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A5.72",
+        "Description": "A5.72-Organically-enriched or anoxic sublittoral habitats"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6",
+        "Description": "A6-Deep-sea bed"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.1",
+        "Description": "A6.1-Deep-sea rock and artificial hard substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.11",
+        "Description": "A6.11-Deep-sea bedrock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.12",
+        "Description": "A6.12-Deep-sea artificial hard substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.13",
+        "Description": "A6.13-Deep-sea manganese nodules"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.14",
+        "Description": "A6.14-Boulders on the deep-sea bed"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.2",
+        "Description": "A6.2-Deep-sea mixed substrata"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.21",
+        "Description": "A6.21-Deep-sea lag deposits"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.22",
+        "Description": "A6.22-Deep-sea biogenic gravels (shells, coral debris)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.23",
+        "Description": "A6.23-Deep-sea calcareous pavements"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.24",
+        "Description": "A6.24-Communities of allochthonous material"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.3",
+        "Description": "A6.3-Deep-sea sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.31",
+        "Description": "A6.31-Communities of bathyal detritic sands with [Grypheus vitreus]"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.4",
+        "Description": "A6.4-Deep-sea muddy sand"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.5",
+        "Description": "A6.5-Deep-sea mud"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.52",
+        "Description": "A6.52-Communities of abyssal muds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.6",
+        "Description": "A6.6-Deep-sea bioherms"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.61",
+        "Description": "A6.61-Communities of deep-sea corals"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.62",
+        "Description": "A6.62-Deep-sea sponge aggregations"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.7",
+        "Description": "A6.7-Raised features of the deep-sea bed"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.71",
+        "Description": "A6.71-Permanently submerged flanks of oceanic islands"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.72",
+        "Description": "A6.72-Seamounts, knolls and banks"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.73",
+        "Description": "A6.73-Oceanic ridges"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.74",
+        "Description": "A6.74-Abyssal hills"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.75",
+        "Description": "A6.75-Carbonate mounds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.8",
+        "Description": "A6.8-Deep-sea trenches and canyons, channels, slope failures and slumps on the continental slope"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.81",
+        "Description": "A6.81-Canyons, channels, slope failures and slumps on the continental slope"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.82",
+        "Description": "A6.82-Deep-sea trenches"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.9",
+        "Description": "A6.9-Vents, seeps, hypoxic and anoxic habitats of the deep sea"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.91",
+        "Description": "A6.91-Deep-sea reducing habitats"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.92",
+        "Description": "A6.92-Deep-sea bed influenced by hypoxic water column"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.93",
+        "Description": "A6.93-Isolated ‘oceanic’ features influenced by hypoxic water column"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "A6.94",
+        "Description": "A6.94-Vents in the deep sea"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1",
+        "Description": "B1-Coastal dunes and sandy shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.12",
+        "Description": "B1.12-Middle European sand beach annual communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.21",
+        "Description": "B1.21-Unvegetated sand beaches above the driftline"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.22",
+        "Description": "B1.22-Biocenosis of supralittoral sands"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.24",
+        "Description": "B1.24-Sandy beach ridges with no or low vegetation"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.25",
+        "Description": "B1.25-Sandy beach ridges dominated by shrubs or trees"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.3_FR01",
+        "Description": "B1.3_FR01-Proposed EUNIS habitat type : Shifting coastal dunes (back of the dune)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.31",
+        "Description": "B1.31-Embryonic shifting dunes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.32",
+        "Description": "B1.32-White dunes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.41",
+        "Description": "B1.41-Northern fixed grey dunes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.42",
+        "Description": "B1.42-Biscay fixed grey dunes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.43",
+        "Description": "B1.43-Mediterraneo-Atlantic fixed grey dunes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.45",
+        "Description": "B1.45-Atlantic dune [Mesobromion] grassland"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.46",
+        "Description": "B1.46-Atlantic dune thermophile fringes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.47",
+        "Description": "B1.47-Dune fine-grass annual communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.4A",
+        "Description": "B1.4A-Thermo-Atlantic succulent and semi-fixed dunes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.51",
+        "Description": "B1.51-[Empetrum] brown dunes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.52",
+        "Description": "B1.52-[Calluna vulgaris] brown dunes"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.61",
+        "Description": "B1.61-Coastal dune thickets"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.62",
+        "Description": "B1.62-[Salix arenaria] mats"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.63",
+        "Description": "B1.63-Dune [Juniperus] thickets"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.64",
+        "Description": "B1.64-Dune sclerophyllous scrubs and thickets"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.71",
+        "Description": "B1.71-Coastal brown dunes covered with natural or almost natural coniferous forest, e.g. [Pinus silvestris]"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.72",
+        "Description": "B1.72-Coastal brown dunes covered with deciduous forest ([Fagus], [Betula], [Quercus])"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.81",
+        "Description": "B1.81-Dune-slack pools"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.82",
+        "Description": "B1.82-Dune-slack pioneer swards"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.83",
+        "Description": "B1.83-Dune-slack fens"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.84",
+        "Description": "B1.84-Dune-slack grassland and heaths"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.85",
+        "Description": "B1.85-Dune-slack reedbeds, sedgebeds and canebeds"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B1.86",
+        "Description": "B1.86-Coastal dunes: wet dune slacks: dominated by shrubs or trees"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2",
+        "Description": "B2-Coastal shingle"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2.12",
+        "Description": "B2.12-Atlantic and Baltic shingle beach drift lines"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2.12+A2.22",
+        "Description": "B2.12+A2.22-Mosaic of B2.12 (Atlantic and Baltic shingle beach drift lines) and A2.22 (Barren or amphipod-dominated mobile sand shores)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2.13",
+        "Description": "B2.13-Gravel beach communities of the mediterranean region"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2.14",
+        "Description": "B2.14-Biocenosis of slowly drying wracks"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2.32",
+        "Description": "B2.32-Channel [Crambe maritima] communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2.33",
+        "Description": "B2.33-Atlantic [Crambe maritima] communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2.41",
+        "Description": "B2.41-Euro-Siberian gravel bank grasslands"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B2.51",
+        "Description": "B2.51-Euro-Siberian gravel bank heaths"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B3",
+        "Description": "B3-Rock cliffs, ledges and shores, including the supralittoral"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B3.1",
+        "Description": "B3.1-Supralittoral rock (lichen or splash zone)"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B3.11",
+        "Description": "B3.11-Lichens or small green algae on supralittoral and littoral fringe rock"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B3.12",
+        "Description": "B3.12-Rock stacks and islets above high tide level in splash zone"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B3.23",
+        "Description": "B3.23-Temperate Atlantic sea-cliffs and rocky shores"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B3.27",
+        "Description": "B3.27-Rock stacks and islets above splash zone"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B3.31",
+        "Description": "B3.31-Atlantic sea-cliff communities"
+      },
+      {
+        "__type": "Habitat",
+        "Code": "B3.36",
+        "Description": "B3.36-Coastal lagoon cliff communities"
+      }
+    ]
+  }

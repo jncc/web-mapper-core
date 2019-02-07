@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using MapConfig.Models;
 
 namespace MapConfig.Controllers
@@ -235,39 +238,12 @@ namespace MapConfig.Controllers
 
             var f1 = new Filter { 
                 LayerId = l1.LayerId, 
-                Name = "Habitat Filter", 
-                Description = "<p>A Filter for <strong>Habitats</strong></p>",
+                Name = "Eunis Habitat", 
+                Description = "<p>Filter by <strong>Eunis</strong> Habitat Classifications</p>",
                 MetadataUrl = "",
                 Type = "Lookup", 
-                Attribute = "habitat", 
-                LookupCategory = "Habitat"
-            };
-            var f2 = new Filter { 
-                LayerId = l1.LayerId, 
-                Name = "Species Filter", 
-                Description = "<p>A Filter for <strong>Species</strong></p>",
-                MetadataUrl = "",
-                Type = "Lookup", 
-                Attribute = "species", 
-                LookupCategory = "Species"
-            };
-            var f3 = new Filter { 
-                LayerId = l2.LayerId, 
-                Name = "Habitat Filter", 
-                Description = "<p>A Filter for <strong>Habitats</strong></p>",
-                MetadataUrl = "",
-                Type = "Lookup", 
-                Attribute = "habitat", 
-                LookupCategory = "Habitat"
-            };
-            var f4 = new Filter { 
-                LayerId = l3.LayerId, 
-                Name = "Species Filter", 
-                Description = "<p>A Filter for <strong>Species</strong></p>",
-                MetadataUrl = "",
-                Type = "Lookup", 
-                Attribute = "species", 
-                LookupCategory = "Species"
+                Attribute = "hab_type", 
+                LookupCategory = "EunisHabitat"
             };
 
             if (_context.Filter.Count() == 0)
@@ -275,37 +251,74 @@ namespace MapConfig.Controllers
                 // Create a new Filter if collection is empty                
                 _context.Filter.Add(f1);
                 _context.SaveChanges();
-                _context.Filter.Add(f2);
-                _context.SaveChanges();
-                _context.Filter.Add(f3);
-                _context.SaveChanges();
-                _context.Filter.Add(f4);
+            }
+
+
+            //Lookups (from JSON files)
+            string json;
+            IEnumerable<JToken> resultObjects;
+            IQueryable<Lookup> habitats;
+
+            habitats = _context.Lookup.Where(l => l.LookupCategory == "EunisHabitats");
+            _context.Lookup.RemoveRange(habitats);
+
+            json = System.IO.File.ReadAllText(@"TestData/EunisHabitats.json");
+            resultObjects = AllChildren(JObject.Parse(json))
+                .First(c => c.Type == JTokenType.Array && c.Path.Contains("d"))
+                .Children<JObject>();
+            
+            foreach (JObject result in resultObjects) {
+                var hb = new Lookup { LookupCategory = "EunisHabitats" };
+                foreach (JProperty property in result.Properties()) {
+                    // do something with the property belonging to result                    
+                    if(property.Name=="Code") hb.Code=property.Value.ToString();
+                    if(property.Name=="Description") hb.Name=property.Value.ToString();                
+                }
+                _context.Lookup.Add(hb);
                 _context.SaveChanges();
             }
 
-            if (_context.Lookup.Count() == 0)
-            {
-                uint i;
-                for(i=0;i<6;i++) {
-                    var lk = new Lookup {
-                        Code = "SP" + i,
-                        Name = "Species " + i,
-                        LookupCategory = "Species"
-                    };
-                    _context.Lookup.Add(lk);
-                    _context.SaveChanges();
+            habitats = _context.Lookup.Where(l => l.LookupCategory == "OsparHabitats");
+            _context.Lookup.RemoveRange(habitats);
+
+            json = System.IO.File.ReadAllText(@"TestData/OsparHabitats.json");
+            resultObjects = AllChildren(JObject.Parse(json))
+                .First(c => c.Type == JTokenType.Array && c.Path.Contains("d"))
+                .Children<JObject>();
+
+            foreach (JObject result in resultObjects) {
+                var hb = new Lookup { LookupCategory = "OsparHabitats" };
+                foreach (JProperty property in result.Properties()) {
+                    // do something with the property belonging to result
+                    if(property.Name=="Code") hb.Code=property.Value.ToString();
+                    if(property.Name=="Description") hb.Name=property.Value.ToString();
                 }
-                for(i=0;i<6;i++) {
-                    var hb = new Lookup {
-                        Code = "HB" + i,
-                        Name = "Habitat " + i,
-                        LookupCategory = "Habitat"
-                    };
-                    _context.Lookup.Add(hb);
-                    _context.SaveChanges();
-                }
+                _context.Lookup.Add(hb);
+                _context.SaveChanges();
             }
+
             return await _context.MapInstance.ToListAsync();
         }
+
+        // recursively yield all children of json
+        private static IEnumerable<JToken> AllChildren(JToken json)
+        {
+            foreach (var c in json.Children()) {
+                yield return c;
+                foreach (var cc in AllChildren(c)) {
+                    yield return cc;
+                }
+            }
+        }
+
+
+    }
+
+
+
+    public class HabitatFilter {
+        public string __type { get; set; }
+        public string Code { get; set; }
+        public string Description { get; set; }
     }
 }
