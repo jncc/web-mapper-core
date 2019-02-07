@@ -73,6 +73,13 @@ namespace MapConfig.Controllers
                 _context.MapInstance.Add(map2);
                 _context.SaveChanges();
             }
+            else
+            {
+                 map1 = await _context.MapInstance
+                    .SingleOrDefaultAsync(m => m.Name == "EMODnet");
+                 map2 = await _context.MapInstance
+                    .SingleOrDefaultAsync(m => m.Name == "OSPAR");
+            }
 
             //LayerGroups
             var layergroups = _context.LayerGroup.Where(f => f.Name.EndsWith("(Test)"));
