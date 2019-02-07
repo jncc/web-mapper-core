@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;//this one is for [NotMapped]
 using System.Collections.Generic;
+using Newtonsoft.Json;
 namespace MapConfig.Models
 {
     public class MapInstance
@@ -12,7 +13,9 @@ namespace MapConfig.Models
         public string Description { get; set; }     //Map description (may contain HTML)
         public string Centre { get; set; }          //Initial Map Centre in EPSG:4326, e.g. [-3.5,52.25]
         public int Zoom { get; set; }               //Initial Zoom Level 1-22
+        [JsonIgnore]
         public string BaseLayerList { get; set; }   //Comma separated list of (either BaseLayerIds or Names)
+        [JsonIgnore]
         public string VisibleBaseLayer { get; set; }//which BaseLayer is initially visible? (either BaseLayerId or Name)
 
         [NotMapped]
