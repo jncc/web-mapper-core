@@ -31,7 +31,7 @@ namespace MapConfig.Models
         public string Type { get; set; }        //the type of layer, e.g. OSM, Bing, Tile etc.
         public string Url { get; set; }         //the source Url for the layer
         [NotMapped]
-        public Boolean Visible {get; set;}      //set by the /api/Map endpoint if this baselayer is the default visible
+        public Boolean Visible { get; set; }    //set by the /api/MapInstance endpoint if this baselayer is the default visible
     }
 
     public class LayerGroup
@@ -81,8 +81,9 @@ namespace MapConfig.Models
         public string MetadataUrl { get; set; }     //(?) icon to page with more info about the filter? 
         public string Type { get; set; }            //could be one of 'Lookup' (as in select box),'LookupMulti' (multi select box),'Date','Boolean','text'
         public string Attribute { get; set; }       //name of the WMS attribute to send
-        public string LookupCategory { get; set; }  //name of the Filter Category to lookup        
-        
+        public string LookupCategory { get; set; }  //name of the Filter Category to lookup
+        public Boolean IsComplex { get; set; }      //is this complex filter, using SQL view viewparams instead of OGC?
+         
         //foreign keys
         public long LayerId { get; set; }           //which Layer do I belong to?
         public Layer Layer { get; set; }
