@@ -14,6 +14,7 @@ import { LayersComponent } from './layers/layers.component';
 import { LayerComponent } from './layers/layer/layer.component';
 import { LayerGroupComponent } from './layers/layer-group/layer-group.component';
 import { ControlsContainerComponent } from './controls-container/controls-container.component';
+import { SubLayerGroupComponent } from './layers/sub-layer-group/sub-layer-group.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -29,7 +30,8 @@ export function initializeApp(appConfig: AppConfigService) {
     LayersComponent,
     LayerComponent,
     LayerGroupComponent,
-    ControlsContainerComponent
+    ControlsContainerComponent,
+    SubLayerGroupComponent
   ],
   imports: [
     BrowserModule,

@@ -48,9 +48,6 @@ export class MapComponent implements OnInit, OnDestroy {
         .reduce((a, b) => a.concat(b));
         this.updateLayers(layers);
       }
-       // if (data.mapInstance.layerGroups.length) {
-      //   this.updateLayers(data.mapInstance.layerGroups[0].layers);
-      // }
     });
   }
 

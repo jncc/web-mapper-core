@@ -11,8 +11,8 @@
     </div>
     <div [ngClass]="{'d-none': !show}" class="layer-group-body">
         <ul>
-            <li *ngFor="let layer of layerGroup.layers">
-                <app-layer [layer]="layer" (visibilityChanged)="onLayerVisibilityChanged(layer, $event)"></app-layer>
+            <li *ngFor="let subLayerGroup of layerGroup.subLayerGroups">
+                <app-sub-layer-group [subLayerGroup]="subLayerGroup" (layerVisibilityChanged)="onLayerVisibilityChanged($event)"></app-sub-layer-group>
             </li>
         </ul>
     </div>

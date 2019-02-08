@@ -27,8 +27,8 @@ export class LayerGroupComponent implements OnInit {
     this.show = !this.show;
   }
 
-  onLayerVisibilityChanged(layer: ILayerConfig, visible: boolean) {
-    this.layerVisibilityChanged.emit({ layerId: layer.layerId, visible: visible });
+  onLayerVisibilityChanged(event: {layerId: number, visible: boolean}) {
+    this.layerVisibilityChanged.emit({ layerId: event.layerId, visible: event.visible });
   }
 
 }

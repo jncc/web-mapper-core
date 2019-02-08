@@ -8,6 +8,9 @@ import { IMapConfig } from './models/map-config.model';
 import TileWMS from 'ol/source/tilewms';
 import Tile from 'ol/layer/tile';
 import { ILayerConfig } from './models/layer-config.model';
+import { ILayerGroupConfig } from './models/layer-group-config';
+import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
+import Layer from 'ol/layer/layer';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +22,7 @@ export class MapService {
 
   private dataStore: {
     mapConfig: IMapConfig;
+    layerLookup: { [layerId: string]: Layer; };
   };
 
   private _mapConfig: BehaviorSubject<IMapConfig>;
@@ -35,7 +39,8 @@ export class MapService {
           description: '',
           layerGroups: []
         }
-      }
+      },
+      layerLookup: {}
     };
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
 
@@ -46,7 +51,7 @@ export class MapService {
 
   private subscribeToConfig() {
     this.apiService.getConfig().subscribe((data) => {
-      this.dataStore.mapConfig.mapInstances = data.mapInstances;
+      this.dataStore.mapConfig.mapInstances = data;
       this._mapConfig.next(this.dataStore.mapConfig);
     }, error => console.log('Could not load map config.'));
   }
@@ -54,17 +59,46 @@ export class MapService {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
+      // console.log(data);
+      this.createMapInstanceConfig();
       // TODO: move to another service
       this.createLayersForConfig();
       this._mapConfig.next(this.dataStore.mapConfig);
     }, error => console.log('Could not load map instance config.'));
   }
 
+  private createMapInstanceConfig() {
+    this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig: ILayerGroupConfig) => {
+      const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
+        map((layer) => layer.subLayerGroup).
+        reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
+          if (!a.find((slg) => subLayerGroup === slg.name)) {
+            a.push({name: subLayerGroup, layers: [], sublayerGroupId: index });
+          }
+          return a;
+        }, []);
+      layerGroupConfig.layers.forEach((layer) => {
+        const subLayerGroup = subLayerGroups.find((slg) => slg.name === layer.subLayerGroup);
+        subLayerGroup.layers.push(layer);
+      });
+      layerGroupConfig.subLayerGroups = subLayerGroups;
+    });
+    // console.log(this.dataStore.mapConfig.mapInstance);
+    // if ((layerConfig.subLayerGroup !== null) && (!layerGroupConfig.subLayerGroups.includes(layerConfig.subLayerGroup))) {
+    //   layerGroupConfig.subLayerGroups.push({
+    //     sublayerGroupId: index,
+    //     name: layerConfig.subLayerGroup,
+    //     layers: []
+    //   });
+    // }
+  }
+
   // TODO: move to another service
   private createLayersForConfig(): void {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig) => {
       if (layerGroupConfig.layers.length) {
-        layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
+
+        layerGroupConfig.layers.forEach((layerConfig: ILayerConfig, index: number) => {
           const source = new TileWMS({
             url: layerConfig.url,
             params: { 'LAYERS': layerConfig.layerName }
@@ -74,6 +108,8 @@ export class MapService {
           });
           layerConfig.layer.setOpacity(layerConfig.opacity);
           layerConfig.layer.setVisible(layerConfig.visible);
+
+          this.dataStore.layerLookup[layerConfig.layerId] = layerConfig.layer;
         });
       }
     });
@@ -107,13 +143,17 @@ export class MapService {
 
   changeLayerVisibility(layerId: number, visible: boolean) {
     // const layerConfig = this.dataStore.mapConfig.mapInstance.layers.find((l) => l.layerId === layerId);
-    const layers = this.dataStore.mapConfig.mapInstance.layerGroups
-      .map((layerGroup) => layerGroup.layers)
-      .reduce((a, b) => a.concat(b));
-    const layerConfig = layers.find((l) => l.layerId === layerId);
-    if (layerConfig) {
-      layerConfig.visible = visible;
-      layerConfig.layer.setVisible(visible);
-    }
+
+    // const layers = this.dataStore.mapConfig.mapInstance.layerGroups
+    //   .map((layerGroup) => layerGroup.layers)
+    //   .reduce((a, b) => a.concat(b));
+    // const layerConfig = layers.find((l) => l.layerId === layerId);
+    // if (layerConfig) {
+    //   layerConfig.visible = visible;
+    //   layerConfig.layer.setVisible(visible);
+    // }
+
+    // console.log(layerId);
+    this.dataStore.layerLookup[layerId].setVisible(visible);
   }
 }

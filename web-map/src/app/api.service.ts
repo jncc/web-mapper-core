@@ -17,8 +17,8 @@ export class ApiService {
   }
 
   getConfig() {
-    const configUrl = this.apiUrl + '/test';
-    return this.http.get<IMapConfig>(configUrl);
+    const configUrl = this.apiUrl + '/mapinstance';
+    return this.http.get<IMapInstance[]>(configUrl);
   }
 
   getMapInstanceConfig() {

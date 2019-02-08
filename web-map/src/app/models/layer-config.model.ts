@@ -6,4 +6,5 @@ export interface ILayerConfig {
     visible: boolean;
     opacity: number;
     layer: any;
+    subLayerGroup: string;
 }
