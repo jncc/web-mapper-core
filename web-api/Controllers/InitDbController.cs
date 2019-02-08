@@ -51,16 +51,16 @@ namespace MapConfig.Controllers
             var map1 = new MapInstance { 
                 Name = "EMODnet",
                 Description = "<p>Configurable <strong>EMODnet</strong> description.</p><p><a href=\"http://www.emodnet.eu/\" target=\"_blank\">EMODnet</a></p>",
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6,
+                MapCentre = "[-3.507729, 52.304535]",
+                MapZoom = 6,
                 BaseLayerList = "OpenStreetMap,OpenTopoMap",
                 VisibleBaseLayer = "OpenStreetMap"
              };
             var map2 = new MapInstance { 
                 Name = "OSPAR", 
                 Description = "<p>Configurable <strong>OSPAR</strong> description.</p><p><a href=\"https://www.ospar.org/\" target=\"_blank\">OSPAR</a></p>",
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6,
+                MapCentre = "[-3.507729, 52.304535]",
+                MapZoom = 6,
                 BaseLayerList = "OpenStreetMap,OpenTopoMap",
                 VisibleBaseLayer = "OpenTopoMap"               
             };           
@@ -124,11 +124,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",
                 Type = "WMS",
                 Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
-                Order = 1,
-                Visible = true,
-                Opacity = 0.8f,
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6
+                LayerOrder = 1,
+                LayerVisible = true,
+                LayerOpacity = 0.8f,
+                LayerCentre = "[-3.507729, 52.304535]",
+                LayerZoom = 6
             };
             var l2 = new Layer { 
                 LayerGroupId = lg1.LayerGroupId,
@@ -139,11 +139,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
                 Type = "WMS",
                 Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
-                Order = 11,
-                Visible = false,
-                Opacity = 0.8f,
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6                
+                LayerOrder = 11,
+                LayerVisible = false,
+                LayerOpacity = 0.8f,
+                LayerCentre = "[-3.507729, 52.304535]",
+                LayerZoom = 6                
             };
 
             var l3 = new Layer { 
@@ -156,11 +156,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
                 Type = "WMS",
                 Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
-                Order = 12,
-                Visible = false,
-                Opacity = 0.8f,
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6
+                LayerOrder = 12,
+                LayerVisible = false,
+                LayerOpacity = 0.8f,
+                LayerCentre = "[-3.507729, 52.304535]",
+                LayerZoom = 6
             };
             var l4 = new Layer { 
                 LayerGroupId = lg1.LayerGroupId,
@@ -172,11 +172,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
                 Type = "WMS",
                 Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
-                Order = 2,
-                Visible = false,
-                Opacity = 0.8f,
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6
+                LayerOrder = 2,
+                LayerVisible = false,
+                LayerOpacity = 0.8f,
+                LayerCentre = "[-3.507729, 52.304535]",
+                LayerZoom = 6
             };
 
             var l5 = new Layer { 
@@ -189,11 +189,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "",               
                 Type = "WMS",
                 Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
-                Order = 21,
-                Visible = false,
-                Opacity = 0.8f,
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6
+                LayerOrder = 21,
+                LayerVisible = false,
+                LayerOpacity = 0.8f,
+                LayerCentre = "[-3.507729, 52.304535]",
+                LayerZoom = 6
             };
             //
             var l6 = new Layer { 
@@ -206,11 +206,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "#",               
                 Type = "WMS",
                 Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
-                Order = 21,
-                Visible = false,
-                Opacity = 0.8f,
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6
+                LayerOrder = 21,
+                LayerVisible = false,
+                LayerOpacity = 0.8f,
+                LayerCentre = "[-3.507729, 52.304535]",
+                LayerZoom = 6
             };            
             var l7 = new Layer { 
                 LayerGroupId = lg2.LayerGroupId,
@@ -222,11 +222,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "#",               
                 Type = "WMS",
                 Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
-                Order = 21,
-                Visible = false,
-                Opacity = 0.8f,
-                Centre = "[-3.507729, 52.304535]",
-                Zoom = 6
+                LayerOrder = 21,
+                LayerVisible = false,
+                LayerOpacity = 0.8f,
+                LayerCentre = "[-3.507729, 52.304535]",
+                LayerZoom = 6
             }; 
 
             // Create a new Layer if collection is empty                

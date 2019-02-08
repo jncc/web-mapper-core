@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;//this one is for [NotMapped]
+using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 namespace MapConfig.Models
@@ -11,13 +12,19 @@ namespace MapConfig.Models
         public long MapInstanceId { get; set; }     //Unique Map Instance ID
         public string Name { get; set; }            //Map name
         public string Description { get; set; }     //Map description (may contain HTML)
-        public string Centre { get; set; }          //Initial Map Centre in EPSG:4326, e.g. [-3.5,52.25]
-        public int Zoom { get; set; }               //Initial Zoom Level 1-22
+        [JsonIgnore]
+        public string MapCentre { get; set; }       //Initial Map Centre in EPSG:4326, e.g. [-3.5,52.25]
+        [JsonIgnore]
+        public int MapZoom { get; set; }            //Initial Zoom Level 1-22
         [JsonIgnore]
         public string BaseLayerList { get; set; }   //Comma separated list of (either BaseLayerIds or Names)
         [JsonIgnore]
         public string VisibleBaseLayer { get; set; }//which BaseLayer is initially visible? (either BaseLayerId or Name)
 
+        [NotMapped]
+        public double[] Center { get; set; } = new double[2];       //what's actually sent in the JSON response (an array)
+        [NotMapped]
+        public int Zoom { get; set; }               //what's actually sent in the JSON response
         [NotMapped]
         public List<BaseLayer> BaseLayers { get; set; }
 
@@ -52,6 +59,7 @@ namespace MapConfig.Models
     }
 
     public class Layer {
+        //database schema
         [Key]
         public long LayerId { get; set; }         //Unique Layer ID
         public string Name { get; set; }         //Short Descriptive text about the layer (can contain HTML)
@@ -62,18 +70,35 @@ namespace MapConfig.Models
         public string Type { get; set; }          //Layer Source type e.g. WMS WMTS Tile etc.
         public string Url { get; set; }           //Base Url not including filter params
         public string LayerName { get; set; }     //WMS or WMTS layer name
-        public string StyleName { get; set; }     //WMS or WMTS style name
-        public long Order { get; set; }           //Initial Order within the Layer Group (or SubLayerGroup)
-        public Boolean Visible { get; set; }      //Initial Visibility
+        public string StyleName { get; set; }     //WMS or WMTS style name        
+        [JsonIgnore]
+        public long LayerOrder { get; set; }           //Initial Order within the Layer Group (or SubLayerGroup)
+        [JsonIgnore]
+        public Boolean LayerVisible { get; set; }      //Initial Visibility
+        [JsonIgnore]
         [Range(0.0f,1.0f)]
-        public float Opacity { get; set; }        //Initial Opacity
-        public string Centre { get; set; }        //Layer specific Centre in EPSG:4326, e.g. [-3.5,52.25]
-        public int Zoom { get; set; }             //Layer specific Zoom Level 1-22
-
+        public float LayerOpacity { get; set; }        //Initial Opacity
+        [JsonIgnore]
+        public string LayerCentre { get; set; }   //Layer specific Centre in EPSG:4326, e.g. [-3.5,52.25] - overrides Map centre
+        [JsonIgnore]
+        public int LayerZoom { get; set; }        //Layer specific Zoom Level 1-22 - overrides Map zoom
+        
         //foreign keys
         public long LayerGroupId { get; set; }    //which LayerGroup am I in?
+        
+        //not part of the schema, but part of the class
         public LayerGroup LayerGroup { get; set; }
-        public List<Filter> Filters { get; set; }     
+        public List<Filter> Filters { get; set; }
+        [NotMapped]
+        public long Order { get; set; }
+        [NotMapped]
+        public Boolean Visible { get; set; }
+        [NotMapped]
+        public float Opacity { get; set; }
+        [NotMapped]
+        public double[] Center { get; set; } = new double[2];       //what's actually sent in the JSON response (an array)
+        [NotMapped]
+        public float Zoom { get; set; }   
     }
 
     public class Filter {

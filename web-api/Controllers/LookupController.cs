@@ -24,12 +24,12 @@ namespace MapConfig.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Lookup>>> GetLookup()
         {
-            var lookups = await _context.Lookup
+            var lookupCategories = await _context.Lookup
                 .Select(l => l.LookupCategory)
                 .Distinct()
                 .ToListAsync();
 
-            return Json( new { LookupCategories = lookups });
+            return Json( lookupCategories );
         }
 
         // GET: api/Lookup/Habitat
@@ -37,15 +37,10 @@ namespace MapConfig.Controllers
         public async Task<ActionResult<Lookup>> GetLookup(string lookupCategory)
         {
             var lookups = await _context.Lookup
-                .Where(m => m.LookupCategory == lookupCategory)
+                .Where(l => l.LookupCategory == lookupCategory)
                 .ToListAsync();
 
-            if (lookups == null)
-            {
-                return NotFound();
-            }
-
-            return Json( new { LookupResults = lookups });
+            return Json( lookups );
         }
 
     }
