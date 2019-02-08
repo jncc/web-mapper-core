@@ -123,7 +123,7 @@ namespace MapConfig.Controllers
 
                     //these need no conversion
                     layer.Order = layer.LayerOrder;
-                    layer.Visible = layer.Visible;
+                    layer.Visible = layer.LayerVisible;
                     layer.Opacity = layer.LayerOpacity;
                     layer.Zoom = layer.LayerZoom;
 

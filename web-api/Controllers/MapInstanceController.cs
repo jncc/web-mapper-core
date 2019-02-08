@@ -28,7 +28,7 @@ namespace MapConfig.Controllers
             var maps = await _context.MapInstance
                 .Select(l => new { l.MapInstanceId, l.Name, l.Description })
                 .ToListAsync();
-                
+
             return Json( maps );
         }
 
@@ -122,7 +122,7 @@ namespace MapConfig.Controllers
 
                     //these need no conversion
                     layer.Order = layer.LayerOrder;
-                    layer.Visible = layer.Visible;
+                    layer.Visible = layer.LayerVisible;
                     layer.Opacity = layer.LayerOpacity;
                     layer.Zoom = layer.LayerZoom;
 
