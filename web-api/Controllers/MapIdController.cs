@@ -100,9 +100,9 @@ namespace MapConfig.Controllers
             }
 
             //convert any <Layer>LayerCentre values into a JSON 'center' array attribute for the Layer, and also re-map other fields
-            List<Layer> layers = new List<Layer>();
             List<LayerGroup> layerGroups = new List<LayerGroup>();
             foreach (LayerGroup layerGroup in map.LayerGroups) {
+                List<Layer> layers = new List<Layer>();
                 foreach(Layer layer in layerGroup.Layers) {
                     //tconvert the database string representation of 'LayerCentre' to a JSON 'center' array in Layer
                     if (layer.LayerCentre != null && layer.LayerCentre.Length > 0 )
