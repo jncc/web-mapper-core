@@ -22,12 +22,10 @@ export class LegendsComponent implements OnInit {
     'biological zones'
   ];
 
-  legends$: Observable<ILayerConfig[]>;
+  visibleLayers$: Observable<ILayerConfig[]>;
 
   constructor(private mapService: MapService) {
-    this.legends$ = this.mapService.layerLookup.pipe(
-      map(layerConfigs => layerConfigs.filter(layerConfig => layerConfig.layer.getVisible()))
-      );
+    this.visibleLayers$ = this.mapService.visibleLayers;
   }
 
   ngOnInit() {
@@ -38,7 +36,7 @@ export class LegendsComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    this.mapService.refreshLayers(event.previousIndex, event.currentIndex);
+    this.mapService.reorderVisibleLayers(event.previousIndex, event.currentIndex);
   }
 
   removeLegend(layerId: number) {

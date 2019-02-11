@@ -24,6 +24,7 @@ export class MapService {
   private dataStore: {
     mapConfig: IMapConfig;
     layerLookup: ILayerConfig[];
+    visibleLayers: ILayerConfig[];
   };
 
   private _mapConfig: BehaviorSubject<IMapConfig>;
@@ -31,9 +32,9 @@ export class MapService {
     return this._mapConfig.asObservable();
   }
 
-  private _layerLookup: BehaviorSubject<ILayerConfig[]>;
-  get layerLookup() {
-    return this._layerLookup.asObservable();
+  private _visibleLayers: BehaviorSubject<ILayerConfig[]>;
+  get visibleLayers() {
+    return this._visibleLayers.asObservable();
   }
 
   constructor(private http: HttpClient, private apiService: ApiService) {
@@ -46,10 +47,11 @@ export class MapService {
           layerGroups: []
         }
       },
-      layerLookup: []
+      layerLookup: [],
+      visibleLayers: []
     };
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
-    this._layerLookup = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.layerLookup);
+    this._visibleLayers = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.visibleLayers);
 
     this.subscribeToConfig();
 
@@ -79,7 +81,7 @@ export class MapService {
         map((layer) => layer.subLayerGroup).
         reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
           if (!a.find((slg) => subLayerGroup === slg.name)) {
-            a.push({name: subLayerGroup, layers: [], sublayerGroupId: index });
+            a.push({ name: subLayerGroup, layers: [], sublayerGroupId: index });
           }
           return a;
         }, []);
@@ -107,12 +109,14 @@ export class MapService {
           layerConfig.layer.setOpacity(layerConfig.opacity);
           layerConfig.layer.setVisible(layerConfig.visible);
 
-          // this.dataStore.layerLookup[layerConfig.layerId] = layerConfig.layer;
+          if (layerConfig.visible) {
+            this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+          }
           this.dataStore.layerLookup.push(layerConfig);
-          this._layerLookup.next(this.dataStore.layerLookup);
         });
       }
     });
+    this._visibleLayers.next(this.dataStore.visibleLayers);
   }
 
   mapReady(map: any) {
@@ -146,19 +150,19 @@ export class MapService {
     currentLayerConfig.layer.setVisible(visible);
     currentLayerConfig.visible = visible;
 
-    this._layerLookup.next(this.dataStore.layerLookup);
+    if (visible) {
+      this.dataStore.visibleLayers = [currentLayerConfig, ...this.dataStore.visibleLayers];
+    } else {
+      this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== currentLayerConfig);
+    }
+    this._visibleLayers.next(this.dataStore.visibleLayers);
     this._mapConfig.next(this.dataStore.mapConfig);
   }
 
-  refreshLayers(previousIndex: number, currentIndex: number) {
-    const visibleLayers = this.dataStore.layerLookup.filter(layer => layer.layer.getVisible());
-    const previousLayer = visibleLayers[previousIndex];
-    const previousRealIndex = this.dataStore.layerLookup.indexOf(previousLayer);
-    const currentLayer = visibleLayers[currentIndex];
-    const currentRealIndex = this.dataStore.layerLookup.indexOf(currentLayer);
-    const l = this.dataStore.layerLookup;
-    [l[previousRealIndex], l[currentRealIndex]] = [l[currentRealIndex], l[previousRealIndex]];
-
-    this._layerLookup.next(this.dataStore.layerLookup);
+  reorderVisibleLayers(previousIndex: number, currentIndex: number) {
+    const l = this.dataStore.visibleLayers;
+    // this apparently swaps two array elements
+    [l[previousIndex], l[currentIndex]] = [l[currentIndex], l[previousIndex]];
+    this._visibleLayers.next(this.dataStore.visibleLayers);
   }
 }

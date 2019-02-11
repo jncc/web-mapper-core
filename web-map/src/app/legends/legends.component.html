@@ -2,7 +2,7 @@
     <span header>LEGEND</span>
     <ng-container body>
         <ul class="legend-list" cdkDropList (cdkDropListDropped)="drop($event)">
-            <li class="legend-item" cdkDrag *ngFor="let legend of legends$ | async">
+            <li class="legend-item" cdkDrag *ngFor="let legend of visibleLayers$ | async">
               <div>
                   <i class="material-icons small" cdkDragHandle>drag_indicator</i>
               </div>
