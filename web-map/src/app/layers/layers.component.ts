@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../map.service';
+import { ILayerGroupConfig } from '../models/layer-group-config';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layers',
@@ -7,18 +11,18 @@ import { MapService } from '../map.service';
   styleUrls: ['./layers.component.scss']
 })
 export class LayersComponent implements OnInit {
-  layerGroups = [];
+
+  layerGroups$: Observable<ILayerGroupConfig[]>;
 
   show = true;
 
   constructor(private mapService: MapService) { }
 
   ngOnInit() {
-    this.mapService.mapConfig.subscribe((data) => {
-      if (data.mapInstance) {
-        this.layerGroups = data.mapInstance.layerGroups;
-      }
-    });
+
+    this.layerGroups$ = this.mapService.mapConfig.pipe(
+      map(mapConfig => mapConfig.mapInstance.layerGroups)
+    );
   }
 
   onLayerVisiblityChanged(event: {layerId: number, visible: boolean}) {

@@ -52,14 +52,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.layersSubscription = this.mapService.layerLookup.subscribe(
       (layers) => this.updateLayers(layers)
     );
-    // this.mapService.mapConfig.subscribe((data) => {
-    //   if (data.mapInstance.layerGroups.length) {
-    //     const layers = data.mapInstance.layerGroups
-    //     .map((layerGroup) => layerGroup.layers)
-    //     .reduce((a, b) => a.concat(b));
-    //     this.updateLayers(layers);
-    //   }
-    // });
   }
 
   private updateLayers(layersConfig: ILayerConfig[]): void {
@@ -68,10 +60,6 @@ export class MapComponent implements OnInit, OnDestroy {
     layersConfig.forEach( (layerConfig) => {
       this.map.addLayer(layerConfig.layer);
     });
-    // console.log(this.map.getLayers());
-
-    // setTimeout(() => this.map.removeLayer(this.baseLayer), 2000);
-    // setTimeout(() => this.map.addLayer(this.baseLayer), 4000);
   }
 
   private setupMap() {
@@ -112,6 +100,9 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.zoomExtentSubscription) {
       this.zoomExtentSubscription.unsubscribe();
+    }
+    if (this.layersSubscription) {
+      this.layersSubscription.unsubscribe();
     }
   }
 }

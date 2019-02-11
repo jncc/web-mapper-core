@@ -2,7 +2,7 @@
   <span header>LAYERS</span>
   <ng-container body>
     <ul>
-      <li *ngFor="let layerGroup of layerGroups">
+      <li *ngFor="let layerGroup of layerGroups$ | async">
         <app-layer-group [layerGroup]="layerGroup" (layerVisibilityChanged)="onLayerVisiblityChanged($event)"></app-layer-group>
       </li>
     </ul>
