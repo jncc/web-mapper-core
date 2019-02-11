@@ -19,7 +19,6 @@ export class LayersComponent implements OnInit {
   constructor(private mapService: MapService) { }
 
   ngOnInit() {
-
     this.layerGroups$ = this.mapService.mapConfig.pipe(
       map(mapConfig => mapConfig.mapInstance.layerGroups)
     );

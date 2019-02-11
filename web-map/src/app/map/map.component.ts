@@ -57,9 +57,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private updateLayers(layersConfig: ILayerConfig[]): void {
     this.map.setLayerGroup(new Group());
     this.map.addLayer(this.baseLayer);
-    layersConfig.forEach( (layerConfig) => {
-      this.map.addLayer(layerConfig.layer);
-    });
+    layersConfig.forEach(layerConfig => this.map.addLayer(layerConfig.layer));
   }
 
   private setupMap() {
@@ -70,13 +68,12 @@ export class MapComponent implements OnInit, OnDestroy {
       minZoom: 3
   });
 
-  // const baseLayer = new Tile({
-  //   source: new OSM()
-  // });
-
     this.map = new Map({
       target: 'map',
-      controls: [],
+      controls: [ new OverviewMap({
+        collapsed: false,
+        collapsible: false
+      })],
       layers: [
         this.baseLayer
       ],
