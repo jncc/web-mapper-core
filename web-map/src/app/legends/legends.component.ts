@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MapService } from '../map.service';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
 
 @Component({
@@ -35,8 +37,7 @@ export class LegendsComponent implements OnInit {
     this.show = !this.show;
   }
 
-  refreshLayers() {
-    this.mapService.refreshLayers(0, 1);
+  drop(event: CdkDragDrop<string[]>) {
+    this.mapService.refreshLayers(event.previousIndex, event.currentIndex);
   }
-
 }

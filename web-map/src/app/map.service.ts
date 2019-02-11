@@ -22,7 +22,6 @@ export class MapService {
 
   private dataStore: {
     mapConfig: IMapConfig;
-    // layerLookup: { [layerId: string]: Layer; };
     layerLookup: ILayerConfig[];
   };
 
@@ -66,7 +65,6 @@ export class MapService {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
-      // console.log(data);
       this.createMapInstanceConfig();
       // TODO: move to another service
       this.createLayersForConfig();
@@ -90,14 +88,6 @@ export class MapService {
       });
       layerGroupConfig.subLayerGroups = subLayerGroups;
     });
-    // console.log(this.dataStore.mapConfig.mapInstance);
-    // if ((layerConfig.subLayerGroup !== null) && (!layerGroupConfig.subLayerGroups.includes(layerConfig.subLayerGroup))) {
-    //   layerGroupConfig.subLayerGroups.push({
-    //     sublayerGroupId: index,
-    //     name: layerConfig.subLayerGroup,
-    //     layers: []
-    //   });
-    // }
   }
 
   // TODO: move to another service
@@ -151,32 +141,20 @@ export class MapService {
   }
 
   changeLayerVisibility(layerId: number, visible: boolean) {
-    // const layerConfig = this.dataStore.mapConfig.mapInstance.layers.find((l) => l.layerId === layerId);
-
-    // const layers = this.dataStore.mapConfig.mapInstance.layerGroups
-    //   .map((layerGroup) => layerGroup.layers)
-    //   .reduce((a, b) => a.concat(b));
-    // const layerConfig = layers.find((l) => l.layerId === layerId);
-    // if (layerConfig) {
-    //   layerConfig.visible = visible;
-    //   layerConfig.layer.setVisible(visible);
-    // }
-
-    // console.log(layerId);
-    console.log(this.dataStore.layerLookup);
     const layer = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId).layer;
     layer.setVisible(visible);
-
     this._layerLookup.next(this.dataStore.layerLookup);
   }
 
   refreshLayers(previousIndex, currentIndex) {
-    console.log('refreshing layers');
-    // this.dataStore.layerLookup()
-    // [ list[x], list[y] ] = [ list[y], list[x] ];
+    const visibleLayers = this.dataStore.layerLookup.filter(layer => layer.layer.getVisible());
+    const previousLayer = visibleLayers[previousIndex];
+    const previousRealIndex = this.dataStore.layerLookup.indexOf(previousLayer);
+    const currentLayer = visibleLayers[currentIndex];
+    const currentRealIndex = this.dataStore.layerLookup.indexOf(currentLayer);
     const l = this.dataStore.layerLookup;
-    console.log(l);
-    [l[previousIndex], l[currentIndex]] = [l[currentIndex], l[previousIndex]];
+    [l[previousRealIndex], l[currentRealIndex]] = [l[currentRealIndex], l[previousRealIndex]];
+
     this._layerLookup.next(this.dataStore.layerLookup);
   }
 }

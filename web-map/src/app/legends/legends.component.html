@@ -1,12 +1,10 @@
 <app-controls-container id="legends">
     <span header>LEGEND</span>
     <ng-container body>
-        <ul>
-            <li *ngFor="let legend of legends$ | async">
+        <ul class="legend-list" cdkDropList (cdkDropListDropped)="drop($event)">
+            <li cdkDrag *ngFor="let legend of legends$ | async">
               <app-legend-item [legend]="legend"></app-legend-item>
             </li>
           </ul>
-          <button type="button" (click)="refreshLayers()"></button>
     </ng-container>
-    
 </app-controls-container>

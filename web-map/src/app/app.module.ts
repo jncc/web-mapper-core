@@ -2,6 +2,8 @@ import { APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import {DragDropModule} from '@angular/cdk/drag-drop';
+
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { AppConfigService } from './app-config.service';
@@ -35,7 +37,8 @@ export function initializeApp(appConfig: AppConfigService) {
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    DragDropModule
   ],
   providers: [
     AppConfigService,
