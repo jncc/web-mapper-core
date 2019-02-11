@@ -22,12 +22,18 @@ export class MapService {
 
   private dataStore: {
     mapConfig: IMapConfig;
-    layerLookup: { [layerId: string]: Layer; };
+    // layerLookup: { [layerId: string]: Layer; };
+    layerLookup: ILayerConfig[];
   };
 
   private _mapConfig: BehaviorSubject<IMapConfig>;
   get mapConfig() {
     return this._mapConfig.asObservable();
+  }
+
+  private _layerLookup: BehaviorSubject<ILayerConfig[]>;
+  get layerLookup() {
+    return this._layerLookup.asObservable();
   }
 
   constructor(private http: HttpClient, private apiService: ApiService) {
@@ -40,9 +46,10 @@ export class MapService {
           layerGroups: []
         }
       },
-      layerLookup: {}
+      layerLookup: []
     };
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
+    this._layerLookup = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.layerLookup);
 
     this.subscribeToConfig();
 
@@ -109,7 +116,9 @@ export class MapService {
           layerConfig.layer.setOpacity(layerConfig.opacity);
           layerConfig.layer.setVisible(layerConfig.visible);
 
-          this.dataStore.layerLookup[layerConfig.layerId] = layerConfig.layer;
+          // this.dataStore.layerLookup[layerConfig.layerId] = layerConfig.layer;
+          this.dataStore.layerLookup.push(layerConfig);
+          this._layerLookup.next(this.dataStore.layerLookup);
         });
       }
     });
@@ -154,6 +163,20 @@ export class MapService {
     // }
 
     // console.log(layerId);
-    this.dataStore.layerLookup[layerId].setVisible(visible);
+    console.log(this.dataStore.layerLookup);
+    const layer = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId).layer;
+    layer.setVisible(visible);
+
+    this._layerLookup.next(this.dataStore.layerLookup);
+  }
+
+  refreshLayers(previousIndex, currentIndex) {
+    console.log('refreshing layers');
+    // this.dataStore.layerLookup()
+    // [ list[x], list[y] ] = [ list[y], list[x] ];
+    const l = this.dataStore.layerLookup;
+    console.log(l);
+    [l[previousIndex], l[currentIndex]] = [l[currentIndex], l[previousIndex]];
+    this._layerLookup.next(this.dataStore.layerLookup);
   }
 }

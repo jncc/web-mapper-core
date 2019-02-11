@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
+import Group from 'ol/layer/group';
 import VectorLayer from 'ol/layer/vector';
 import VectorSource from 'ol/source/vector';
 import OSM from 'ol/source/OSM';
@@ -23,6 +24,7 @@ import DragZoom from 'ol/interaction/dragzoom';
 
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
 
 @Component({
   selector: 'app-map',
@@ -34,28 +36,42 @@ export class MapComponent implements OnInit, OnDestroy {
   map: Map;
   private zoomExtentSubscription: Subscription;
 
+  private layersSubscription: Subscription;
+
   mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
+
+  baseLayer = new Tile({
+    source: new OSM()
+  });
 
   constructor(private mapService: MapService) {
   }
 
   ngOnInit() {
     this.setupMap();
-    this.mapService.mapConfig.subscribe((data) => {
-      if (data.mapInstance.layerGroups.length) {
-        const layers = data.mapInstance.layerGroups
-        .map((layerGroup) => layerGroup.layers)
-        .reduce((a, b) => a.concat(b));
-        this.updateLayers(layers);
-      }
-    });
+    this.layersSubscription = this.mapService.layerLookup.subscribe(
+      (layers) => this.updateLayers(layers)
+    );
+    // this.mapService.mapConfig.subscribe((data) => {
+    //   if (data.mapInstance.layerGroups.length) {
+    //     const layers = data.mapInstance.layerGroups
+    //     .map((layerGroup) => layerGroup.layers)
+    //     .reduce((a, b) => a.concat(b));
+    //     this.updateLayers(layers);
+    //   }
+    // });
   }
 
   private updateLayers(layersConfig: ILayerConfig[]): void {
+    this.map.setLayerGroup(new Group());
+    this.map.addLayer(this.baseLayer);
     layersConfig.forEach( (layerConfig) => {
       this.map.addLayer(layerConfig.layer);
     });
     // console.log(this.map.getLayers());
+
+    // setTimeout(() => this.map.removeLayer(this.baseLayer), 2000);
+    // setTimeout(() => this.map.addLayer(this.baseLayer), 4000);
   }
 
   private setupMap() {
@@ -66,15 +82,15 @@ export class MapComponent implements OnInit, OnDestroy {
       minZoom: 3
   });
 
-  const baseLayer = new Tile({
-    source: new OSM()
-  });
+  // const baseLayer = new Tile({
+  //   source: new OSM()
+  // });
 
     this.map = new Map({
       target: 'map',
       controls: [],
       layers: [
-        baseLayer
+        this.baseLayer
       ],
       view: view
     });

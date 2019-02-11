@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ILayerConfig } from 'src/app/models/layer-config.model';
 
 @Component({
   selector: 'app-legend-item',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LegendItemComponent implements OnInit {
 
-  @Input() legend: string;
+  @Input() legend: ILayerConfig;
 
   constructor() { }
 
