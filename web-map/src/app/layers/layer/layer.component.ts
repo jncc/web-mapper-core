@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ILayerConfig } from '../../models/layer-config.model';
 
 @Component({
   selector: 'app-layer',
   templateUrl: './layer.component.html',
-  styleUrls: ['./layer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./layer.component.scss']
 })
 export class LayerComponent implements OnInit {
 
@@ -15,7 +14,6 @@ export class LayerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    // console.log(this.layer);
   }
 
   onChange(event) {

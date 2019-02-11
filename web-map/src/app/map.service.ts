@@ -11,6 +11,7 @@ import { ILayerConfig } from './models/layer-config.model';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
 import Layer from 'ol/layer/layer';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -141,12 +142,15 @@ export class MapService {
   }
 
   changeLayerVisibility(layerId: number, visible: boolean) {
-    const layer = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId).layer;
-    layer.setVisible(visible);
+    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
+    currentLayerConfig.layer.setVisible(visible);
+    currentLayerConfig.visible = visible;
+
     this._layerLookup.next(this.dataStore.layerLookup);
+    this._mapConfig.next(this.dataStore.mapConfig);
   }
 
-  refreshLayers(previousIndex, currentIndex) {
+  refreshLayers(previousIndex: number, currentIndex: number) {
     const visibleLayers = this.dataStore.layerLookup.filter(layer => layer.layer.getVisible());
     const previousLayer = visibleLayers[previousIndex];
     const previousRealIndex = this.dataStore.layerLookup.indexOf(previousLayer);

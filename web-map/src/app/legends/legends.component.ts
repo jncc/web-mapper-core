@@ -40,4 +40,8 @@ export class LegendsComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     this.mapService.refreshLayers(event.previousIndex, event.currentIndex);
   }
+
+  removeLegend(layerId: number) {
+    this.mapService.changeLayerVisibility(layerId, false);
+  }
 }

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../map.service';
-import { ILayerConfig } from '../models/layer-config.model';
-import { ILayerGroupConfig } from '../models/layer-group-config';
 
 @Component({
   selector: 'app-layers',
@@ -9,9 +7,7 @@ import { ILayerGroupConfig } from '../models/layer-group-config';
   styleUrls: ['./layers.component.scss']
 })
 export class LayersComponent implements OnInit {
-  layerGroups = [{
-    name: 'andyb'
-  }];
+  layerGroups = [];
 
   show = true;
 

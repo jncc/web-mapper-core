@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ISubLayerGroupConfig } from 'src/app/models/sub-layer-group-config';
 import { ILayerConfig } from 'src/app/models/layer-config.model';
 
