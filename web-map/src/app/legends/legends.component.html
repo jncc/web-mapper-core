@@ -1,8 +1,9 @@
 <app-controls-container id="legends">
     <span header>LEGEND</span>
     <ng-container body>
-        <ul class="legend-list" cdkDropList (cdkDropListDropped)="drop($event)">
-            <li class="legend-item" cdkDrag *ngFor="let legend of visibleLayers$ | async">
+        <ul *ngIf="(visibleLayers$ | async).length; else no_visible_layers" class="legend-list" cdkDropList (cdkDropListDropped)="drop($event)">
+            <li class="legend-item" cdkDrag cdkDragBoundary="#legends"
+                *ngFor="let legend of visibleLayers$ | async">
               <div>
                   <i class="material-icons small" cdkDragHandle>drag_indicator</i>
               </div>
@@ -14,5 +15,6 @@
               </div>
             </li>
           </ul>
+          <ng-template #no_visible_layers>No layers selected</ng-template>
     </ng-container>
 </app-controls-container>
