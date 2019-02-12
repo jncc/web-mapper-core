@@ -34,6 +34,10 @@ else
 fi
 [ $? -ne 0 ] && echo "Deploy Transfer Failed!" && exit 1
 
+echo "Installing Correct Configuration..."
+ssh $user@$host "cd $remotepath/$project && cp -f appsettings.esdm.json appsettings.json"
+[ $? -ne 0 ] && echo "Installing Configuration Failed!" && exit 1
+
 echo "Running Post Deploy Task on server...."
 ssh $user@$host "cd $remotepath && ./post-deploy.sh $project"
 [ $? -ne 0 ] && echo "Post Deploy Task Failed!" && exit 1
