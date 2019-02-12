@@ -22,10 +22,12 @@ import OverviewMap from 'ol/control/OverviewMap';
 import ScaleLine from 'ol/control/ScaleLine';
 import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
+
 
 @Component({
   selector: 'app-map',
@@ -68,7 +70,7 @@ export class MapComponent implements OnInit, OnDestroy {
       zoom: 4,
       maxZoom: 17,
       minZoom: 3
-  });
+    });
 
     this.map = new Map({
       target: 'map',
@@ -90,8 +92,23 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.mapService.mapReady(this.map);
 
-    this.map.on('click', () => {
-      this.mapService.getFeatureInfo();
+    this.map.on('click', (event: MapBrowserEvent) => {
+      const viewResolution = this.map.getView().getResolution();
+      const pixel = this.map.getEventPixel(event.originalEvent);
+      const urls = [];
+      this.map.forEachLayerAtPixel(pixel, layer => {
+        if (layer instanceof Tile) {
+          const source = (<Tile>layer).getSource();
+          if (source instanceof TileWMS) {
+            const url = source.getGetFeatureInfoUrl(event.coordinate, viewResolution, 'EPSG:3857',
+              {'INFO_FORMAT': 'text/html'});
+              // {'INFO_FORMAT': 'application/json'});
+            urls.push(url);
+            console.log(url);
+          }
+        }
+      });
+      this.mapService.showFeatureInfo(urls);
     });
 
     this.zoomExtentSubscription = this.mapService.zoomExtent.subscribe(() =>

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { IMapConfig } from './models/map-config.model';
 import { IMapInstance } from './models/map-instance.model';
+import { Observable, forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +17,22 @@ export class ApiService {
     this.apiUrl = AppConfigService.settings.apiUrl;
   }
 
-  getConfig() {
+  getConfig(): Observable<IMapInstance[]> {
     const configUrl = this.apiUrl + '/mapinstance';
     return this.http.get<IMapInstance[]>(configUrl);
   }
 
-  getMapInstanceConfig() {
+  getMapInstanceConfig(): Observable<IMapInstance> {
     const mapInstanceConfigUrl = this.apiUrl + '/mapinstance/EMODnet';
-
     return this.http.get<IMapInstance>(mapInstanceConfigUrl);
+  }
+
+  getFeatureInfoForUrls(urls: string[]): Observable<any[]> {
+    const responses = [];
+    urls.forEach(
+      url => responses.push(this.http.get(url, {responseType: 'text'}))
+    );
+    return forkJoin(responses);
   }
 
 }

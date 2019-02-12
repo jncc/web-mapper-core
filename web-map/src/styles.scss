@@ -70,3 +70,18 @@ img {
   left: auto;
   background: rgba(0,60,136,0.7);
 }
+
+table.featureInfo {
+  border-collapse: collapse;
+  border: 1px solid grey;
+  margin: 1rem;
+}
+table.featureInfo th, table.featureInfo td {
+  border: 1px solid grey;
+}
+
+caption.featureInfo {
+  text-align: left;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}

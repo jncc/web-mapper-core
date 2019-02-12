@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ApiService } from './api.service';
 import { IMapConfig } from './models/map-config.model';
 
@@ -11,11 +11,12 @@ import { ILayerConfig } from './models/layer-config.model';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
 import Layer from 'ol/layer/layer';
+import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MapService {
+export class MapService implements OnDestroy {
 
   map: any;
 
@@ -25,6 +26,7 @@ export class MapService {
     mapConfig: IMapConfig;
     layerLookup: ILayerConfig[];
     visibleLayers: ILayerConfig[];
+    featureInfos: any[];
   };
 
   private _mapConfig: BehaviorSubject<IMapConfig>;
@@ -37,6 +39,12 @@ export class MapService {
     return this._visibleLayers.asObservable();
   }
 
+  private _featureInfos: BehaviorSubject<any[]>;
+  get featureInfos() {
+    return this._featureInfos.asObservable();
+  }
+  private featureInfoSubscription: Subscription;
+
   constructor(private http: HttpClient, private apiService: ApiService) {
     this.dataStore = {
       mapConfig: {
@@ -48,11 +56,12 @@ export class MapService {
         }
       },
       layerLookup: [],
-      visibleLayers: []
+      visibleLayers: [],
+      featureInfos: []
     };
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
     this._visibleLayers = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.visibleLayers);
-
+    this._featureInfos = <BehaviorSubject<any[]>>new BehaviorSubject(this.dataStore.featureInfos);
     this.subscribeToConfig();
 
     this.subscribeToMapInstanceConfig();
@@ -101,7 +110,8 @@ export class MapService {
         layerGroupConfig.layers.forEach((layerConfig: ILayerConfig, index: number) => {
           const source = new TileWMS({
             url: layerConfig.url,
-            params: { 'LAYERS': layerConfig.layerName }
+            params: { 'LAYERS': layerConfig.layerName },
+            crossOrigin: 'anonymous'
           });
           layerConfig.layer = new Tile({
             source: source
@@ -145,6 +155,21 @@ export class MapService {
     );
   }
 
+  showFeatureInfo(urls: string[]) {
+    if (this.featureInfoSubscription) {
+      this.featureInfoSubscription.unsubscribe();
+    }
+    this.featureInfoSubscription = this.apiService.getFeatureInfoForUrls(urls).subscribe(data => {
+      this.dataStore.featureInfos = data;
+      this._featureInfos.next(this.dataStore.featureInfos);
+    });
+  }
+
+  clearFeatureInfo() {
+    this.dataStore.featureInfos = [];
+    this._featureInfos.next(this.dataStore.featureInfos);
+  }
+
   changeLayerVisibility(layerId: number, visible: boolean) {
     const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
     currentLayerConfig.layer.setVisible(visible);
@@ -164,5 +189,11 @@ export class MapService {
     // this apparently swaps two array elements
     [l[previousIndex], l[currentIndex]] = [l[currentIndex], l[previousIndex]];
     this._visibleLayers.next(this.dataStore.visibleLayers);
+  }
+
+  ngOnDestroy() {
+    if (this.featureInfoSubscription) {
+      this.featureInfoSubscription.unsubscribe();
+    }
   }
 }
