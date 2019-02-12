@@ -19,6 +19,7 @@ import Icon from 'ol/style/icon';
 import Select from 'ol/interaction/select';
 import condition from 'ol/events/condition';
 import OverviewMap from 'ol/control/OverviewMap';
+import ScaleLine from 'ol/control/ScaleLine';
 import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
 
@@ -71,10 +72,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.map = new Map({
       target: 'map',
-      controls: [ new OverviewMap({
-        collapsed: false,
-        collapsible: false
-      })],
+      controls: [
+        new OverviewMap({
+          collapsed: false,
+          collapsible: false
+        }),
+        new ScaleLine()
+      ],
       layers: [
         this.baseLayer
       ],
