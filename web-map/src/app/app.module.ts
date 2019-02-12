@@ -18,6 +18,7 @@ import { LayerGroupComponent } from './layers/layer-group/layer-group.component'
 import { ControlsContainerComponent } from './controls-container/controls-container.component';
 import { SubLayerGroupComponent } from './layers/sub-layer-group/sub-layer-group.component';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
+import { SafeHtmlPipe } from './safe-html.pipe';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -35,7 +36,8 @@ export function initializeApp(appConfig: AppConfigService) {
     LayerGroupComponent,
     ControlsContainerComponent,
     SubLayerGroupComponent,
-    FeatureInfosComponent
+    FeatureInfosComponent,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,
