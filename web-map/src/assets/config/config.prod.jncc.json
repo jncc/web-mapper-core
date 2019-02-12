@@ -1,0 +1,6 @@
+{
+    "name": "prod mapper",
+    "logging": false,
+    "apiUrl": "//api.emodnet-seabedhabitats.eu/api",
+    "mapInstance": "EMODnet"
+}
