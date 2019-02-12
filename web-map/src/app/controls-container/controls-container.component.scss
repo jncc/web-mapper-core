@@ -10,11 +10,12 @@
   }
    
   .controls-container-header {
-      padding: $container-padding;
-      border-bottom: 1px solid $border-color;
-      background-color: midnightblue;
-      border-radius: $container-border-radius;
-      cursor: pointer;
+    display: flex;
+    padding: $container-padding;
+    border-bottom: 1px solid $border-color;
+    background-color: midnightblue;
+    border-radius: $container-border-radius;
+    cursor: pointer;
   }
   
   .controls-container-header h6 {
