@@ -6,7 +6,7 @@ user="esdm"
 remotepath="/home/esdm/web-published"
 
 echo "Building solution in Production mode..."
-ng build --prod
+ng build --prod --extract-css=false
 [ $? -ne 0 ] && echo "Build/Publish Task Failed!" && exit 1
 
 echo "Cleaning Remote Deployment Directory..."
