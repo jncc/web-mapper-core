@@ -13,9 +13,12 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Newtonsoft.Json;
+
+using Config.Options;
 using Test.Models;
 using MapConfig.Models;
 
@@ -23,7 +26,7 @@ namespace JNCCMapConfigEditor
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IOptions<WebApiConfig> webapiconfig)
         {
             Configuration = configuration;
         }
@@ -33,12 +36,16 @@ namespace JNCCMapConfigEditor
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            //grab anything we need from the config section WebApiConfig
+            services.Configure<WebApiConfig>(Configuration.GetSection("WebApiConfig"));
 
             services.AddDbContext<TestContext>(opt =>
                 opt.UseInMemoryDatabase("Test"));
@@ -82,8 +89,9 @@ namespace JNCCMapConfigEditor
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseCors("AllowAllOrigins");
             app.UseMvc();
+            app.UseCors("AllowAllOrigins");
         }
+
     }
 }

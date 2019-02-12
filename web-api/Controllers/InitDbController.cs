@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using Config.Options;
 using MapConfig.Models;
 
 namespace MapConfig.Controllers
@@ -17,10 +20,11 @@ namespace MapConfig.Controllers
     public class InitDbController : Controller
     {
         private readonly MapConfigContext _context;
-
-        public InitDbController(MapConfigContext context)
+        private readonly IOptions<WebApiConfig> _webapiconfig;
+        public InitDbController(MapConfigContext context, IOptions<WebApiConfig> webapiconfig)
         {
             _context = context;
+            _webapiconfig = webapiconfig;
         }
 
         // GET: api/InitDb
@@ -123,7 +127,7 @@ namespace MapConfig.Controllers
                 MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified in EUNIS classification system, except where translation is not possible.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",
                 Type = "WMS",
-                Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
+                Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 1,
                 LayerVisible = true,
                 LayerOpacity = 0.8f,
@@ -138,7 +142,7 @@ namespace MapConfig.Controllers
                 MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified into Marine Strategy Framework Directive Benthic Broad Habitat Types.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
                 Type = "WMS",
-                Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
+                Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 11,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
@@ -155,7 +159,7 @@ namespace MapConfig.Controllers
                 MetadataDescription = "Classified biological zones for all European waters. One of several habitat descriptors used to determine the final habitat type.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
                 Type = "WMS",
-                Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
+                Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 12,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
@@ -171,7 +175,7 @@ namespace MapConfig.Controllers
                 MetadataDescription = "Classified seabed substrate types for all European waters. One of several habitat descriptors used to determine the final habitat type. Based on the EMODnet Geology seabed substrate product.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
                 Type = "WMS",
-                Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
+                Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 2,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
@@ -188,7 +192,7 @@ namespace MapConfig.Controllers
                 MetadataDescription = "Case-study in the use of the \"EUSeaMap\" model to drive a higher resolution three arc-second broad-scale habitat map for the UK shelf where sufficient data are available.",
                 DownloadURL = "",               
                 Type = "WMS",
-                Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
+                Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 21,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
@@ -205,7 +209,7 @@ namespace MapConfig.Controllers
                 MetadataDescription = "Decription",
                 DownloadURL = "#",               
                 Type = "WMS",
-                Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
+                Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 21,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
@@ -221,7 +225,7 @@ namespace MapConfig.Controllers
                 MetadataDescription = "Decription",
                 DownloadURL = "#",               
                 Type = "WMS",
-                Url="//jnccdev-geo.esdm.co.uk/emodnet/wms",
+                Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 21,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
