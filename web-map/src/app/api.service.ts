@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
-import { IMapConfig } from './models/map-config.model';
 import { IMapInstance } from './models/map-instance.model';
 import { Observable, forkJoin } from 'rxjs';
 
