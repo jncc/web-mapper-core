@@ -20,7 +20,7 @@ EOF
 [ $? -ne 0 ] && echo "Deploy Transfer Failed!" && exit 1
 
 echo "Installing Correct Configuration..."
-ssh $user@$host "cd $remotepath/$project/assets/config && mv -f config.prod.esdm.json config.prod.json"
+ssh $user@$host "cd $remotepath/$project/assets/config && cp -f config.prod.esdm.json config.prod.json"
 [ $? -ne 0 ] && echo "Installing Configuration Failed!" && exit 1
 
 echo "Deploy Finished Successfully!"
