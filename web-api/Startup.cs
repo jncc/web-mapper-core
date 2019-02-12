@@ -89,8 +89,9 @@ namespace JNCCMapConfigEditor
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseMvc();
             app.UseCors("AllowAllOrigins");
+            app.UseMvc();
+
         }
 
     }
