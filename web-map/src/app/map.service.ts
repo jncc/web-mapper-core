@@ -1,6 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject, BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
+
 import { ApiService } from './api.service';
 import { IMapConfig } from './models/map-config.model';
 
@@ -12,6 +14,7 @@ import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
 import Layer from 'ol/layer/layer';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
+
 
 @Injectable({
   providedIn: 'root'
@@ -185,9 +188,7 @@ export class MapService implements OnDestroy {
   }
 
   reorderVisibleLayers(previousIndex: number, currentIndex: number) {
-    const l = this.dataStore.visibleLayers;
-    // this apparently swaps two array elements
-    [l[previousIndex], l[currentIndex]] = [l[currentIndex], l[previousIndex]];
+    moveItemInArray(this.dataStore.visibleLayers, previousIndex, currentIndex);
     this._visibleLayers.next(this.dataStore.visibleLayers);
   }
 
