@@ -33,9 +33,14 @@
     color: midnightblue;
 }
 
-.legend-item {
+.legend-item-header {
     display: flex;
     border-bottom: 1px solid lightgrey;
     margin: 0 -0.5rem;
     padding: 0.5rem;
+}
+
+.legend-item {
+    display: flex;
+    flex-direction: column;
 }

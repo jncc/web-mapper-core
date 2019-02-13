@@ -1,13 +1,14 @@
 import { APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {Ng5SliderModule} from 'ng5-slider';
 
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { AppConfigService } from './app-config.service';
-import { HttpClientModule } from '@angular/common/http';
 import { LegendsComponent } from './legends/legends.component';
 import { LegendItemComponent } from './legends/legend-item/legend-item.component';
 import { ControlsToolbarComponent } from './controls-toolbar/controls-toolbar.component';
@@ -19,6 +20,7 @@ import { ControlsContainerComponent } from './controls-container/controls-contai
 import { SubLayerGroupComponent } from './layers/sub-layer-group/sub-layer-group.component';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
+import { SliderControlComponent } from './slider-control/slider-control.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -37,12 +39,14 @@ export function initializeApp(appConfig: AppConfigService) {
     ControlsContainerComponent,
     SubLayerGroupComponent,
     FeatureInfosComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    SliderControlComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    DragDropModule
+    DragDropModule,
+    Ng5SliderModule
   ],
   providers: [
     AppConfigService,

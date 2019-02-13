@@ -104,7 +104,7 @@ export class MapComponent implements OnInit, OnDestroy {
               {'INFO_FORMAT': 'text/html'});
               // {'INFO_FORMAT': 'application/json'});
             urls.push(url);
-            console.log(url);
+            // console.log(url);
           }
         }
       });
