@@ -102,6 +102,7 @@ export class MapComponent implements OnInit, OnDestroy {
           if (source instanceof TileWMS) {
             const url = source.getGetFeatureInfoUrl(event.coordinate, viewResolution, 'EPSG:3857',
               {'INFO_FORMAT': 'text/html'});
+              // {'INFO_FORMAT': 'text/plain'});
               // {'INFO_FORMAT': 'application/json'});
             urls.push(url);
             // console.log(url);

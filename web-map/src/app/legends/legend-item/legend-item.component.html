@@ -1,1 +1,36 @@
-{{ legend.name }}
+<div class="legend-item-header">
+    <div>
+        <i class="material-icons small" cdkDragHandle>drag_indicator</i>
+    </div>
+    <div style="flex-grow: 1;">
+        {{legend.name}}
+    </div>
+    <div>
+        <i *ngIf="filtered" class="fa fa-sm fa-filter"></i>
+    </div>
+    <div>
+        <i class="material-icons small" (click)="removeLegend(legend.layerId)">close</i>
+    </div>
+</div>
+<div class="legend-item-body">
+    <div>
+        <app-slider-control [value]="legend.opacity"></app-slider-control>
+    </div>
+    <div><button type="button" (click)="onShowFilter()">filter settings</button></div>
+    <div *ngIf="showFilter">
+        <div>
+            the filter controls
+            <select>
+                <option value=""></option>
+                <option value="1">sand</option>
+                <option value="2">mud</option>
+                <option value="3">rock</option>
+            </select>
+        </div>
+        <div>
+            <button *ngIf="!filtered" type="button" (click)="onToggleFilter()">Apply</button>
+            <button *ngIf="filtered" type="button" (click)="onToggleFilter()">Clear</button>
+        </div>
+
+    </div>
+</div>
