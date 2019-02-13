@@ -3,7 +3,7 @@
     <button type="button" (click)="clearFeatureInfo()">Clear Feature Info</button>
   </div>
   <div *ngFor="let featureInfo of featureInfos$ | async">
-    <div [innerHTML]="featureInfo"></div>
+    <div [innerHTML]="featureInfo | safeHtml"></div>
     <hr>
   </div>
 </div>

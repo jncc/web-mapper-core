@@ -1,6 +1,6 @@
 <div class="controls-container">
-    <div class="controls-container-header">
-      <h6  (click)="toggleShow()">
+    <div class="controls-container-header" (click)="toggleShow()">
+      <h6>
         <i *ngIf="show" class="btn fa fa-caret-down"></i>
         <i *ngIf="!show" class="btn fa fa-caret-right"></i>
         <ng-content select="[header]"></ng-content>

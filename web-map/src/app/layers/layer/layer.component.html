@@ -1,2 +1,11 @@
-{{layer.name}}
-<input type="checkbox" [checked]="layer.visible" (change)="onChange($event)">
+<div class="layer">
+    <div class="layer-toggle">
+        <label class="switch">
+            <input type="checkbox" [checked]="layer.visible" (change)="onChange($event)">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div class="layer-name">
+        {{layer.name}}
+    </div>
+</div>
