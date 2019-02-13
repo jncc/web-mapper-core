@@ -12,7 +12,7 @@ import OSM from 'ol/source/osm';
 import TileWMS from 'ol/source/tilewms';
 import Image from 'ol/layer/image';
 import ImageWMS from 'ol/source/imagewms';
-import GeoJSON from 'ol/format/GeoJSON';
+import GeoJSON from 'ol/format/geojson';
 import proj from 'ol/proj';
 import Style from 'ol/style/style';
 import Icon from 'ol/style/icon';
