@@ -10,7 +10,8 @@ echo "Running Deploy to Live Task on server...."
 ssh $user@$host "mkdir $remotepath 2>/dev/null; rsync -e ssh -zauvE --delete --progress --exclude=appsettings.json $remotepath/$project $user@$livehost:$remotepath"
 [ $? -ne 0 ] && echo "Deploy to Live Task Failed!" && exit 1
 
-echo "Installing Correct Configuration on Live Server..."
-rc="ssh $user@$livehost \"cd $remotepath/$project && cp -f appsettings.jncc.json appsettings.json\""
+echo "Installing Correct Configuration on Live Server and Restarting Process..."
+rc="ssh $user@$livehost \"cd $remotepath/$project && cp -f appsettings.jncc.json appsettings.json && kill \\\$(pgrep -f -o '$project')\""
+echo $rc
 ssh $user@$host "$rc"
-[ $? -ne 0 ] && echo "Installing Configuration Failed!" && exit 1
+[ $? -ne 0 ] && echo "Installing Configuration and Restarting Failed!" && exit 1
