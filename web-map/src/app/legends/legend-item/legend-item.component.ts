@@ -27,8 +27,12 @@ export class LegendItemComponent implements OnInit {
     alert('Filter status: ' + this.filtered);
   }
 
-  removeLegend() {
+  onRemoveLegend() {
     this.mapService.changeLayerVisibility(this.legend.layerId, false);
+  }
+
+  onZoomToLayerExtent() {
+    this.mapService.zoomToLayerExtent(this.legend.layerId);
   }
 
   onOpacityChanged(opacity: number) {

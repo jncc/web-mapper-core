@@ -9,7 +9,10 @@
         <i *ngIf="filtered" class="fa fa-sm fa-filter"></i>
     </div>
     <div>
-        <i class="material-icons small" (click)="removeLegend()">close</i>
+        <i class="btn fa fa-globe" (click)="onZoomToLayerExtent()"></i>
+    </div>
+    <div>
+        <i class="material-icons small" (click)="onRemoveLegend()">close</i>
     </div>
 </div>
 <div class="legend-item-body">

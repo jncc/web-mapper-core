@@ -44,10 +44,14 @@ export class MapComponent implements OnInit, OnDestroy {
   private zoomToMapExtentSubscription: Subscription;
   private zoomInToExtentSubscription: Subscription;
   private zoomOutToExtentSubscription: Subscription;
+  private zoomSubscription: Subscription;
 
   private layersSubscription: Subscription;
 
-  mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
+  // mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
+  // TODO: read from config
+  initialCenter = [-2, 55];
+  initialZoom = 4;
 
   baseLayer = new Tile({
     source: new OSM()
@@ -72,8 +76,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private setupMap() {
     const view = new View({
-      center: proj.fromLonLat([0, 50]),
-      zoom: 4,
+      center: proj.fromLonLat([this.initialCenter[0], this.initialCenter[1]]),
+      zoom: this.initialZoom,
       maxZoom: 17,
       minZoom: 3
     });
@@ -92,7 +96,7 @@ export class MapComponent implements OnInit, OnDestroy {
       ],
       view: view
     });
-    this.map.getView().fit(this.mapExtent);
+    // this.map.getView().fit(this.mapExtent);
 
     this.map.addInteraction(new DragZoom());
 
@@ -118,8 +122,10 @@ export class MapComponent implements OnInit, OnDestroy {
       this.mapService.showFeatureInfo(urls);
     });
 
-    this.zoomToMapExtentSubscription = this.mapService.zoomMapExtent.subscribe(() =>
-      this.map.getView().fit(this.mapExtent)
+    this.zoomToMapExtentSubscription = this.mapService.zoomMapExtent.subscribe(() => {
+        this.map.getView().setCenter(proj.fromLonLat([this.initialCenter[0], this.initialCenter[1]]));
+        this.map.getView().setZoom(this.initialZoom);
+      }
     );
 
     // TODO: speak to SB about condition and EventsConditionType
@@ -142,6 +148,16 @@ export class MapComponent implements OnInit, OnDestroy {
     this.zoomOutToExtentSubscription = this.mapService.zoomOutExtent.subscribe((active) => {
       dragZoomOut.setActive(active);
     });
+
+    this.zoomSubscription = this.mapService.zoom.subscribe(data => {
+      if (data.center && data.center.length === 2 && data.zoom) {
+        const center = proj.fromLonLat([data.center[0], data.center[1]]);
+        this.map.getView().setCenter(center);
+        this.map.getView().setZoom(data.zoom);
+      } else {
+
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -153,6 +169,9 @@ export class MapComponent implements OnInit, OnDestroy {
     }
     if (this.zoomOutToExtentSubscription) {
       this.zoomOutToExtentSubscription.unsubscribe();
+    }
+    if (this.zoomSubscription) {
+      this.zoomSubscription.unsubscribe();
     }
     if (this.layersSubscription) {
       this.layersSubscription.unsubscribe();

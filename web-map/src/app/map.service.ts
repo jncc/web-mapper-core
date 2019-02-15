@@ -26,6 +26,7 @@ export class MapService implements OnDestroy {
   zoomMapExtent = new Subject<null>();
   zoomInExtent = new Subject<boolean>();
   zoomOutExtent = new Subject<boolean>();
+  zoom = new Subject<{ center: number[], zoom: number }>();
 
   private dataStore: {
     mapConfig: IMapConfig;
@@ -82,6 +83,7 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
+      // console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       // TODO: move to another service
       this.createLayersForConfig();
@@ -148,6 +150,11 @@ export class MapService implements OnDestroy {
 
   zoomToMapExtent() {
     this.zoomMapExtent.next();
+  }
+
+  zoomToLayerExtent(layerId: number) {
+    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
+    this.zoom.next({ center: currentLayerConfig.center, zoom: currentLayerConfig.zoom });
   }
 
   zoomInToExtent(activated: boolean) {
