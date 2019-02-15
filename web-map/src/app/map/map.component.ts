@@ -123,9 +123,8 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     this.zoomToMapExtentSubscription = this.mapService.zoomMapExtent.subscribe(() => {
-        this.map.getView().setCenter(proj.fromLonLat([this.initialCenter[0], this.initialCenter[1]]));
-        this.map.getView().setZoom(this.initialZoom);
-      }
+      this.zoomToMapExtent();
+    }
     );
 
     // TODO: speak to SB about condition and EventsConditionType
@@ -155,9 +154,14 @@ export class MapComponent implements OnInit, OnDestroy {
         this.map.getView().setCenter(center);
         this.map.getView().setZoom(data.zoom);
       } else {
-
+        this.zoomToMapExtent();
       }
     });
+  }
+
+  zoomToMapExtent() {
+    this.map.getView().setCenter(proj.fromLonLat([this.initialCenter[0], this.initialCenter[1]]));
+    this.map.getView().setZoom(this.initialZoom);
   }
 
   ngOnDestroy() {
