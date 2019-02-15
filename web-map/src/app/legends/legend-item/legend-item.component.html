@@ -9,12 +9,12 @@
         <i *ngIf="filtered" class="fa fa-sm fa-filter"></i>
     </div>
     <div>
-        <i class="material-icons small" (click)="removeLegend(legend.layerId)">close</i>
+        <i class="material-icons small" (click)="removeLegend()">close</i>
     </div>
 </div>
 <div class="legend-item-body">
     <div>
-        <app-slider-control [value]="legend.opacity"></app-slider-control>
+        <app-slider-control [value]="legend.opacity" (valueChanged)="onOpacityChanged($event)"></app-slider-control>
     </div>
     <div><button type="button" (click)="onShowFilter()">filter settings</button></div>
     <div *ngIf="showFilter">

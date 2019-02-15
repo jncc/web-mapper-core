@@ -23,7 +23,9 @@ export class MapService implements OnDestroy {
 
   map: any;
 
-  zoomExtent = new Subject<null>();
+  zoomMapExtent = new Subject<null>();
+  zoomInExtent = new Subject<boolean>();
+  zoomOutExtent = new Subject<boolean>();
 
   private dataStore: {
     mapConfig: IMapConfig;
@@ -140,12 +142,20 @@ export class MapService implements OnDestroy {
     this.map.getView().setZoom(this.map.getView().getZoom() + 1);
   }
 
-  zoomout() {
+  zoomOut() {
     this.map.getView().setZoom(this.map.getView().getZoom() - 1);
   }
 
-  zoomToExtent() {
-    this.zoomExtent.next();
+  zoomToMapExtent() {
+    this.zoomMapExtent.next();
+  }
+
+  zoomInToExtent(activated: boolean) {
+    this.zoomInExtent.next(activated);
+  }
+
+  zoomOutToExtent(activated: boolean) {
+    this.zoomOutExtent.next(activated);
   }
 
   showFeatureInfo(urls: string[]) {
@@ -175,6 +185,12 @@ export class MapService implements OnDestroy {
     }
     this._visibleLayers.next(this.dataStore.visibleLayers);
     this._mapConfig.next(this.dataStore.mapConfig);
+  }
+
+  changeLayerOpacity(layerId: number, opacity: number) {
+    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
+    currentLayerConfig.layer.setOpacity(opacity);
+    currentLayerConfig.opacity = opacity;
   }
 
   reorderVisibleLayers(previousIndex: number, currentIndex: number) {

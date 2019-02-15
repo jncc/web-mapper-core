@@ -56,6 +56,10 @@ img {
   padding: $button-padding;
 }
 
+.btn.active {
+  background-color: aliceblue;
+}
+
 .ol-dragzoom {
   border: 2px midnightblue dashed;
   background-color: rgba(255, 255, 255, 0.3);

@@ -24,6 +24,10 @@ import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
 import MapBrowserEvent from 'ol/mapbrowserevent';
 
+import always from 'ol/events/condition';
+import EventConditionType from 'ol';
+import EventsConditionType from 'ol';
+
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
@@ -37,7 +41,9 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
-  private zoomExtentSubscription: Subscription;
+  private zoomToMapExtentSubscription: Subscription;
+  private zoomInToExtentSubscription: Subscription;
+  private zoomOutToExtentSubscription: Subscription;
 
   private layersSubscription: Subscription;
 
@@ -101,9 +107,9 @@ export class MapComponent implements OnInit, OnDestroy {
           const source = (<Tile>layer).getSource();
           if (source instanceof TileWMS) {
             const url = source.getGetFeatureInfoUrl(event.coordinate, viewResolution, 'EPSG:3857',
-              {'INFO_FORMAT': 'text/html'});
-              // {'INFO_FORMAT': 'text/plain'});
-              // {'INFO_FORMAT': 'application/json'});
+              { 'INFO_FORMAT': 'text/html' });
+            // {'INFO_FORMAT': 'text/plain'});
+            // {'INFO_FORMAT': 'application/json'});
             urls.push(url);
             // console.log(url);
           }
@@ -112,14 +118,41 @@ export class MapComponent implements OnInit, OnDestroy {
       this.mapService.showFeatureInfo(urls);
     });
 
-    this.zoomExtentSubscription = this.mapService.zoomExtent.subscribe(() =>
+    this.zoomToMapExtentSubscription = this.mapService.zoomMapExtent.subscribe(() =>
       this.map.getView().fit(this.mapExtent)
     );
+
+    // TODO: speak to SB about condition and EventsConditionType
+    const dragZoomIn = new DragZoom({
+      condition: () => true,
+      out: false
+    });
+    this.map.addInteraction(dragZoomIn);
+    dragZoomIn.setActive(false);
+    this.zoomInToExtentSubscription = this.mapService.zoomInExtent.subscribe((active) => {
+      dragZoomIn.setActive(active);
+    });
+
+    const dragZoomOut = new DragZoom({
+      condition: () => true,
+      out: true
+    });
+    this.map.addInteraction(dragZoomOut);
+    dragZoomOut.setActive(false);
+    this.zoomOutToExtentSubscription = this.mapService.zoomOutExtent.subscribe((active) => {
+      dragZoomOut.setActive(active);
+    });
   }
 
   ngOnDestroy() {
-    if (this.zoomExtentSubscription) {
-      this.zoomExtentSubscription.unsubscribe();
+    if (this.zoomToMapExtentSubscription) {
+      this.zoomToMapExtentSubscription.unsubscribe();
+    }
+    if (this.zoomInToExtentSubscription) {
+      this.zoomInToExtentSubscription.unsubscribe();
+    }
+    if (this.zoomOutToExtentSubscription) {
+      this.zoomOutToExtentSubscription.unsubscribe();
     }
     if (this.layersSubscription) {
       this.layersSubscription.unsubscribe();
