@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AppConfigService } from './app-config.service';
+import { XmlConverter } from './xmlconverter';
 
 @Component({
   selector: 'app-root',
@@ -10,5 +11,7 @@ export class AppComponent {
 
   constructor() {
     // console.log(AppConfigService.settings);
+    const converter = new XmlConverter();
+    converter.convert();
   }
 }
