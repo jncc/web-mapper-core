@@ -3,12 +3,12 @@ import { ILayerConfig } from 'src/app/models/layer-config.model';
 import { MapService } from 'src/app/map.service';
 
 @Component({
-  selector: 'app-legend-item',
-  templateUrl: './legend-item.component.html',
-  styleUrls: ['./legend-item.component.scss']
+  selector: 'app-active-layer',
+  templateUrl: './active-layer.component.html',
+  styleUrls: ['./active-layer.component.scss']
 })
-export class LegendItemComponent implements OnInit {
-  @Input() legend: ILayerConfig;
+export class ActiveLayerComponent implements OnInit {
+  @Input() layer: ILayerConfig;
 
   showFilter = false;
   filtered = false;
@@ -27,16 +27,16 @@ export class LegendItemComponent implements OnInit {
     alert('Filter status: ' + this.filtered);
   }
 
-  onRemoveLegend() {
-    this.mapService.changeLayerVisibility(this.legend.layerId, false);
+  onRemoveLayer() {
+    this.mapService.changeLayerVisibility(this.layer.layerId, false);
   }
 
   onZoomToLayerExtent() {
-    this.mapService.zoomToLayerExtent(this.legend.layerId);
+    this.mapService.zoomToLayerExtent(this.layer.layerId);
   }
 
   onOpacityChanged(opacity: number) {
-    this.mapService.changeLayerOpacity(this.legend.layerId, opacity);
+    this.mapService.changeLayerOpacity(this.layer.layerId, opacity);
   }
 
 }

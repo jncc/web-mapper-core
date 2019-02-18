@@ -9,8 +9,8 @@ import {Ng5SliderModule} from 'ng5-slider';
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { AppConfigService } from './app-config.service';
-import { LegendsComponent } from './legends/legends.component';
-import { LegendItemComponent } from './legends/legend-item/legend-item.component';
+import { ActiveLayersComponent } from './active-layers/active-layers.component';
+import { ActiveLayerComponent } from './active-layers/active-layer/active-layer.component';
 import { ControlsToolbarComponent } from './controls-toolbar/controls-toolbar.component';
 import { MapInstancesComponent } from './map-instances/map-instances.component';
 import { LayersComponent } from './layers/layers.component';
@@ -29,8 +29,8 @@ export function initializeApp(appConfig: AppConfigService) {
   declarations: [
     AppComponent,
     MapComponent,
-    LegendsComponent,
-    LegendItemComponent,
+    ActiveLayersComponent,
+    ActiveLayerComponent,
     ControlsToolbarComponent,
     MapInstancesComponent,
     LayersComponent,

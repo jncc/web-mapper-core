@@ -1,9 +1,9 @@
-<div class="legend-item-header">
+<div class="active-layer-header">
     <div>
         <i class="material-icons small" cdkDragHandle>drag_indicator</i>
     </div>
     <div style="flex-grow: 1;">
-        {{legend.name}}
+        {{layer.name}}
     </div>
     <div>
         <i *ngIf="filtered" class="fa fa-sm fa-filter"></i>
@@ -12,12 +12,12 @@
         <i class="btn fa fa-globe" (click)="onZoomToLayerExtent()"></i>
     </div>
     <div>
-        <i class="material-icons small" (click)="onRemoveLegend()">close</i>
+        <i class="material-icons small" (click)="onRemoveLayer()">close</i>
     </div>
 </div>
-<div class="legend-item-body">
+<div class="active-layer-body">
     <div>
-        <app-slider-control [value]="legend.opacity" (valueChanged)="onOpacityChanged($event)"></app-slider-control>
+        <app-slider-control [value]="layer.opacity" (valueChanged)="onOpacityChanged($event)"></app-slider-control>
     </div>
     <div><button type="button" (click)="onShowFilter()">filter settings</button></div>
     <div *ngIf="showFilter">

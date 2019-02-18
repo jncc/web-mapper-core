@@ -1,14 +1,7 @@
-/* #legends {
-    position: absolute;
-    left: 1rem;
-    top: 4rem;
-}
- */
-.legend-list.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
+.active-layers.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     list-style: none;
 }
-
 
 .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);

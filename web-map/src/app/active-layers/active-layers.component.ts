@@ -7,11 +7,11 @@ import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
 
 @Component({
-  selector: 'app-legends',
-  templateUrl: './legends.component.html',
-  styleUrls: ['./legends.component.scss']
+  selector: 'app-active-layers',
+  templateUrl: './active-layers.component.html',
+  styleUrls: ['./active-layers.component.scss']
 })
-export class LegendsComponent implements OnInit {
+export class ActiveLayersComponent implements OnInit {
 
   show = true;
 
