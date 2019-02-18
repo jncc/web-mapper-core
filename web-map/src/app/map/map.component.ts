@@ -94,7 +94,7 @@ export class MapComponent implements OnInit, OnDestroy {
           projection: 'EPSG:4326',
           target: document.getElementById('mousePosition'),
           className: 'custom-mouse-position',
-          coordinateFormat: coordinate =>  'longitude: ' + coordinate[0].toFixed(3) + ' latitude: ' + coordinate[1].toFixed(3)
+          coordinateFormat: coordinate =>  'lon: ' + coordinate[0].toFixed(3) + ' lat: ' + coordinate[1].toFixed(3)
         }),
         new ScaleLine()
       ],
