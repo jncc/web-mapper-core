@@ -21,6 +21,7 @@ import { SubLayerGroupComponent } from './layers/sub-layer-group/sub-layer-group
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { SliderControlComponent } from './slider-control/slider-control.component';
+import { LegendComponent } from './legend/legend.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -40,7 +41,8 @@ export function initializeApp(appConfig: AppConfigService) {
     SubLayerGroupComponent,
     FeatureInfosComponent,
     SafeHtmlPipe,
-    SliderControlComponent
+    SliderControlComponent,
+    LegendComponent
   ],
   imports: [
     BrowserModule,

@@ -9,4 +9,5 @@ export interface ILayerConfig {
     subLayerGroup: string;
     center: number[];
     zoom: number;
+    legendLayerName: string;
 }

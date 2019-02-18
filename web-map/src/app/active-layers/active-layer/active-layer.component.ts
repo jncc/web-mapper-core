@@ -39,4 +39,8 @@ export class ActiveLayerComponent implements OnInit {
     this.mapService.changeLayerOpacity(this.layer.layerId, opacity);
   }
 
+  onShowLegend() {
+    this.mapService.showLegend(this.layer.layerId);
+  }
+
 }

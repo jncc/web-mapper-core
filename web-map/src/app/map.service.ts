@@ -210,4 +210,17 @@ export class MapService implements OnDestroy {
       this.featureInfoSubscription.unsubscribe();
     }
   }
+
+  showLegend(layerId: number) {
+    const layerConfig = this.getLayerConfig(layerId);
+    const legendLayerName = layerConfig.legendLayerName ? layerConfig.legendLayerName : layerConfig.layerName;
+    const url = layerConfig.url +
+      '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' +
+      legendLayerName;
+    console.log(url);
+  }
+
+  private getLayerConfig(layerId: number): ILayerConfig {
+    return this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
+  }
 }
