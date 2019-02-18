@@ -73,6 +73,21 @@ img {
   background: rgba(0,60,136,0.7);
 }
 
+div#mousePosition {
+  position: absolute;
+  right: 7rem;
+  bottom: 1rem;
+  width: 14rem;
+  background-color: green;
+  background-color: white;
+  padding: $container-padding;
+  pointer-events: none;
+}
+
+div.custom-mouse-position {
+  min-height: 1rem;
+}
+
 /*
 table.featureInfo {
   border-collapse: collapse;

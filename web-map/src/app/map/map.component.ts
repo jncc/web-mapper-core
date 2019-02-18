@@ -23,6 +23,7 @@ import ScaleLine from 'ol/control/scaleline';
 import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
 import MapBrowserEvent from 'ol/mapbrowserevent';
+import MousePosition from 'ol/control/mouseposition';
 
 import always from 'ol/events/condition';
 import EventConditionType from 'ol';
@@ -88,6 +89,12 @@ export class MapComponent implements OnInit, OnDestroy {
         new OverviewMap({
           collapsed: false,
           collapsible: false
+        }),
+        new MousePosition({
+          projection: 'EPSG:4326',
+          target: document.getElementById('mousePosition'),
+          className: 'custom-mouse-position',
+          coordinateFormat: coordinate =>  'longitude: ' + coordinate[0].toFixed(3) + ' latitude: ' + coordinate[1].toFixed(3)
         }),
         new ScaleLine()
       ],
