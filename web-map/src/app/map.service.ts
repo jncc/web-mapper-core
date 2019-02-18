@@ -28,6 +28,8 @@ export class MapService implements OnDestroy {
   zoomOutExtent = new Subject<boolean>();
   zoom = new Subject<{ center: number[], zoom: number }>();
 
+  showLegendSubject = new Subject<{ name: string, legendUrl: string }>();
+
   private dataStore: {
     mapConfig: IMapConfig;
     layerLookup: ILayerConfig[];
@@ -217,7 +219,14 @@ export class MapService implements OnDestroy {
     const url = layerConfig.url +
       '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' +
       legendLayerName;
+
+      // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
     console.log(url);
+    this.showLegendSubject.next({ name: layerConfig.name, legendUrl: url });
+  }
+
+  hideLegend() {
+    this.showLegendSubject.next(null);
   }
 
   private getLayerConfig(layerId: number): ILayerConfig {

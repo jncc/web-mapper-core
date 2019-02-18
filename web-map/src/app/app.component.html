@@ -8,4 +8,7 @@
     <app-map-instances></app-map-instances>
     <app-feature-infos></app-feature-infos>
     <div id="mousePosition"></div>
+    <div id="legendPane" [ngClass]="{ 'show': show }">
+        <app-legend [legend]="legend"></app-legend>
+    </div>
 </div>
