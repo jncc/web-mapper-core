@@ -11,21 +11,3 @@
     display:flex;
     flex-direction: column;
 }
-
-/* legend */
-#legendPane {
-    width: 0;
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    background-color: white;
-    transition: 0.5s;
-    height: 100%;
-}
-
-#legendPane.show {
-    padding: 10px;
-    width: 30%;
-    overflow-y: auto;
-}
