@@ -41,6 +41,9 @@
                 @Html.DisplayNameFor(model => model.Layer[0].StyleName)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Layer[0].LegendLayerName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Layer[0].LayerOrder)
             </th>
             <th>
@@ -90,6 +93,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StyleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LegendLayerName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LayerOrder)

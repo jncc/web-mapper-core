@@ -70,7 +70,8 @@ namespace MapConfig.Models
         public string Type { get; set; }          //Layer Source type e.g. WMS WMTS Tile etc.
         public string Url { get; set; }           //Base Url not including filter params
         public string LayerName { get; set; }     //WMS or WMTS layer name
-        public string StyleName { get; set; }     //WMS or WMTS style name        
+        public string StyleName { get; set; }     //WMS or WMTS style name
+        public string LegendLayerName { get; set; } //The name of a single layer that provides the map key       
         [JsonIgnore]
         public long LayerOrder { get; set; }           //Initial Order within the Layer Group (or SubLayerGroup)
         [JsonIgnore]

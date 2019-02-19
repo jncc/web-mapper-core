@@ -60,6 +60,11 @@
                 <span asp-validation-for="Layer.StyleName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Layer.LegendLayerName" class="control-label"></label>
+                <input asp-for="Layer.LegendLayerName" class="form-control" />
+                <span asp-validation-for="Layer.LegendLayerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Layer.LayerOrder" class="control-label"></label>
                 <input asp-for="Layer.LayerOrder" class="form-control" />
                 <span asp-validation-for="Layer.LayerOrder" class="text-danger"></span>
