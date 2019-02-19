@@ -50,7 +50,6 @@ export class LegendComponent implements OnInit, OnDestroy {
       this.show = false;
       this.legend = null;
     }
-    console.log(this.legend);
   }
 
   onLegendImageLoaded() {
