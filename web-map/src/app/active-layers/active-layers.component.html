@@ -1,12 +1,19 @@
-<app-controls-container id="active-layers">
-    <span header>ACTIVE LAYERS</span>
-    <ng-container body>
+<div class="controls-container" id="active-layers">
+    <div class="controls-container-header" (click)="toggleShow()">
+        <h6>
+            <i *ngIf="show" class="btn fa fa-caret-down"></i>
+            <i *ngIf="!show" class="btn fa fa-caret-right"></i>
+            <span>ACTIVE LAYERS</span>
+        </h6>
+    </div>
+    <div *ngIf="show" class="controls-container-body">
         <ul *ngIf="(visibleLayers$ | async).length; else no_visible_layers" class="active-layers-list" cdkDropList
             (cdkDropListDropped)="drop($event)">
-            <li class="active-layer" cdkDrag cdkDragBoundary="#active-layers" *ngFor="let layer of visibleLayers$ | async">
+            <li class="active-layer" cdkDrag cdkDragBoundary="#active-layers"
+                *ngFor="let layer of visibleLayers$ | async">
                 <app-active-layer [layer]="layer"></app-active-layer>
             </li>
         </ul>
         <ng-template #no_visible_layers>No active layers</ng-template>
-    </ng-container>
-</app-controls-container>
+    </div>
+</div>

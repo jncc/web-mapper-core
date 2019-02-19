@@ -22,7 +22,9 @@
     <div>
         <app-slider-control [value]="layer.opacity" (valueChanged)="onOpacityChanged($event)"></app-slider-control>
     </div>
-    <div><button type="button" (click)="onShowFilter()">filter settings</button></div>
+    <div>
+        <button type="button" (click)="onShowFilter()">filter settings</button>
+    </div>
     <div *ngIf="showFilter">
         <div>
             the filter controls

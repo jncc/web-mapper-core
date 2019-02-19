@@ -23,8 +23,7 @@ export class SliderControlComponent implements OnInit {
   ngOnInit() {
   }
 
-    onUserChange(changeContext: ChangeContext): void {
-      this.valueChanged.emit(changeContext.value);
+  onUserChange(changeContext: ChangeContext): void {
+    this.valueChanged.emit(changeContext.value);
   }
-
 }

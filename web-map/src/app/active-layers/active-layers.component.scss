@@ -1,3 +1,31 @@
+@import '../../variables.scss';
+
+.controls-container {
+    user-select: none;
+    border-radius: $container-border-radius;
+    box-shadow: $container-shadow;
+    width: 20rem;
+    background-color: white;
+  }
+   
+  .controls-container-header {
+    display: flex;
+    padding: $container-padding;
+    border-bottom: 1px solid $border-color;
+    background-color: midnightblue;
+    border-radius: $container-border-radius;
+    cursor: pointer;
+  }
+  
+  .controls-container-header h6 {
+    color: white;
+  }
+  
+  .controls-container-body {
+      padding: $container-padding;
+  }
+
+
 .active-layers.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     list-style: none;

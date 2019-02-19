@@ -42,5 +42,4 @@ export class ActiveLayerComponent implements OnInit {
   onShowLegend() {
     this.mapService.showLegend(this.layer.layerId);
   }
-
 }
