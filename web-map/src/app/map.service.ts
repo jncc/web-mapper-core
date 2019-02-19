@@ -16,8 +16,6 @@ import Layer from 'ol/layer/layer';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import WMSCapabilities from 'ol/format/wmscapabilities';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -62,7 +60,9 @@ export class MapService implements OnDestroy {
         mapInstance: {
           name: '',
           description: '',
-          layerGroups: []
+          layerGroups: [],
+          center: [],
+          zoom: 0
         }
       },
       layerLookup: [],
@@ -92,6 +92,10 @@ export class MapService implements OnDestroy {
       // TODO: move to another service
       this.createLayersForConfig();
       this._mapConfig.next(this.dataStore.mapConfig);
+
+      const center = this.dataStore.mapConfig.mapInstance.center;
+      const zoom = this.dataStore.mapConfig.mapInstance.zoom;
+      this.zoom.next({center: center, zoom: zoom});
     }, error => console.log('Could not load map instance config.'));
   }
 
