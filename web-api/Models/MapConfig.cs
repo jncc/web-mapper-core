@@ -99,7 +99,7 @@ namespace MapConfig.Models
         [NotMapped]
         public double[] Center { get; set; } = new double[2];       //what's actually sent in the JSON response (an array)
         [NotMapped]
-        public float Zoom { get; set; }   
+        public int Zoom { get; set; }   
     }
 
     public class Filter {
@@ -124,5 +124,14 @@ namespace MapConfig.Models
         public string Code { get; set; }        //lookup code (maps to value in a select box)
         public string Name { get; set; }        //lookup name (maps to the text in a select box)
         public string LookupCategory { get; set; } //which lookup category am I in?
+    }
+
+    public class Gazetteer {
+        [Key]
+        public long GazetteerId { get; set; }   //unique Gazetteer ID
+        public string Name { get; set; }        //PlaceName
+        public double Longitude { get; set; }   //Longitude (x)
+        public double Latitude { get; set; }    //Latitude (y)
+        public int Zoom { get; set; }           //Map zoom for feature
     }
 }

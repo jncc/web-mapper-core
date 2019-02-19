@@ -17,6 +17,8 @@ namespace MapConfig.Models
 
         public DbSet<MapConfig.Models.Lookup> Lookup { get; set; }
 
+        public DbSet<MapConfig.Models.Gazetteer> Gazetteer { get; set; }
+
         // Fluent API ovverides for field definitions
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +28,7 @@ namespace MapConfig.Models
             modelBuilder.Entity<LayerGroup>().HasIndex(l => l.Name);
             modelBuilder.Entity<Filter>().HasIndex(f => f.Name);
             modelBuilder.Entity<Lookup>().HasIndex(l => l.LookupCategory);
+            modelBuilder.Entity<Gazetteer>().HasIndex(g => g.Name);
         }
 
 

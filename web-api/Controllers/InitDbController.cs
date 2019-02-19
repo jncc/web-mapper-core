@@ -218,8 +218,8 @@ namespace MapConfig.Controllers
                 LayerOrder = 21,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[-3.507729, 52.304535]",
-                LayerZoom = 6
+                LayerCentre = "[36, 43]",
+                LayerZoom = 7
             };            
             var l7 = new Layer { 
                 LayerGroupId = lg2.LayerGroupId,
@@ -235,8 +235,8 @@ namespace MapConfig.Controllers
                 LayerOrder = 21,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[-3.507729, 52.304535]",
-                LayerZoom = 6
+                LayerCentre = "[36, 43]",
+                LayerZoom = 7
             }; 
                
             _context.Layer.Add(l1);
@@ -315,6 +315,21 @@ namespace MapConfig.Controllers
                 _context.SaveChanges();
             }
 
+            //Gazetteer
+            var gazetteer = _context.Gazetteer.Where(g => g.Name.EndsWith("(Test)"));
+            _context.Gazetteer.RemoveRange(gazetteer);
+
+            var ge1= new Gazetteer { Name = "Rhayader (Test)", Longitude = -3.507, Latitude = 52.3, Zoom = 9 };
+            var ge2= new Gazetteer { Name = "Brecon (Test)", Longitude = -3.387, Latitude = 51.948, Zoom = 8 };
+            var ge3= new Gazetteer { Name = "Newtown (Test)", Longitude = -3.334, Latitude = 52.512, Zoom = 10 };
+            _context.Gazetteer.Add(ge1);
+            _context.SaveChanges();
+            _context.Gazetteer.Add(ge2);
+            _context.SaveChanges();
+            _context.Gazetteer.Add(ge3);
+            _context.SaveChanges();
+
+
             return await _context.MapInstance.ToListAsync();
         }
 
@@ -331,8 +346,6 @@ namespace MapConfig.Controllers
 
 
     }
-
-
 
     public class HabitatFilter {
         public string __type { get; set; }

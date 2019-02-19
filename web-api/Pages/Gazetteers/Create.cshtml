@@ -1,0 +1,49 @@
+@page
+@model jncc_web_api.Pages.Gazetteers.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Gazetteer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Gazetteer.Name" class="control-label"></label>
+                <input asp-for="Gazetteer.Name" class="form-control" />
+                <span asp-validation-for="Gazetteer.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gazetteer.Longitude" class="control-label"></label>
+                <input asp-for="Gazetteer.Longitude" class="form-control" />
+                <span asp-validation-for="Gazetteer.Longitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gazetteer.Latitude" class="control-label"></label>
+                <input asp-for="Gazetteer.Latitude" class="form-control" />
+                <span asp-validation-for="Gazetteer.Latitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gazetteer.Zoom" class="control-label"></label>
+                <input asp-for="Gazetteer.Zoom" class="form-control" />
+                <span asp-validation-for="Gazetteer.Zoom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
