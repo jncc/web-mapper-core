@@ -106,8 +106,7 @@ namespace MapConfig.Controllers
                 Name = "Collection of Layers (Test)",
                 Description = "<p>Collection of <strong>Layers</strong></p>"
             };
-
-            // Create a new LayerGroup if collection is empty                
+              
             _context.LayerGroup.Add(lg1);
             _context.SaveChanges();
             _context.LayerGroup.Add(lg2);
@@ -122,6 +121,7 @@ namespace MapConfig.Controllers
             var l1 = new Layer { 
                 LayerGroupId = lg1.LayerGroupId,
                 LayerName = "eusm2016",
+                LegendLayerName = "eusm2016_full",
                 Name = "EUNIS/full-detail habitat classification (Test)",
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/02a444c8-bd2d-4e15-8e69-806059103760",
                 MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified in EUNIS classification system, except where translation is not possible.",
@@ -137,6 +137,7 @@ namespace MapConfig.Controllers
             var l2 = new Layer { 
                 LayerGroupId = lg1.LayerGroupId,
                 LayerName = "eusm_msfd",
+                LegendLayerName = "eusm2016_msfd_full",
                 Name = "MSFD Benthic Broad Habitat Types (Test)",
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/d23d0516-6ff4-4fb8-bf78-c11991cef78b",
                 MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified into Marine Strategy Framework Directive Benthic Broad Habitat Types.",
@@ -153,6 +154,7 @@ namespace MapConfig.Controllers
             var l3 = new Layer { 
                 LayerGroupId = lg1.LayerGroupId,
                 LayerName = "eusm_bio",
+                LegendLayerName = "eusm2016_bio_full",
                 Name = "Substrate type (Test)",
                 SubLayerGroup = "Classified habitat descriptors",
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/ad20fbc7-37d4-40b5-a246-8cdb321e4654",
@@ -169,6 +171,7 @@ namespace MapConfig.Controllers
             var l4 = new Layer { 
                 LayerGroupId = lg1.LayerGroupId,
                 LayerName = "eusm_sub",
+                LegendLayerName = "eusm2016_subs_full",
                 Name = "Substrate type (Test)",
                 SubLayerGroup = "Classified habitat descriptors",
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/15adae05-99f0-4275-88c3-26d7908b9f0e",
@@ -186,6 +189,7 @@ namespace MapConfig.Controllers
             var l5 = new Layer { 
                 LayerGroupId = lg1.LayerGroupId,
                 LayerName = "uksm2016",
+                LegendLayerName = "uk3as",
                 Name = "EUNIS classification for the UK shelf area at 3 arc-second resolution (Test)",
                 SubLayerGroup = "Regional broad-scale seabed habitat maps",
                 MetadataUrl = "",
@@ -203,10 +207,11 @@ namespace MapConfig.Controllers
             var l6 = new Layer { 
                 LayerGroupId = lg2.LayerGroupId,
                 LayerName = "eusm_oxy",
-                Name = "Another Layer 1 (Test)",
+                LegendLayerName = "eusm2016_oxy_full",
+                Name = "EUSeaMap 2016 Oxygen Regime Group (Test)",
                 SubLayerGroup = "Regional broad-scale seabed habitat maps",
                 MetadataUrl = "#",
-                MetadataDescription = "Decription",
+                MetadataDescription = "Description",
                 DownloadURL = "#",               
                 Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
@@ -219,7 +224,8 @@ namespace MapConfig.Controllers
             var l7 = new Layer { 
                 LayerGroupId = lg2.LayerGroupId,
                 LayerName = "eusm_oxy",
-                Name = "Another Layer 2 (Test)",
+                LegendLayerName = "eusm2016_oxy_full",
+                Name = "EUSeaMap 2016 Oxygen Regime Group (Test)",
                 SubLayerGroup = "Regional broad-scale seabed habitat maps",
                 MetadataUrl = "#",
                 MetadataDescription = "Decription",
@@ -232,8 +238,7 @@ namespace MapConfig.Controllers
                 LayerCentre = "[-3.507729, 52.304535]",
                 LayerZoom = 6
             }; 
-
-            // Create a new Layer if collection is empty                
+               
             _context.Layer.Add(l1);
             _context.SaveChanges();
             _context.Layer.Add(l2);
