@@ -23,7 +23,6 @@ export class MapService implements OnDestroy {
 
   map: any;
 
-  zoomMapExtent = new Subject<null>();
   zoomInExtent = new Subject<boolean>();
   zoomOutExtent = new Subject<boolean>();
   zoom = new Subject<{ center: number[], zoom: number }>();
@@ -92,10 +91,8 @@ export class MapService implements OnDestroy {
       // TODO: move to another service
       this.createLayersForConfig();
       this._mapConfig.next(this.dataStore.mapConfig);
-
-      const center = this.dataStore.mapConfig.mapInstance.center;
-      const zoom = this.dataStore.mapConfig.mapInstance.zoom;
-      this.zoom.next({center: center, zoom: zoom});
+      // console.log(this.dataStore.mapConfig);
+      this.zoomToMapExtent();
     }, error => console.log('Could not load map instance config.'));
   }
 
@@ -149,7 +146,7 @@ export class MapService implements OnDestroy {
 
   private getStyles(layerName, legendLayerName, url) {
     const capabilitiesUrl = url + '?REQUEST=GetCapabilities&VERSION=1.3.0';
-    this.apiService.getCapabilities(capabilitiesUrl).subscribe( data => {
+    this.apiService.getCapabilities(capabilitiesUrl).subscribe(data => {
       const parser = new WMSCapabilities();
       const result = parser.read(data);
       console.log(layerName);
@@ -185,7 +182,9 @@ export class MapService implements OnDestroy {
   }
 
   zoomToMapExtent() {
-    this.zoomMapExtent.next();
+    const center = this.dataStore.mapConfig.mapInstance.center;
+    const zoom = this.dataStore.mapConfig.mapInstance.zoom;
+    this.zoom.next({ center: center, zoom: zoom });
   }
 
   zoomToLayerExtent(layerId: number) {
@@ -254,7 +253,7 @@ export class MapService implements OnDestroy {
       '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' +
       legendLayerName;
 
-      // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
+    // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
     // console.log(url);
     this.showLegendSubject.next({ name: layerConfig.name, legendUrl: url });
   }
