@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AppConfigService } from './app-config.service';
+import { XmlConverter } from './xmlconverter';
+import { MapService } from './map.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +12,7 @@ import { AppConfigService } from './app-config.service';
 export class AppComponent {
 
   constructor() {
-    // console.log(AppConfigService.settings);
+    const converter = new XmlConverter();
+    converter.convert();
   }
 }

@@ -23,7 +23,12 @@ export class MapService implements OnDestroy {
 
   map: any;
 
-  zoomExtent = new Subject<null>();
+  zoomMapExtent = new Subject<null>();
+  zoomInExtent = new Subject<boolean>();
+  zoomOutExtent = new Subject<boolean>();
+  zoom = new Subject<{ center: number[], zoom: number }>();
+
+  showLegendSubject = new Subject<{ name: string, legendUrl: string }>();
 
   private dataStore: {
     mapConfig: IMapConfig;
@@ -80,6 +85,7 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
+      // console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       // TODO: move to another service
       this.createLayersForConfig();
@@ -140,12 +146,25 @@ export class MapService implements OnDestroy {
     this.map.getView().setZoom(this.map.getView().getZoom() + 1);
   }
 
-  zoomout() {
+  zoomOut() {
     this.map.getView().setZoom(this.map.getView().getZoom() - 1);
   }
 
-  zoomToExtent() {
-    this.zoomExtent.next();
+  zoomToMapExtent() {
+    this.zoomMapExtent.next();
+  }
+
+  zoomToLayerExtent(layerId: number) {
+    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
+    this.zoom.next({ center: currentLayerConfig.center, zoom: currentLayerConfig.zoom });
+  }
+
+  zoomInToExtent(activated: boolean) {
+    this.zoomInExtent.next(activated);
+  }
+
+  zoomOutToExtent(activated: boolean) {
+    this.zoomOutExtent.next(activated);
   }
 
   showFeatureInfo(urls: string[]) {
@@ -177,6 +196,12 @@ export class MapService implements OnDestroy {
     this._mapConfig.next(this.dataStore.mapConfig);
   }
 
+  changeLayerOpacity(layerId: number, opacity: number) {
+    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
+    currentLayerConfig.layer.setOpacity(opacity);
+    currentLayerConfig.opacity = opacity;
+  }
+
   reorderVisibleLayers(previousIndex: number, currentIndex: number) {
     moveItemInArray(this.dataStore.visibleLayers, previousIndex, currentIndex);
     this._visibleLayers.next(this.dataStore.visibleLayers);
@@ -186,5 +211,25 @@ export class MapService implements OnDestroy {
     if (this.featureInfoSubscription) {
       this.featureInfoSubscription.unsubscribe();
     }
+  }
+
+  showLegend(layerId: number) {
+    const layerConfig = this.getLayerConfig(layerId);
+    const legendLayerName = layerConfig.legendLayerName ? layerConfig.legendLayerName : layerConfig.layerName;
+    const url = layerConfig.url +
+      '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' +
+      legendLayerName;
+
+      // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
+    console.log(url);
+    this.showLegendSubject.next({ name: layerConfig.name, legendUrl: url });
+  }
+
+  hideLegend() {
+    this.showLegendSubject.next(null);
+  }
+
+  private getLayerConfig(layerId: number): ILayerConfig {
+    return this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
   }
 }

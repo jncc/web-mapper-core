@@ -1,0 +1,12 @@
+<app-controls-container id="active-layers">
+    <span header>ACTIVE LAYERS</span>
+    <ng-container body>
+        <ul *ngIf="(visibleLayers$ | async).length; else no_visible_layers" class="active-layers-list" cdkDropList
+            (cdkDropListDropped)="drop($event)">
+            <li class="active-layer" cdkDrag cdkDragBoundary="#active-layers" *ngFor="let layer of visibleLayers$ | async">
+                <app-active-layer [layer]="layer"></app-active-layer>
+            </li>
+        </ul>
+        <ng-template #no_visible_layers>No active layers</ng-template>
+    </ng-container>
+</app-controls-container>

@@ -1,0 +1,18 @@
+
+.material-icons.small {
+    font-size: 1rem;
+    cursor: pointer;
+    color: midnightblue;
+}
+
+.active-layer-header {
+    display: flex;
+    border-bottom: 1px solid lightgrey;
+    margin: 0 -0.5rem;
+    padding: 0.5rem;
+}
+
+.active-layer {
+    display: flex;
+    flex-direction: column;
+}

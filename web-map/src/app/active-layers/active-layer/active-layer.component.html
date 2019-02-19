@@ -1,0 +1,42 @@
+<div class="active-layer-header">
+    <div>
+        <i class="material-icons small" cdkDragHandle>drag_indicator</i>
+    </div>
+    <div style="flex-grow: 1;">
+        {{layer.name}}
+    </div>
+    <div>
+        <i *ngIf="filtered" class="fa fa-sm fa-filter"></i>
+    </div>
+    <div>
+        <i class="btn fa fa-list-ul" (click)="onShowLegend()"></i>
+    </div>
+    <div>
+        <i class="btn fa fa-globe" (click)="onZoomToLayerExtent()"></i>
+    </div>
+    <div>
+        <i class="material-icons small" (click)="onRemoveLayer()">close</i>
+    </div>
+</div>
+<div class="active-layer-body">
+    <div>
+        <app-slider-control [value]="layer.opacity" (valueChanged)="onOpacityChanged($event)"></app-slider-control>
+    </div>
+    <div><button type="button" (click)="onShowFilter()">filter settings</button></div>
+    <div *ngIf="showFilter">
+        <div>
+            the filter controls
+            <select>
+                <option value=""></option>
+                <option value="1">sand</option>
+                <option value="2">mud</option>
+                <option value="3">rock</option>
+            </select>
+        </div>
+        <div>
+            <button *ngIf="!filtered" type="button" (click)="onToggleFilter()">Apply</button>
+            <button *ngIf="filtered" type="button" (click)="onToggleFilter()">Clear</button>
+        </div>
+
+    </div>
+</div>

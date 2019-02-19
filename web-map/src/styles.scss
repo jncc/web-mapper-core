@@ -56,6 +56,10 @@ img {
   padding: $button-padding;
 }
 
+.btn.active {
+  background-color: aliceblue;
+}
+
 .ol-dragzoom {
   border: 2px midnightblue dashed;
   background-color: rgba(255, 255, 255, 0.3);
@@ -67,6 +71,21 @@ img {
   right: 1rem;
   left: auto;
   background: rgba(0,60,136,0.7);
+}
+
+div#mousePosition {
+  position: absolute;
+  right: 8rem;
+  bottom: 1rem;
+  width: 10rem;
+  background-color: green;
+  background-color: white;
+  padding: $container-padding;
+  pointer-events: none;
+}
+
+div.custom-mouse-position {
+  min-height: 1rem;
 }
 
 /*

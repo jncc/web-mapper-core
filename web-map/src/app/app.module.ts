@@ -9,8 +9,8 @@ import {Ng5SliderModule} from 'ng5-slider';
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { AppConfigService } from './app-config.service';
-import { LegendsComponent } from './legends/legends.component';
-import { LegendItemComponent } from './legends/legend-item/legend-item.component';
+import { ActiveLayersComponent } from './active-layers/active-layers.component';
+import { ActiveLayerComponent } from './active-layers/active-layer/active-layer.component';
 import { ControlsToolbarComponent } from './controls-toolbar/controls-toolbar.component';
 import { MapInstancesComponent } from './map-instances/map-instances.component';
 import { LayersComponent } from './layers/layers.component';
@@ -21,6 +21,7 @@ import { SubLayerGroupComponent } from './layers/sub-layer-group/sub-layer-group
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { SliderControlComponent } from './slider-control/slider-control.component';
+import { LegendComponent } from './legend/legend.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -29,8 +30,8 @@ export function initializeApp(appConfig: AppConfigService) {
   declarations: [
     AppComponent,
     MapComponent,
-    LegendsComponent,
-    LegendItemComponent,
+    ActiveLayersComponent,
+    ActiveLayerComponent,
     ControlsToolbarComponent,
     MapInstancesComponent,
     LayersComponent,
@@ -40,7 +41,8 @@ export function initializeApp(appConfig: AppConfigService) {
     SubLayerGroupComponent,
     FeatureInfosComponent,
     SafeHtmlPipe,
-    SliderControlComponent
+    SliderControlComponent,
+    LegendComponent
   ],
   imports: [
     BrowserModule,

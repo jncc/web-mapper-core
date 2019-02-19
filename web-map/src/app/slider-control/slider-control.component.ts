@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Options } from 'ng5-slider';
+import { Options, ChangeContext } from 'ng5-slider';
 
 @Component({
   selector: 'app-slider-control',
@@ -9,17 +9,22 @@ import { Options } from 'ng5-slider';
 })
 export class SliderControlComponent implements OnInit {
   @Input() value: number;
+  @Output() valueChanged = new EventEmitter<number>();
 
   options: Options = {
     floor: 0,
     ceil: 1,
     showSelectionBar: true,
-    step: 0.1
+    step: 0.01
   };
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+    onUserChange(changeContext: ChangeContext): void {
+      this.valueChanged.emit(changeContext.value);
   }
 
 }

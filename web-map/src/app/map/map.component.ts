@@ -23,6 +23,11 @@ import ScaleLine from 'ol/control/scaleline';
 import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
 import MapBrowserEvent from 'ol/mapbrowserevent';
+import MousePosition from 'ol/control/mouseposition';
+
+import always from 'ol/events/condition';
+import EventConditionType from 'ol';
+import EventsConditionType from 'ol';
 
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
@@ -37,11 +42,17 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
-  private zoomExtentSubscription: Subscription;
+  private zoomToMapExtentSubscription: Subscription;
+  private zoomInToExtentSubscription: Subscription;
+  private zoomOutToExtentSubscription: Subscription;
+  private zoomSubscription: Subscription;
 
   private layersSubscription: Subscription;
 
-  mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
+  // mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
+  // TODO: read from config
+  initialCenter = [-2, 55];
+  initialZoom = 4;
 
   baseLayer = new Tile({
     source: new OSM()
@@ -66,8 +77,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private setupMap() {
     const view = new View({
-      center: proj.fromLonLat([0, 50]),
-      zoom: 4,
+      center: proj.fromLonLat([this.initialCenter[0], this.initialCenter[1]]),
+      zoom: this.initialZoom,
       maxZoom: 17,
       minZoom: 3
     });
@@ -79,6 +90,12 @@ export class MapComponent implements OnInit, OnDestroy {
           collapsed: false,
           collapsible: false
         }),
+        new MousePosition({
+          projection: 'EPSG:4326',
+          target: document.getElementById('mousePosition'),
+          className: 'custom-mouse-position',
+          coordinateFormat: coordinate =>  'lon: ' + coordinate[0].toFixed(3) + ' lat: ' + coordinate[1].toFixed(3)
+        }),
         new ScaleLine()
       ],
       layers: [
@@ -86,7 +103,7 @@ export class MapComponent implements OnInit, OnDestroy {
       ],
       view: view
     });
-    this.map.getView().fit(this.mapExtent);
+    // this.map.getView().fit(this.mapExtent);
 
     this.map.addInteraction(new DragZoom());
 
@@ -101,8 +118,9 @@ export class MapComponent implements OnInit, OnDestroy {
           const source = (<Tile>layer).getSource();
           if (source instanceof TileWMS) {
             const url = source.getGetFeatureInfoUrl(event.coordinate, viewResolution, 'EPSG:3857',
-              {'INFO_FORMAT': 'text/html'});
-              // {'INFO_FORMAT': 'application/json'});
+              { 'INFO_FORMAT': 'text/html' });
+            // {'INFO_FORMAT': 'text/plain'});
+            // {'INFO_FORMAT': 'application/json'});
             urls.push(url);
             // console.log(url);
           }
@@ -111,14 +129,60 @@ export class MapComponent implements OnInit, OnDestroy {
       this.mapService.showFeatureInfo(urls);
     });
 
-    this.zoomExtentSubscription = this.mapService.zoomExtent.subscribe(() =>
-      this.map.getView().fit(this.mapExtent)
+    this.zoomToMapExtentSubscription = this.mapService.zoomMapExtent.subscribe(() => {
+      this.zoomToMapExtent();
+    }
     );
+
+    // TODO: speak to SB about condition and EventsConditionType
+    const dragZoomIn = new DragZoom({
+      condition: () => true,
+      out: false
+    });
+    this.map.addInteraction(dragZoomIn);
+    dragZoomIn.setActive(false);
+    this.zoomInToExtentSubscription = this.mapService.zoomInExtent.subscribe((active) => {
+      dragZoomIn.setActive(active);
+    });
+
+    const dragZoomOut = new DragZoom({
+      condition: () => true,
+      out: true
+    });
+    this.map.addInteraction(dragZoomOut);
+    dragZoomOut.setActive(false);
+    this.zoomOutToExtentSubscription = this.mapService.zoomOutExtent.subscribe((active) => {
+      dragZoomOut.setActive(active);
+    });
+
+    this.zoomSubscription = this.mapService.zoom.subscribe(data => {
+      if (data.center && data.center.length === 2 && data.zoom) {
+        const center = proj.fromLonLat([data.center[0], data.center[1]]);
+        this.map.getView().setCenter(center);
+        this.map.getView().setZoom(data.zoom);
+      } else {
+        this.zoomToMapExtent();
+      }
+    });
+  }
+
+  zoomToMapExtent() {
+    this.map.getView().setCenter(proj.fromLonLat([this.initialCenter[0], this.initialCenter[1]]));
+    this.map.getView().setZoom(this.initialZoom);
   }
 
   ngOnDestroy() {
-    if (this.zoomExtentSubscription) {
-      this.zoomExtentSubscription.unsubscribe();
+    if (this.zoomToMapExtentSubscription) {
+      this.zoomToMapExtentSubscription.unsubscribe();
+    }
+    if (this.zoomInToExtentSubscription) {
+      this.zoomInToExtentSubscription.unsubscribe();
+    }
+    if (this.zoomOutToExtentSubscription) {
+      this.zoomOutToExtentSubscription.unsubscribe();
+    }
+    if (this.zoomSubscription) {
+      this.zoomSubscription.unsubscribe();
     }
     if (this.layersSubscription) {
       this.layersSubscription.unsubscribe();

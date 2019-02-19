@@ -7,4 +7,7 @@ export interface ILayerConfig {
     opacity: number;
     layer: any;
     subLayerGroup: string;
+    center: number[];
+    zoom: number;
+    legendLayerName: string;
 }

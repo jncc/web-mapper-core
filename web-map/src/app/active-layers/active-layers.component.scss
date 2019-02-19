@@ -1,14 +1,7 @@
-/* #legends {
-    position: absolute;
-    left: 1rem;
-    top: 4rem;
-}
- */
-.legend-list.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
+.active-layers.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     list-style: none;
 }
-
 
 .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
@@ -25,22 +18,4 @@
 
 .cdk-drag-placeholder {
     opacity: 0;
-}
-
-.material-icons.small {
-    font-size: 1rem;
-    cursor: pointer;
-    color: midnightblue;
-}
-
-.legend-item-header {
-    display: flex;
-    border-bottom: 1px solid lightgrey;
-    margin: 0 -0.5rem;
-    padding: 0.5rem;
-}
-
-.legend-item {
-    display: flex;
-    flex-direction: column;
 }

@@ -10,19 +10,39 @@ export class ControlsToolbarComponent implements OnInit {
 
   constructor(private mapService: MapService) { }
 
+  zoomInToExtentActivated = false;
+  zoomOutToExtentActivated = false;
+
   ngOnInit() {
   }
 
-  zoomIn() {
+  onZoomIn() {
     this.mapService.zoomIn();
   }
 
-  zoomOut() {
-    this.mapService.zoomout();
+  onZoomOut() {
+    this.mapService.zoomOut();
   }
 
-  zoomToExtent() {
-    this.mapService.zoomToExtent();
+  onZoomToMapExtent() {
+    this.mapService.zoomToMapExtent();
+  }
+
+  onZoomInToExtent() {
+    this.zoomOutToExtentActivated = false;
+    this.zoomInToExtentActivated = !this.zoomInToExtentActivated;
+    this.sendControlStateToMapService();
+  }
+
+  onZoomOutToExtent() {
+    this.zoomInToExtentActivated = false;
+    this.zoomOutToExtentActivated = !this.zoomOutToExtentActivated;
+    this.sendControlStateToMapService();
+  }
+
+  private sendControlStateToMapService() {
+    this.mapService.zoomInToExtent(this.zoomInToExtentActivated);
+    this.mapService.zoomOutToExtent(this.zoomOutToExtentActivated);
   }
 
 }
