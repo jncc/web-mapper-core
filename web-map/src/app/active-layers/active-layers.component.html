@@ -20,6 +20,6 @@
 
 <ng-template #opacityOverlay let-activeLayer>
         <section class="opacity-overlay">
-            <app-slider-control></app-slider-control>
+            <app-slider-control [value]="activeLayer.opacity" (valueChanged)="onOpacityChanged($event, activeLayer)"></app-slider-control>
         </section>
     </ng-template>

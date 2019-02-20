@@ -38,9 +38,9 @@ export class ActiveLayersComponent implements OnInit {
     this.mapService.reorderVisibleLayers(event.previousIndex, event.currentIndex);
   }
 
-  opacity(activeLayer: any) {
-    this.close();
-  }
+  // opacity(activeLayer: any) {
+  //   this.close();
+  // }
 
   openOpacity({ x, y }, activeLayer) {
     // console.log(x + ' ' + y + ' ' + activeLayer.layerName);
@@ -76,6 +76,10 @@ export class ActiveLayersComponent implements OnInit {
       this.overlayRef.dispose();
       this.overlayRef = null;
     }
+  }
+
+  onOpacityChanged(opacity: number, activeLayer) {
+    this.mapService.changeLayerOpacity(activeLayer.layerId, opacity);
   }
 
 }
