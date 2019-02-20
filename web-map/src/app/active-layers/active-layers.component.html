@@ -19,7 +19,9 @@
 </div>
 
 <ng-template #opacityOverlay let-activeLayer>
-        <section class="opacity-overlay">
-            <app-slider-control [value]="activeLayer.opacity" (valueChanged)="onOpacityChanged($event, activeLayer)"></app-slider-control>
-        </section>
-    </ng-template>
+    <div class="opacity-overlay">
+        <div>Opacity</div>
+        <app-slider-control [value]="activeLayer.opacity" (valueChanged)="onOpacityChanged($event, activeLayer)">
+        </app-slider-control>
+    </div>
+</ng-template>

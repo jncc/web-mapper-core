@@ -1,7 +1,12 @@
 // We need to use ::ng-deep to overcome view encapsulation
+
 :host ::ng-deep {
     *:focus {
         outline: none;
+    }
+
+    .custom-slider {
+      height: 2rem;
     }
 
     .custom-slider .ng5-slider {
@@ -20,7 +25,7 @@
     .custom-slider .ng5-slider .ng5-slider-pointer {
       width: 12px;
       height: 12px;
-      top: auto; /* to remove the default positioning */
+      top: auto; // to remove the default positioning
       bottom: -8px;
       background-color: #fff;
       border: 2px solid lightgrey;
@@ -35,3 +40,4 @@
       display: none;
     }
   }
+  
