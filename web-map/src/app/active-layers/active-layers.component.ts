@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild, TemplateRef } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription, fromEvent } from 'rxjs';
 
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-active-layers',
@@ -17,7 +20,11 @@ export class ActiveLayersComponent implements OnInit {
 
   visibleLayers$: Observable<ILayerConfig[]>;
 
-  constructor(private mapService: MapService) {
+  sub: Subscription;
+  @ViewChild('opacityOverlay') opacityOverlay: TemplateRef<any>;
+  overlayRef: OverlayRef | null;
+
+  constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) {
     this.visibleLayers$ = this.mapService.visibleLayers;
   }
 
@@ -30,6 +37,46 @@ export class ActiveLayersComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     this.mapService.reorderVisibleLayers(event.previousIndex, event.currentIndex);
+  }
+
+  opacity(activeLayer: any) {
+    this.close();
+  }
+
+  openOpacity({ x, y }, activeLayer) {
+    console.log(x + ' ' + y + ' ' + activeLayer.layerName);
+    this.close();
+    const positionStrategy = this.overlay.position()
+      .flexibleConnectedTo({ x, y })
+      .withPositions([
+        {
+          originX: 'end',
+          originY: 'bottom',
+          overlayX: 'start',
+          overlayY: 'top',
+        }
+      ]);
+
+    this.overlayRef = this.overlay.create({
+      hasBackdrop: true,
+      positionStrategy,
+      scrollStrategy: this.overlay.scrollStrategies.close()
+    });
+
+
+    this.overlayRef.attach(new TemplatePortal(this.opacityOverlay, this.viewContainerRef, {
+      $implicit: activeLayer
+    }));
+
+    this.overlayRef.backdropClick().subscribe(() => this.close());
+
+  }
+
+  close() {
+    if (this.overlayRef) {
+      this.overlayRef.dispose();
+      this.overlayRef = null;
+    }
   }
 
 }

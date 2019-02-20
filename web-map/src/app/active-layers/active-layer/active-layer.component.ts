@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ILayerConfig } from 'src/app/models/layer-config.model';
 import { MapService } from 'src/app/map.service';
 
@@ -9,6 +9,7 @@ import { MapService } from 'src/app/map.service';
 })
 export class ActiveLayerComponent implements OnInit {
   @Input() layer: ILayerConfig;
+  @Output() showOpacity: EventEmitter<{x: number, y: number}> = new EventEmitter();
 
   showFilter = false;
   filtered = false;
@@ -41,5 +42,10 @@ export class ActiveLayerComponent implements OnInit {
 
   onShowLegend() {
     this.mapService.showLegend(this.layer.layerId);
+  }
+
+  onShowOpacity(event: MouseEvent) {
+    event.preventDefault();
+    this.showOpacity.emit({x: event.x, y: event.y});
   }
 }

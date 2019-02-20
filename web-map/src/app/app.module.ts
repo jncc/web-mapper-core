@@ -3,8 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {Ng5SliderModule} from 'ng5-slider';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { Ng5SliderModule } from 'ng5-slider';
 
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
@@ -48,11 +49,12 @@ export function initializeApp(appConfig: AppConfigService) {
     BrowserModule,
     HttpClientModule,
     DragDropModule,
+    OverlayModule,
     Ng5SliderModule
   ],
   providers: [
     AppConfigService,
-    {provide: APP_INITIALIZER, useFactory: initializeApp, deps: [AppConfigService], multi: true}
+    { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [AppConfigService], multi: true }
   ],
   bootstrap: [AppComponent]
 })

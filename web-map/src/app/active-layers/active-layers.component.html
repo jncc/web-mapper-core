@@ -11,9 +11,15 @@
             (cdkDropListDropped)="drop($event)">
             <li class="active-layer" cdkDrag cdkDragBoundary="#active-layers"
                 *ngFor="let layer of visibleLayers$ | async">
-                <app-active-layer [layer]="layer"></app-active-layer>
+                <app-active-layer [layer]="layer" (showOpacity)="openOpacity($event, layer);"></app-active-layer>
             </li>
         </ul>
         <ng-template #no_visible_layers>No active layers</ng-template>
     </div>
 </div>
+
+<ng-template #opacityOverlay let-activeLayer>
+        <section class="opacity-overlay">
+            <app-slider-control></app-slider-control>
+        </section>
+    </ng-template>
