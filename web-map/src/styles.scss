@@ -41,7 +41,7 @@ ol, ul {
 }
   
 img {
-  max-width: 100%;
+  // max-width: 100%;
   height: auto;
 }
 
@@ -86,6 +86,10 @@ div#mousePosition {
 
 div.custom-mouse-position {
   min-height: 1rem;
+}
+
+.cdk-overlay-dark-backdrop {
+  background-color: transparent;
 }
 
 /*

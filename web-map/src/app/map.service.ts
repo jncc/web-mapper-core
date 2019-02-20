@@ -250,8 +250,9 @@ export class MapService implements OnDestroy {
     const layerConfig = this.getLayerConfig(layerId);
     const legendLayerName = layerConfig.legendLayerName ? layerConfig.legendLayerName : layerConfig.layerName;
     const url = layerConfig.url +
-      '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' +
-      legendLayerName;
+      '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20' +
+      '&LEGEND_OPTIONS=fontAntiAliasing:true;fontColor:0x5A5A5A' +
+      '&LAYER=' + legendLayerName;
 
     // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
     // console.log(url);

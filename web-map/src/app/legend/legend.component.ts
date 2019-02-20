@@ -22,14 +22,6 @@ export class LegendComponent implements OnInit, OnDestroy {
     });
   }
 
-  private testngOnChanges(changes: SimpleChanges) {
-    console.log(changes.legend);
-    if (changes.legend.previousValue) {
-      if (changes.legend.previousValue.legendUrl !== changes.legend.currentValue.legendUrl) {
-        this.loading = true;
-      }
-    }
-  }
   onHideLegend() {
     this.mapService.hideLegend();
   }
