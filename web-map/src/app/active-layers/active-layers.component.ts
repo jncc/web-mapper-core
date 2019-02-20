@@ -19,7 +19,7 @@ export class ActiveLayersComponent implements OnInit {
 
   visibleLayers$: Observable<ILayerConfig[]>;
 
-  sub: Subscription;
+  subscription: Subscription;
   @ViewChild('opacityOverlay') opacityOverlay: TemplateRef<any>;
   overlayRef: OverlayRef | null;
 
@@ -67,7 +67,7 @@ export class ActiveLayersComponent implements OnInit {
       $implicit: activeLayer
     }));
 
-    this.overlayRef.backdropClick().subscribe(() => this.close());
+    this.subscription = this.overlayRef.backdropClick().subscribe(() => this.close());
 
   }
 
@@ -75,6 +75,9 @@ export class ActiveLayersComponent implements OnInit {
     if (this.overlayRef) {
       this.overlayRef.dispose();
       this.overlayRef = null;
+    }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
