@@ -45,7 +45,6 @@ export class ActiveLayerComponent implements OnInit {
   }
 
   onShowOpacity(event: MouseEvent) {
-    event.preventDefault();
     this.showOpacity.emit({x: event.x, y: event.y});
   }
 }

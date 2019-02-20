@@ -7,7 +7,6 @@ import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-active-layers',
@@ -44,7 +43,7 @@ export class ActiveLayersComponent implements OnInit {
   }
 
   openOpacity({ x, y }, activeLayer) {
-    console.log(x + ' ' + y + ' ' + activeLayer.layerName);
+    // console.log(x + ' ' + y + ' ' + activeLayer.layerName);
     this.close();
     const positionStrategy = this.overlay.position()
       .flexibleConnectedTo({ x, y })
