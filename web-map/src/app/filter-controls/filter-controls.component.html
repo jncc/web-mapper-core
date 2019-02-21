@@ -1,4 +1,2 @@
-<p>
-  filter-controls works!
-</p>
-<app-filter-control *ngFor="let filter of layer.filters"></app-filter-control>
+<div>Filter settings</div>
+<app-filter-control *ngFor="let filter of layer.filters" [filterName]="filter.name" [filterLookup]="filterLookup[filter.lookupCategory]"></app-filter-control>

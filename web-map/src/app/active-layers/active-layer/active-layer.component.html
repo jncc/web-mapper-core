@@ -23,10 +23,9 @@
 </div>
 <div class="active-layer-body">
     <div *ngIf="layer.filters && layer.filters.length">
-        {{ layer.filters.length }}
         <app-filter-controls [layer]="layer"></app-filter-controls>
     </div>
-    <div>
+    <!-- <div>
         <button type="button" (click)="onShowFilter()">filter settings</button>
     </div>
     <div *ngIf="showFilter">
@@ -44,5 +43,5 @@
             <button *ngIf="filtered" type="button" (click)="onToggleFilter()">Clear</button>
         </div>
 
-    </div>
+    </div> -->
 </div>
