@@ -125,7 +125,7 @@ export class MapService implements OnDestroy {
           // this.getStyles(layerName, legendLayerName, layerConfig.url);
           const source = new TileWMS({
             url: layerConfig.url,
-            params: { 'LAYERS': layerConfig.layerName },
+            params: { 'LAYERS': layerConfig.layerName, 'TILED': 'TRUE', 'FORMAT': 'image/png8' },
             crossOrigin: 'anonymous'
           });
           layerConfig.layer = new Tile({
