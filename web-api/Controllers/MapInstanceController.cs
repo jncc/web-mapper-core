@@ -21,7 +21,7 @@ namespace MapConfig.Controllers
             _context = context;
         }
 
-        // GET: api/Map
+        // GET: api/MapInstance
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstances()
         {
@@ -32,7 +32,7 @@ namespace MapConfig.Controllers
             return Json( maps );
         }
 
-        // GET: api/Map/Test
+        // GET: api/MapInstance/Test
         [HttpGet("{name}")]
         public async Task<ActionResult<MapInstance>> GetMapInstances(string name)
         {

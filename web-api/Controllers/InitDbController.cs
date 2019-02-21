@@ -265,12 +265,22 @@ namespace MapConfig.Controllers
                 MetadataUrl = "",
                 Type = "Lookup", 
                 Attribute = "hab_type", 
-                LookupCategory = "EunisHabitat"
+                LookupCategory = "EunisHabitats"
+            };
+            var f2 = new Filter { 
+                LayerId = l2.LayerId, 
+                Name = "Eunis Habitat (Test)", 
+                Description = "<p>Filter by <strong>Eunis</strong> Habitat Classifications</p>",
+                MetadataUrl = "",
+                Type = "Lookup", 
+                Attribute = "hab_type", 
+                LookupCategory = "EunisHabitats"
             };
              
             _context.Filter.Add(f1);
             _context.SaveChanges();
-
+            _context.Filter.Add(f2);
+            _context.SaveChanges();
 
             //Lookups (from JSON files)
             string json;
