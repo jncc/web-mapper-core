@@ -267,6 +267,7 @@ namespace MapConfig.Controllers
                 Attribute = "hab_type", 
                 LookupCategory = "EunisHabitats"
             };
+
             var f2 = new Filter { 
                 LayerId = l2.LayerId, 
                 Name = "Eunis Habitat (Test)", 
@@ -276,10 +277,78 @@ namespace MapConfig.Controllers
                 Attribute = "hab_type", 
                 LookupCategory = "EunisHabitats"
             };
+            var f3 = new Filter { 
+                LayerId = l2.LayerId, 
+                Name = "Ospar Habitat (Test)", 
+                Description = "<p>Filter by <strong>Ospar</strong> Habitat Classifications</p>",
+                MetadataUrl = "",
+                Type = "Lookup", 
+                Attribute = "hab_type", 
+                LookupCategory = "OsparHabitats"
+            };            
+            var f4 = new Filter { 
+                LayerId = l2.LayerId, 
+                Name = "Habitat (Test)", 
+                Description = "<p>Filter by Habitat Classifications</p>",
+                MetadataUrl = "",
+                Type = "Lookup", 
+                Attribute = "habitat", 
+                LookupCategory = "Habitat"
+            };
+
+            var f5 = new Filter { 
+                LayerId = l3.LayerId, 
+                Name = "Habitat (Test)", 
+                Description = "<p>Filter by Habitat Classifications</p>",
+                MetadataUrl = "",
+                Type = "Lookup", 
+                Attribute = "habitat", 
+                LookupCategory = "Habitat"
+            };
+            var f6 = new Filter { 
+                LayerId = l3.LayerId, 
+                Name = "Species (Test)", 
+                Description = "<p>Filter by Species Classifications</p>",
+                MetadataUrl = "",
+                Type = "Lookup", 
+                Attribute = "species", 
+                LookupCategory = "Species"
+            };
+
+            var f7 = new Filter { 
+                LayerId = l5.LayerId, 
+                Name = "Species (Test)", 
+                Description = "<p>Filter by Species Classifications</p>",
+                MetadataUrl = "",
+                Type = "LookupMulti", 
+                Attribute = "species", 
+                LookupCategory = "Species"
+            };
+            var f8 = new Filter { 
+                LayerId = l5.LayerId, 
+                Name = "Habitat (Test)", 
+                Description = "<p>Filter by Habitat Classifications</p>",
+                MetadataUrl = "",
+                Type = "LookupMulti", 
+                Attribute = "habitat", 
+                LookupCategory = "Habitat"
+            };
              
             _context.Filter.Add(f1);
             _context.SaveChanges();
             _context.Filter.Add(f2);
+            _context.SaveChanges();
+            _context.Filter.Add(f3);
+            _context.SaveChanges();
+            _context.Filter.Add(f4);
+            _context.SaveChanges();
+            _context.Filter.Add(f5);
+            _context.SaveChanges();
+            _context.Filter.Add(f6);
+            _context.SaveChanges();
+            _context.Filter.Add(f7);
+            _context.SaveChanges();
+            _context.Filter.Add(f8);
             _context.SaveChanges();
 
             //Lookups (from JSON files)
