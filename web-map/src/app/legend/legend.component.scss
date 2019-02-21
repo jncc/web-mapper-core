@@ -1,4 +1,5 @@
-/* legend */
+@import '../../variables.scss';
+
 #legendPane {
     width: 0;
     position: absolute;
@@ -8,10 +9,24 @@
     background-color: white;
     transition: width 0.5s;
     height: 100%;
+    box-shadow: $container-shadow;
 }
 
 #legendPane.show {
     padding: 10px;
     width: 30%;
     overflow-y: auto;
+    overflow-x: auto;
+}
+
+#legendPane img {
+    visibility: hidden;
+}
+
+#legendPane.show img {
+    visibility: visible;
+}
+
+#legendPane h2 {
+    margin-bottom: 0.5rem;
 }

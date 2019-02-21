@@ -34,4 +34,8 @@ export class ApiService {
     return forkJoin(responses);
   }
 
+  getCapabilities(url: string): Observable<any> {
+    return this.http.get(url, {responseType: 'text'});
+  }
+
 }

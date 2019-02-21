@@ -4,6 +4,7 @@
             <i class="btn material-icons small" (click)="onHideLegend()">close</i>
         </div>
         <h2>{{ legend.name }}</h2>
+        <hr>
         <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
         <img #legendImage [hidden]="loading" [src]="legend.legendUrl" (load)="onLegendImageLoaded()" alt="legend">
     </div>

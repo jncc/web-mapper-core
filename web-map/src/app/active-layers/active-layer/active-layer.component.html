@@ -9,6 +9,9 @@
         <i *ngIf="filtered" class="fa fa-sm fa-filter"></i>
     </div>
     <div>
+        <i class="btn fa fa-sm fa-adjust" (click)="onShowOpacity($event)"></i>
+    </div>
+    <div>
         <i class="btn fa fa-list-ul" (click)="onShowLegend()"></i>
     </div>
     <div>
@@ -20,9 +23,8 @@
 </div>
 <div class="active-layer-body">
     <div>
-        <app-slider-control [value]="layer.opacity" (valueChanged)="onOpacityChanged($event)"></app-slider-control>
+        <button type="button" (click)="onShowFilter()">filter settings</button>
     </div>
-    <div><button type="button" (click)="onShowFilter()">filter settings</button></div>
     <div *ngIf="showFilter">
         <div>
             the filter controls

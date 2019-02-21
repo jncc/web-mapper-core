@@ -14,7 +14,7 @@ import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
 import Layer from 'ol/layer/layer';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
-
+import WMSCapabilities from 'ol/format/wmscapabilities';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,6 @@ export class MapService implements OnDestroy {
 
   map: any;
 
-  zoomMapExtent = new Subject<null>();
   zoomInExtent = new Subject<boolean>();
   zoomOutExtent = new Subject<boolean>();
   zoom = new Subject<{ center: number[], zoom: number }>();
@@ -60,7 +59,9 @@ export class MapService implements OnDestroy {
         mapInstance: {
           name: '',
           description: '',
-          layerGroups: []
+          layerGroups: [],
+          center: [],
+          zoom: 0
         }
       },
       layerLookup: [],
@@ -90,6 +91,8 @@ export class MapService implements OnDestroy {
       // TODO: move to another service
       this.createLayersForConfig();
       this._mapConfig.next(this.dataStore.mapConfig);
+      // console.log(this.dataStore.mapConfig);
+      this.zoomToMapExtent();
     }, error => console.log('Could not load map instance config.'));
   }
 
@@ -115,11 +118,14 @@ export class MapService implements OnDestroy {
   private createLayersForConfig(): void {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig) => {
       if (layerGroupConfig.layers.length) {
-
         layerGroupConfig.layers.forEach((layerConfig: ILayerConfig, index: number) => {
+          // TODO: styles - this is just exploring styles in getcapabilities
+          // const layerName = layerConfig.layerName;
+          // const legendLayerName = layerConfig.legendLayerName;
+          // this.getStyles(layerName, legendLayerName, layerConfig.url);
           const source = new TileWMS({
             url: layerConfig.url,
-            params: { 'LAYERS': layerConfig.layerName },
+            params: { 'LAYERS': layerConfig.layerName, 'TILED': 'TRUE', 'FORMAT': 'image/png8' },
             crossOrigin: 'anonymous'
           });
           layerConfig.layer = new Tile({
@@ -138,6 +144,31 @@ export class MapService implements OnDestroy {
     this._visibleLayers.next(this.dataStore.visibleLayers);
   }
 
+  private getStyles(layerName, legendLayerName, url) {
+    const capabilitiesUrl = url + '?REQUEST=GetCapabilities&VERSION=1.3.0';
+    this.apiService.getCapabilities(capabilitiesUrl).subscribe(data => {
+      const parser = new WMSCapabilities();
+      const result = parser.read(data);
+      console.log(layerName);
+      const layer = result.Capability.Layer.Layer.find(l => l.Name === layerName);
+      if (layer.hasOwnProperty('Layer')) {
+        console.log('I\'m a group layer');
+        if (layer.Layer) {
+          console.log(legendLayerName);
+          console.log(layer.Layer);
+          const layer2 = layer.Layer.find(l => l.Name === 'emodnet:' + legendLayerName);
+          if (layer2.Style) {
+            console.log(layer2.Style);
+          }
+          // console.log(layer2);
+        }
+      } else {
+        console.log('I\'m just a layer');
+      }
+      // console.log(result.Capability.Layer.Layer.find(l => l.Name === layerName));
+    });
+  }
+
   mapReady(map: any) {
     this.map = map;
   }
@@ -151,7 +182,9 @@ export class MapService implements OnDestroy {
   }
 
   zoomToMapExtent() {
-    this.zoomMapExtent.next();
+    const center = this.dataStore.mapConfig.mapInstance.center;
+    const zoom = this.dataStore.mapConfig.mapInstance.zoom;
+    this.zoom.next({ center: center, zoom: zoom });
   }
 
   zoomToLayerExtent(layerId: number) {
@@ -217,11 +250,12 @@ export class MapService implements OnDestroy {
     const layerConfig = this.getLayerConfig(layerId);
     const legendLayerName = layerConfig.legendLayerName ? layerConfig.legendLayerName : layerConfig.layerName;
     const url = layerConfig.url +
-      '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' +
-      legendLayerName;
+      '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20' +
+      '&LEGEND_OPTIONS=fontAntiAliasing:true;fontColor:0x5A5A5A' +
+      '&LAYER=' + legendLayerName;
 
-      // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
-    console.log(url);
+    // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
+    // console.log(url);
     this.showLegendSubject.next({ name: layerConfig.name, legendUrl: url });
   }
 

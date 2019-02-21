@@ -42,7 +42,6 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
-  private zoomToMapExtentSubscription: Subscription;
   private zoomInToExtentSubscription: Subscription;
   private zoomOutToExtentSubscription: Subscription;
   private zoomSubscription: Subscription;
@@ -129,10 +128,10 @@ export class MapComponent implements OnInit, OnDestroy {
       this.mapService.showFeatureInfo(urls);
     });
 
-    this.zoomToMapExtentSubscription = this.mapService.zoomMapExtent.subscribe(() => {
-      this.zoomToMapExtent();
-    }
-    );
+    // this.map.on('pointermove', (event: MapBrowserEvent) => {
+    //   console.log(proj.toLonLat(event.coordinate));
+    // });
+
 
     // TODO: speak to SB about condition and EventsConditionType
     const dragZoomIn = new DragZoom({
@@ -172,9 +171,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.zoomToMapExtentSubscription) {
-      this.zoomToMapExtentSubscription.unsubscribe();
-    }
     if (this.zoomInToExtentSubscription) {
       this.zoomInToExtentSubscription.unsubscribe();
     }
