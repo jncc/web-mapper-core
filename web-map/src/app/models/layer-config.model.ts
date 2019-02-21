@@ -1,3 +1,5 @@
+import { IFilterConfig } from './filter-config.model';
+
 export interface ILayerConfig {
     layerId: number;
     layerName: string;
@@ -10,4 +12,5 @@ export interface ILayerConfig {
     center: number[];
     zoom: number;
     legendLayerName: string;
+    filters: IFilterConfig[];
 }

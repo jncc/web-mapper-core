@@ -22,6 +22,10 @@
     </div>
 </div>
 <div class="active-layer-body">
+    <div *ngIf="layer.filters && layer.filters.length">
+        {{ layer.filters.length }}
+        <app-filter-controls [layer]="layer"></app-filter-controls>
+    </div>
     <div>
         <button type="button" (click)="onShowFilter()">filter settings</button>
     </div>
@@ -30,9 +34,9 @@
             the filter controls
             <select>
                 <option value=""></option>
-                <option value="1">sand</option>
-                <option value="2">mud</option>
-                <option value="3">rock</option>
+                <option *ngFor="let lookup of filterLookup['EunisHabitats']" [value]="lookup.code">
+                    {{ lookup.name}}
+                </option>
             </select>
         </div>
         <div>

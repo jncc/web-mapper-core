@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ILayerConfig } from 'src/app/models/layer-config.model';
 import { MapService } from 'src/app/map.service';
+import { ILookup } from 'src/app/models/lookup.model';
 
 @Component({
   selector: 'app-active-layer',
@@ -14,9 +15,12 @@ export class ActiveLayerComponent implements OnInit {
   showFilter = false;
   filtered = false;
 
+  filterLookup: { [lookupCategory: string]: ILookup[] } = {};
+
   constructor(private mapService: MapService) { }
 
   ngOnInit() {
+    this.mapService.lookups.subscribe(data => this.filterLookup = data);
   }
 
   onShowFilter() {
