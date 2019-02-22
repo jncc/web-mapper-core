@@ -25,13 +25,8 @@ import DragZoom from 'ol/interaction/dragzoom';
 import MapBrowserEvent from 'ol/mapbrowserevent';
 import MousePosition from 'ol/control/mouseposition';
 
-import always from 'ol/events/condition';
-import EventConditionType from 'ol';
-import EventsConditionType from 'ol';
-
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
 
 
 @Component({
@@ -45,15 +40,12 @@ export class MapComponent implements OnInit, OnDestroy {
   private zoomInToExtentSubscription: Subscription;
   private zoomOutToExtentSubscription: Subscription;
   private zoomSubscription: Subscription;
-
   private layersSubscription: Subscription;
 
-  // mapExtent = proj.transformExtent([-4, 50, 1, 60], 'EPSG:4326', 'EPSG:3857');
-  // TODO: read from config
-  initialCenter = [-2, 55];
-  initialZoom = 4;
-
-  baseLayer = new Tile({
+  // Map defaults
+  defaultCenter = [-2, 55];
+  defaultZoom = 4;
+  defaultBaseLayer = new Tile({
     source: new OSM()
   });
 
@@ -68,16 +60,15 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private updateLayers(layersConfig: ILayerConfig[]): void {
-    // console.log(layersConfig);
     this.map.setLayerGroup(new Group());
-    this.map.addLayer(this.baseLayer);
+    this.map.addLayer(this.defaultBaseLayer);
     layersConfig.slice().reverse().forEach(layerConfig => this.map.addLayer(layerConfig.layer));
   }
 
   private setupMap() {
     const view = new View({
-      center: proj.fromLonLat([this.initialCenter[0], this.initialCenter[1]]),
-      zoom: this.initialZoom,
+      center: proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]),
+      zoom: this.defaultZoom,
       maxZoom: 17,
       minZoom: 3
     });
@@ -98,7 +89,7 @@ export class MapComponent implements OnInit, OnDestroy {
         new ScaleLine()
       ],
       layers: [
-        this.baseLayer
+        this.defaultBaseLayer
       ],
       view: view
     });
@@ -166,8 +157,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   zoomToMapExtent() {
-    this.map.getView().setCenter(proj.fromLonLat([this.initialCenter[0], this.initialCenter[1]]));
-    this.map.getView().setZoom(this.initialZoom);
+    this.map.getView().setCenter(proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]));
+    this.map.getView().setZoom(this.defaultZoom);
   }
 
   ngOnDestroy() {

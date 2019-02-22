@@ -20,9 +20,12 @@ export class ActiveLayersComponent implements OnInit {
 
   visibleLayers$: Observable<ILayerConfig[]>;
 
-  subscription: Subscription;
+  backdropSubscription: Subscription;
   @ViewChild('opacityOverlay') opacityOverlay: TemplateRef<any>;
-  overlayRef: OverlayRef | null;
+  opacityOverlayRef: OverlayRef | null;
+
+  @ViewChild('filterOverlay') filterOverlay: TemplateRef<any>;
+  filterOverlayRef: OverlayRef | null;
 
   constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) {
     this.visibleLayers$ = this.mapService.visibleLayers;
@@ -39,13 +42,9 @@ export class ActiveLayersComponent implements OnInit {
     this.mapService.reorderVisibleLayers(event.previousIndex, event.currentIndex);
   }
 
-  // opacity(activeLayer: any) {
-  //   this.close();
-  // }
-
   openOpacity({ x, y }, activeLayer) {
     // console.log(x + ' ' + y + ' ' + activeLayer.layerName);
-    this.close();
+    this.closeOpacity();
     const positionStrategy = this.overlay.position()
       .flexibleConnectedTo({ x, y })
       .withPositions([
@@ -57,33 +56,61 @@ export class ActiveLayersComponent implements OnInit {
         }
       ]);
 
-    this.overlayRef = this.overlay.create({
+    this.opacityOverlayRef = this.overlay.create({
       hasBackdrop: true,
       positionStrategy,
       scrollStrategy: this.overlay.scrollStrategies.close()
     });
 
 
-    this.overlayRef.attach(new TemplatePortal(this.opacityOverlay, this.viewContainerRef, {
+    this.opacityOverlayRef.attach(new TemplatePortal(this.opacityOverlay, this.viewContainerRef, {
       $implicit: activeLayer
     }));
 
-    this.subscription = this.overlayRef.backdropClick().subscribe(() => this.close());
+    this.backdropSubscription = this.opacityOverlayRef.backdropClick().subscribe(() => this.closeOpacity());
 
   }
 
-  close() {
-    if (this.overlayRef) {
-      this.overlayRef.dispose();
-      this.overlayRef = null;
+  closeOpacity() {
+    if (this.opacityOverlayRef) {
+      this.opacityOverlayRef.dispose();
+      this.opacityOverlayRef = null;
     }
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.backdropSubscription) {
+      this.backdropSubscription.unsubscribe();
     }
   }
 
   onOpacityChanged(opacity: number, activeLayer) {
     this.mapService.changeLayerOpacity(activeLayer.layerId, opacity);
+  }
+
+  // Filter
+  openFilter(activeLayer) {
+    console.log(activeLayer.layerName);
+    this.closeFilter();
+    const positionStrategy = this.overlay.position()
+      .global()
+      .centerHorizontally()
+      .centerVertically();
+
+    this.filterOverlayRef = this.overlay.create({
+      hasBackdrop: true,
+      positionStrategy,
+    });
+
+
+    this.filterOverlayRef.attach(new TemplatePortal(this.filterOverlay, this.viewContainerRef, {
+      $implicit: activeLayer
+    }));
+
+  }
+
+  closeFilter() {
+    if (this.filterOverlayRef) {
+      this.filterOverlayRef.dispose();
+      this.filterOverlayRef = null;
+    }
   }
 
 }

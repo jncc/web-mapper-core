@@ -2,21 +2,32 @@
 
 #active-layers {
     margin-top: 2rem;
+    width: 20rem;
+}
+
+#filterOverlay {
+    width: 25rem;
 }
 
 .controls-container {
     user-select: none;
     border-radius: $container-border-radius;
     box-shadow: $container-shadow;
-    width: 20rem;
     background-color: white;
+  }
+
+  #filter-settings .controls-container-header {
+    justify-content: space-between;
+    color: white;
+    line-height: 1.5rem;
+    cursor: auto;
   }
    
   .controls-container-header {
     display: flex;
     padding: $container-padding;
     border-bottom: 1px solid $border-color;
-    background-color: midnightblue;
+    background-color: #0A71B4;
     border-radius: $container-border-radius;
     cursor: pointer;
   }

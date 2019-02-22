@@ -11,6 +11,7 @@ import { ILookup } from 'src/app/models/lookup.model';
 export class ActiveLayerComponent implements OnInit {
   @Input() layer: ILayerConfig;
   @Output() showOpacity: EventEmitter<{x: number, y: number}> = new EventEmitter();
+  @Output() openFilter: EventEmitter<any> = new EventEmitter();
 
   showFilter = false;
   filtered = false;
@@ -51,4 +52,9 @@ export class ActiveLayerComponent implements OnInit {
   onShowOpacity(event: MouseEvent) {
     this.showOpacity.emit({x: event.x, y: event.y});
   }
+
+  onOpenFilter() {
+    this.openFilter.emit();
+  }
+
 }

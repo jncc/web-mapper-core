@@ -16,7 +16,6 @@ import Layer from 'ol/layer/layer';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import WMSCapabilities from 'ol/format/wmscapabilities';
 import { IFilterConfig } from './models/filter-config.model';
-import layer from 'ol/layer/layer';
 import { ILookup } from './models/lookup.model';
 
 

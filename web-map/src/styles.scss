@@ -78,7 +78,6 @@ div#mousePosition {
   right: 8rem;
   bottom: 1rem;
   width: 10rem;
-  background-color: green;
   background-color: white;
   padding: $container-padding;
   pointer-events: none;
@@ -87,6 +86,8 @@ div#mousePosition {
 div.custom-mouse-position {
   min-height: 1rem;
 }
+
+// CDK BACKDROP
 
 .cdk-overlay-dark-backdrop {
   background-color: transparent;

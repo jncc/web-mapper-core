@@ -1,6 +1,6 @@
 <div class="active-layer-header">
     <div>
-        <i class="material-icons small" cdkDragHandle>drag_indicator</i>
+        <i class="material-icons drag" cdkDragHandle>drag_indicator</i>
     </div>
     <div style="flex-grow: 1;">
         {{layer.name}}
@@ -9,22 +9,26 @@
         <i *ngIf="filtered" class="fa fa-sm fa-filter"></i>
     </div>
     <div>
-        <i class="btn fa fa-sm fa-adjust" (click)="onShowOpacity($event)"></i>
+        <i class="btn fa fa-lg fa-adjust" [title]="'opacity ' + layer.opacity" (click)="onShowOpacity($event)"></i>
     </div>
     <div>
-        <i class="btn fa fa-list-ul" (click)="onShowLegend()"></i>
+        <i class="btn fa fa-lg fa-list-ul" (click)="onShowLegend()"></i>
     </div>
     <div>
-        <i class="btn fa fa-globe" (click)="onZoomToLayerExtent()"></i>
+        <i class="btn fa fa-lg fa-globe" (click)="onZoomToLayerExtent()"></i>
+    </div>
+
+    <div *ngIf="layer.filters && layer.filters.length">
+        <i class="btn fa fa-lg fa-filter" (click)="onOpenFilter()"></i>
     </div>
     <div>
-        <i class="material-icons small" (click)="onRemoveLayer()">close</i>
+        <i class="btn fa fa-lg fa-close" (click)="onRemoveLayer()"></i>
     </div>
 </div>
 <div class="active-layer-body">
-    <div *ngIf="layer.filters && layer.filters.length">
+    <!-- <div *ngIf="layer.filters && layer.filters.length">
         <app-filter-controls [layer]="layer"></app-filter-controls>
-    </div>
+    </div> -->
     <!-- <div>
         <button type="button" (click)="onShowFilter()">filter settings</button>
     </div>
