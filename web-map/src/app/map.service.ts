@@ -12,7 +12,6 @@ import Tile from 'ol/layer/tile';
 import { ILayerConfig } from './models/layer-config.model';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
-import Layer from 'ol/layer/layer';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import WMSCapabilities from 'ol/format/wmscapabilities';
 import { IFilterConfig } from './models/filter-config.model';
@@ -178,6 +177,28 @@ export class MapService implements OnDestroy {
     });
   }
 
+  filterLayer(layerId: number, filter: any) {
+    const layerConfig = this.getLayerConfig(layerId);
+    const source = layerConfig.layer.getSource();
+    const params = layerConfig.layer.getSource().getParams();
+    const filterAttributes = Object.keys(filter);
+    let cqlFilter = '';
+    filterAttributes.forEach(attribute => {
+      cqlFilter = cqlFilter + attribute + ' IN (' + filter[attribute].map(code => `'${code}'`).join() + ')';
+    });
+    params['CQL_FILTER'] = cqlFilter;
+    console.log(cqlFilter);
+    source.updateParams(params);
+  }
+
+  clearFilterLayer(layerId) {
+    const layerConfig = this.getLayerConfig(layerId);
+    const source = layerConfig.layer.getSource();
+    const params = layerConfig.layer.getSource().getParams();
+    delete params['CQL_FILTER'];
+    source.updateParams(params);
+  }
+
   private getStyles(layerName, legendLayerName, url) {
     const capabilitiesUrl = url + '?REQUEST=GetCapabilities&VERSION=1.3.0';
     this.apiService.getCapabilities(capabilitiesUrl).subscribe(data => {
@@ -222,8 +243,8 @@ export class MapService implements OnDestroy {
   }
 
   zoomToLayerExtent(layerId: number) {
-    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
-    this.zoom.next({ center: currentLayerConfig.center, zoom: currentLayerConfig.zoom });
+    const layerConfig = this.getLayerConfig(layerId);
+    this.zoom.next({ center: layerConfig.center, zoom: layerConfig.zoom });
   }
 
   zoomInToExtent(activated: boolean) {
@@ -264,9 +285,9 @@ export class MapService implements OnDestroy {
   }
 
   changeLayerOpacity(layerId: number, opacity: number) {
-    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
-    currentLayerConfig.layer.setOpacity(opacity);
-    currentLayerConfig.opacity = opacity;
+    const layerConfig = this.getLayerConfig(layerId);
+    layerConfig.layer.setOpacity(opacity);
+    layerConfig.opacity = opacity;
   }
 
   reorderVisibleLayers(previousIndex: number, currentIndex: number) {

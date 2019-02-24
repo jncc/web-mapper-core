@@ -8,6 +8,7 @@ import { ILookup } from 'src/app/models/lookup.model';
 })
 export class FilterControlComponent implements OnInit {
   @Input() filterName: string;
+  @Input() filterAttribute: string;
   @Input() filterLookup: { [lookupCategory: string]: ILookup[] };
 
 
