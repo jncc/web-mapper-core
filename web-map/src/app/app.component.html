@@ -1,11 +1,27 @@
 <div id="appContainer">
     <app-map></app-map>
-    <div id="leftPane">
-        <app-layers></app-layers>
-        <app-active-layers></app-active-layers>
+    <div id="sideNav" [ngClass]="{ 'open': showLayers }">
+        <div id="layers">
+            <app-layers></app-layers>
+        </div>
+        <div id="controls">
+            <div class="control-item">
+                <div id="toggleLayers" (click)="onToggleShowLayers()">
+                    <i *ngIf="showLayers" class="btn fa fa-caret-left"></i>
+                    <i *ngIf="!showLayers" class="btn fa fa-caret-right"></i>
+                    ALL LAYERS
+                </div>
+            </div>
+            <div class="control-item">
+                <app-controls-toolbar></app-controls-toolbar>
+            </div>
+            <div class="control-item">
+                <app-active-layers></app-active-layers>
+            </div>
+            <div id="overviewMap"></div>
+        </div>
+
     </div>
-    
-    <app-controls-toolbar></app-controls-toolbar>
     <!-- <app-map-instances></app-map-instances> -->
     <app-feature-infos></app-feature-infos>
     <div id="mousePosition"></div>

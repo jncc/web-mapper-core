@@ -78,7 +78,8 @@ export class MapComponent implements OnInit, OnDestroy {
       controls: [
         new OverviewMap({
           collapsed: false,
-          collapsible: false
+          collapsible: false,
+          target: document.getElementById('overviewMap')
         }),
         new MousePosition({
           projection: 'EPSG:4326',
@@ -148,8 +149,9 @@ export class MapComponent implements OnInit, OnDestroy {
     this.zoomSubscription = this.mapService.zoom.subscribe(data => {
       if (data.center && data.center.length === 2 && data.zoom) {
         const center = proj.fromLonLat([data.center[0], data.center[1]]);
-        this.map.getView().setCenter(center);
-        this.map.getView().setZoom(data.zoom);
+        view.animate({center: center, zoom: data.zoom});
+        // view.setCenter(center);
+        // view.setZoom(data.zoom);
       } else {
         this.zoomToMapExtent();
       }

@@ -2,7 +2,8 @@
 
 #active-layers {
     margin-top: 2rem;
-    width: 20rem;
+    // width: 20rem;
+    pointer-events: auto;
 }
 
 #filterOverlay {
@@ -37,6 +38,10 @@
   }
   
   .controls-container-body {
+      padding: $container-padding;
+  }
+
+  .controls-container-footer {
       padding: $container-padding;
   }
 

@@ -22,6 +22,8 @@ export class ActiveLayerComponent implements OnInit {
 
   ngOnInit() {
     this.mapService.lookups.subscribe(data => this.filterLookup = data);
+
+    console.log(this.layer.downloadURL);
   }
 
   onShowFilter() {

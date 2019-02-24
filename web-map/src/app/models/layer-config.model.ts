@@ -11,6 +11,8 @@ export interface ILayerConfig {
     subLayerGroup: string;
     center: number[];
     zoom: number;
+    metadataUrl: string;
+    downloadURL: string;
     legendLayerName: string;
     filters: IFilterConfig[];
 }

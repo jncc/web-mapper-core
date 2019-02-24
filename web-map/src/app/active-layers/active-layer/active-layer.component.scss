@@ -5,12 +5,24 @@
 
 .active-layer-header {
     display: flex;
-    border-bottom: 1px solid lightgrey;
-    margin: 0 -0.5rem;
-    padding: 0.5rem;
+    // align-items: center;
+    justify-content: space-between;
+
+}
+
+.active-layer-title {
+    display: flex;
+    align-items: center;
 }
 
 .active-layer {
+    border: 1px solid lightgrey;
+    border-radius: 2px; 
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    width: 20rem;
+}
+
+.active-layer-body {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
 }
