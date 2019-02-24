@@ -7,6 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
+  showLayers = true;
+
   constructor() {
+  }
+
+  onToggleShowLayers() {
+    this.showLayers = !this.showLayers;
   }
 }

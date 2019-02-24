@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ILayerConfig } from 'src/app/models/layer-config.model';
 import { MapService } from 'src/app/map.service';
+import { ILookup } from 'src/app/models/lookup.model';
 
 @Component({
   selector: 'app-active-layer',
@@ -10,13 +11,17 @@ import { MapService } from 'src/app/map.service';
 export class ActiveLayerComponent implements OnInit {
   @Input() layer: ILayerConfig;
   @Output() showOpacity: EventEmitter<{x: number, y: number}> = new EventEmitter();
+  @Output() openFilter: EventEmitter<any> = new EventEmitter();
 
   showFilter = false;
   filtered = false;
 
+  filterLookup: { [lookupCategory: string]: ILookup[] } = {};
+
   constructor(private mapService: MapService) { }
 
   ngOnInit() {
+    this.mapService.lookups.subscribe(data => this.filterLookup = data);
   }
 
   onShowFilter() {
@@ -47,4 +52,9 @@ export class ActiveLayerComponent implements OnInit {
   onShowOpacity(event: MouseEvent) {
     this.showOpacity.emit({x: event.x, y: event.y});
   }
+
+  onOpenFilter() {
+    this.openFilter.emit();
+  }
+
 }

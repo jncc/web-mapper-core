@@ -35,6 +35,11 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
   font-size: 12px;
   color: $text-color;
 }
+
+a {
+  text-decoration: none;
+  color: $text-color;
+}
   
 ol, ul {
   list-style: none;
@@ -78,7 +83,6 @@ div#mousePosition {
   right: 8rem;
   bottom: 1rem;
   width: 10rem;
-  background-color: green;
   background-color: white;
   padding: $container-padding;
   pointer-events: none;
@@ -87,6 +91,8 @@ div#mousePosition {
 div.custom-mouse-position {
   min-height: 1rem;
 }
+
+// CDK BACKDROP
 
 .cdk-overlay-dark-backdrop {
   background-color: transparent;

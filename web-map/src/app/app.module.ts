@@ -23,6 +23,8 @@ import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { SliderControlComponent } from './slider-control/slider-control.component';
 import { LegendComponent } from './legend/legend.component';
+import { FilterControlsComponent } from './filter-controls/filter-controls.component';
+import { FilterControlComponent } from './filter-controls/filter-control/filter-control.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -43,7 +45,9 @@ export function initializeApp(appConfig: AppConfigService) {
     FeatureInfosComponent,
     SafeHtmlPipe,
     SliderControlComponent,
-    LegendComponent
+    LegendComponent,
+    FilterControlsComponent,
+    FilterControlComponent
   ],
   imports: [
     BrowserModule,
