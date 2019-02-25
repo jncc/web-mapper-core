@@ -7,15 +7,12 @@
         <div id="controlsPanel">
             <div class="control-item">
                 <div id="toggleLayers" (click)="onToggleShowLayers()">
-                    <i *ngIf="showLayers" class="btn fa fa-caret-left"></i>
-                    <i *ngIf="!showLayers" class="btn fa fa-caret-right"></i>
-                    <ng-container *ngIf="showLayers">HIDE </ng-container>
+                    <i *ngIf="showLayers" class="btn fa fa-fw fa-3x fa-caret-left"></i>
+                    <i *ngIf="!showLayers" class="btn fa fa-fw fa-3x fa-caret-right"></i>
+                    <!-- <ng-container *ngIf="showLayers">HIDE </ng-container>
                     <ng-container *ngIf="!showLayers">SHOW </ng-container>
-                    ALL LAYERS
+                    ALL LAYERS -->
                 </div>
-            </div>
-            <div class="control-item">
-                <app-controls-toolbar></app-controls-toolbar>
             </div>
             <div class="control-item">
                 <app-active-layers></app-active-layers>
@@ -26,6 +23,7 @@
     </div>
     <!-- <app-map-instances></app-map-instances> -->
     <app-feature-infos></app-feature-infos>
+    <app-controls-toolbar id="controlsToolbar"></app-controls-toolbar>
     <div id="mousePosition"></div>
     <app-legend></app-legend>
 </div>

@@ -146,6 +146,10 @@ export class MapComponent implements OnInit, OnDestroy {
       dragZoomOut.setActive(active);
     });
 
+    // this.map.on('pointerdrag', event => {
+    //   document.body.style.cursor = 'grabbing';
+    // });
+
     this.zoomSubscription = this.mapService.zoom.subscribe(data => {
       if (data.center && data.center.length === 2 && data.zoom) {
         const center = proj.fromLonLat([data.center[0], data.center[1]]);

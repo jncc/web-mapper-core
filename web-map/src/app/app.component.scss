@@ -29,7 +29,7 @@
 
 #controlsPanel {
     position: relative;
-    margin-left: 1rem;
+    padding-left: 1rem;
 }
 
 #overviewMap {
@@ -38,16 +38,23 @@
 
 .control-item {
     pointer-events: auto;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 #toggleLayers {
     display: inline-block;
     font-family: 'Montserrat', sans-serif;
     color: white;
-    padding: 0.5rem;
+    padding: 0;
     font-weight: 600;
     background-color: #0A71B4;
     cursor: pointer;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+    margin-left: -1rem;
+}
+
+#controlsToolbar {
+    position: fixed;
+    bottom: 5rem;
+    right: 1rem;
 }
