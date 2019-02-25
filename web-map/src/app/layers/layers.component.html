@@ -1,10 +1,10 @@
-<app-controls-container id="layers">
-  <span header>LAYERS</span>
-  <ng-container body>
-    <ul>
-      <li *ngFor="let layerGroup of layerGroups$ | async">
-        <app-layer-group [layerGroup]="layerGroup" (layerVisibilityChanged)="onLayerVisiblityChanged($event)"></app-layer-group>
-      </li>
-    </ul>
-  </ng-container>
-</app-controls-container>
+<h2>LAYERS</h2>
+
+<div class="layers">
+  <ul>
+    <li *ngFor="let layerGroup of layerGroups$ | async">
+      <app-layer-group [layerGroup]="layerGroup" (layerVisibilityChanged)="onLayerVisiblityChanged($event)">
+      </app-layer-group>
+    </li>
+  </ul>
+</div>

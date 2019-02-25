@@ -1,5 +1,4 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Subject, BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -60,7 +59,7 @@ export class MapService implements OnDestroy {
     return this._filterLookups.asObservable();
   }
 
-  constructor(private http: HttpClient, private apiService: ApiService) {
+  constructor(private apiService: ApiService) {
     this.dataStore = {
       mapConfig: {
         mapInstances: [],
@@ -184,7 +183,11 @@ export class MapService implements OnDestroy {
     const filterAttributes = Object.keys(filter);
     let cqlFilter = '';
     filterAttributes.forEach(attribute => {
-      cqlFilter = cqlFilter + attribute + ' IN (' + filter[attribute].map(code => `'${code}'`).join() + ')';
+      if (cqlFilter.length > 0) {
+        // there is already at least one filter so use AND
+        cqlFilter += ' AND ';
+      }
+      cqlFilter += cqlFilter + attribute + ' IN (' + filter[attribute].map(code => `'${code}'`).join() + ')';
     });
     params['CQL_FILTER'] = cqlFilter;
     console.log(cqlFilter);

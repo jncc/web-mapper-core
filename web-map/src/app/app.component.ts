@@ -7,10 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  showLayers = true;
+  cssUrl = '/assets/map-styles.css';
 
-  constructor() {
-  }
+  showLayers = true;
 
   onToggleShowLayers() {
     this.showLayers = !this.showLayers;

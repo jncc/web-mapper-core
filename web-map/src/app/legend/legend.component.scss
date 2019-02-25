@@ -7,7 +7,7 @@
     top: 0;
     right: 0;
     background-color: white;
-    transition: width 0.5s;
+    transition: width 350ms ease-out;
     height: 100%;
     box-shadow: $container-shadow;
 }

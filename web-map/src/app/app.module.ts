@@ -25,6 +25,8 @@ import { SliderControlComponent } from './slider-control/slider-control.componen
 import { LegendComponent } from './legend/legend.component';
 import { FilterControlsComponent } from './filter-controls/filter-controls.component';
 import { FilterControlComponent } from './filter-controls/filter-control/filter-control.component';
+import { SafeResourceUrlPipe } from './safe-resource-url.pipe';
+import { SafeCssPipe } from './safe-css.pipe';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -47,7 +49,9 @@ export function initializeApp(appConfig: AppConfigService) {
     SliderControlComponent,
     LegendComponent,
     FilterControlsComponent,
-    FilterControlComponent
+    FilterControlComponent,
+    SafeResourceUrlPipe,
+    SafeCssPipe
   ],
   imports: [
     BrowserModule,

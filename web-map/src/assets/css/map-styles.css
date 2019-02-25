@@ -1,0 +1,22 @@
+/* Map Styles */
+
+/* Primary background colour */
+.bg-primary {
+    background-color: #0A71B4;
+}
+
+/* Secondary background colour */
+.bg-secondary {
+    background-color: #61AADF;
+}
+
+.bg-dark {
+    background-color: #012E58;
+}
+
+
+.bg-light {
+    background-color: white;
+}
+
+/* GetFeatureInfo Styles */

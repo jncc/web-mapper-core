@@ -1,10 +1,10 @@
 <div id="appContainer">
     <app-map></app-map>
     <div id="sideNav" [ngClass]="{ 'open': showLayers }">
-        <div id="layers">
+        <div id="layersPanel" class="bg-secondary">
             <app-layers></app-layers>
         </div>
-        <div id="controls">
+        <div id="controlsPanel">
             <div class="control-item">
                 <div id="toggleLayers" (click)="onToggleShowLayers()">
                     <i *ngIf="showLayers" class="btn fa fa-caret-left"></i>

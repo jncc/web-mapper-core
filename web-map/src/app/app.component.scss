@@ -8,7 +8,6 @@
 
 #sideNav {
     position: fixed;
-    // width: 500px;
     height: 100%;
     top: 0;
     display:flex;
@@ -16,19 +15,19 @@
     margin-left: -350px;
     overflow: hidden;
     pointer-events: none;
-    transition: margin-left 0.5s;
+    transition: margin-left 350ms ease-out;
 }
 
 #sideNav.open {
     margin-left: 0;
 }
 
-#layers {
+#layersPanel {
     pointer-events: auto;
-    background-color: aliceblue;
+    width: 350px;
 }
 
-#controls {
+#controlsPanel {
     position: relative;
     margin-left: 1rem;
 }
