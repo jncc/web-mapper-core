@@ -154,8 +154,6 @@ export class MapComponent implements OnInit, OnDestroy {
       if (data.center && data.center.length === 2 && data.zoom) {
         const center = proj.fromLonLat([data.center[0], data.center[1]]);
         view.animate({center: center, zoom: data.zoom});
-        // view.setCenter(center);
-        // view.setZoom(data.zoom);
       } else {
         this.zoomToMapExtent();
       }

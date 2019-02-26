@@ -13,7 +13,7 @@
 }
 
 #legendPane.show {
-    padding: 10px;
+    // padding: 10px;
     width: 30%;
     overflow-y: auto;
     overflow-x: auto;
@@ -27,6 +27,15 @@
     visibility: visible;
 }
 
-#legendPane h2 {
-    margin-bottom: 0.5rem;
+.legend-title {
+    padding: 1rem;
+}
+
+.legend-title h2 {
+    font-size: 1rem;
+    color: white;
+}
+
+.legend-body {
+    padding: 0.5rem;
 }

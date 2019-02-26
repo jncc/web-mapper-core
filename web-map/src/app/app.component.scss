@@ -25,6 +25,7 @@
 #layersPanel {
     pointer-events: auto;
     width: 350px;
+    box-shadow: $container-shadow;
 }
 
 #controlsPanel {
@@ -49,8 +50,9 @@
     font-weight: 600;
     background-color: #0A71B4;
     cursor: pointer;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
     margin-left: -1rem;
+    box-shadow: $container-shadow;
 }
 
 #controlsToolbar {
