@@ -31,15 +31,20 @@ namespace MapConfig.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<Gazetteer>> GetGazetteer(string name)
         {
+
             var gazetteer = await _context.Gazetteer
                 .Where(m => m.Name.ToUpper().StartsWith(name.ToUpper()))
                 .ToListAsync();   
 
-            if (gazetteer == null)
-            {
-                return NotFound();
-            }
+            if (gazetteer == null) return NotFound();
 
+            int gazcount = gazetteer.Count();
+            for(var i=0;i<gazcount;i++) {
+                gazetteer[i].Extent[0] = gazetteer[i].Xmin;
+                gazetteer[i].Extent[1] = gazetteer[i].Ymin;
+                gazetteer[i].Extent[2] = gazetteer[i].Xmax;
+                gazetteer[i].Extent[3] = gazetteer[i].Ymax;
+            }
             return Json( gazetteer );
         }
     }

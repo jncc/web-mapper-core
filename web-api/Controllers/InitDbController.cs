@@ -29,7 +29,7 @@ namespace MapConfig.Controllers
 
         // GET: api/InitDb
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstances()
+        public async Task<ActionResult<IEnumerable<MapInstance>>> InitDb()
         {
             var bl1 = new BaseLayer { 
                 Name = "OpenStreetMap",
@@ -397,10 +397,10 @@ namespace MapConfig.Controllers
             //Gazetteer
             var gazetteer = _context.Gazetteer.Where(g => g.Name.EndsWith("(Test)"));
             _context.Gazetteer.RemoveRange(gazetteer);
+            var ge1= new Gazetteer { Name = "Rhayader (Test)", Xmin=-3.9021790028, Ymin=52.1505680545, Xmax=-3.1489288807, Ymax=52.4495366603, Imported=false };
+            var ge2= new Gazetteer { Name = "Brecon (Test)", Xmin=-3.6007416248, Ymin=51.8500024602, Xmax=-3.1523621082, Ymax=51.9999034172, Imported=false };
+            var ge3= new Gazetteer { Name = "Newtown (Test)", Xmin=-3.6476644545, Ymin=52.3323769212, Xmax=-2.9740652114, Ymax=52.6372051526, Imported=false };
 
-            var ge1= new Gazetteer { Name = "Rhayader (Test)", Longitude = -3.507, Latitude = 52.3, Zoom = 9 };
-            var ge2= new Gazetteer { Name = "Brecon (Test)", Longitude = -3.387, Latitude = 51.948, Zoom = 8 };
-            var ge3= new Gazetteer { Name = "Newtown (Test)", Longitude = -3.334, Latitude = 52.512, Zoom = 10 };
             _context.Gazetteer.Add(ge1);
             _context.SaveChanges();
             _context.Gazetteer.Add(ge2);
@@ -408,8 +408,7 @@ namespace MapConfig.Controllers
             _context.Gazetteer.Add(ge3);
             _context.SaveChanges();
 
-
-            return await _context.MapInstance.ToListAsync();
+            return Json ( new { result = "success" });
         }
 
         // recursively yield all children of json

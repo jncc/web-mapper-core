@@ -17,13 +17,22 @@
                 @Html.DisplayNameFor(model => model.Gazetteer[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gazetteer[0].Longitude)
+                @Html.DisplayNameFor(model => model.Gazetteer[0].Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gazetteer[0].Latitude)
+                @Html.DisplayNameFor(model => model.Gazetteer[0].Xmin)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gazetteer[0].Zoom)
+                @Html.DisplayNameFor(model => model.Gazetteer[0].Ymin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gazetteer[0].Xmax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gazetteer[0].Ymax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gazetteer[0].Imported)
             </th>
             <th></th>
         </tr>
@@ -35,13 +44,22 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Longitude)
+                @Html.DisplayFor(modelItem => item.Category)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Latitude)
+                @Html.DisplayFor(modelItem => item.Xmin)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Zoom)
+                @Html.DisplayFor(modelItem => item.Ymin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Xmax)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ymax)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imported)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.GazetteerId">Edit</a> |

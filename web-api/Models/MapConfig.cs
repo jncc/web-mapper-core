@@ -130,8 +130,21 @@ namespace MapConfig.Models
         [Key]
         public long GazetteerId { get; set; }   //unique Gazetteer ID
         public string Name { get; set; }        //PlaceName
-        public double Longitude { get; set; }   //Longitude (x)
-        public double Latitude { get; set; }    //Latitude (y)
-        public int Zoom { get; set; }           //Map zoom for feature
+        public string Category { get; set; }    //Gazetteer Category
+        [JsonIgnore]
+        public double Xmin { get; set; }        //Extent X Min
+        [JsonIgnore]
+        public double Ymin { get; set; }        //Extent Y Min
+        [JsonIgnore]
+        public double Xmax { get; set; }        //Extent X Max
+        [JsonIgnore]
+        public double Ymax { get; set; }        //Extent Y Max
+        
+        [NotMapped]
+        public double[] Extent { get; set; } = new double[4]; //an array of coordinates for the extent
+
+        [JsonIgnore]
+        public Boolean Imported { get; set; }   //was this data imported from the spreadsheet?
+
     }
 }
