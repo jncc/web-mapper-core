@@ -103,6 +103,12 @@ namespace MapConfig.Controllers
                     layer.Opacity = layer.LayerOpacity;
                     layer.Zoom = layer.LayerZoom;
 
+                    List<Filter> filters = new List<Filter>();
+                    foreach(Filter filter in layer.Filters) {
+                        filter.Type=filter.Type.ToLower();
+                        filters.Add(filter);
+                    }
+                    layer.Filters = filters;
                     layers.Add(layer);                    
                 }
                 layerGroup.Layers = layers;

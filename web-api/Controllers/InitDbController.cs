@@ -312,16 +312,17 @@ namespace MapConfig.Controllers
                 MetadataUrl = "",
                 Type = "Lookup", 
                 Attribute = "habitat", 
-                LookupCategory = "Habitat"
+                LookupCategory = "Habitat",
+                IsComplex = true
             };
             var f6 = new Filter { 
                 LayerId = l3.LayerId, 
                 Name = "Species (Test)", 
                 Description = "<p>Filter by Species Classifications</p>",
                 MetadataUrl = "",
-                Type = "Lookup", 
+                Type = "Text", 
                 Attribute = "species", 
-                LookupCategory = "Species"
+                IsComplex = true
             };
 
             var f7 = new Filter { 

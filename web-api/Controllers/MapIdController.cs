@@ -88,6 +88,7 @@ namespace MapConfig.Controllers
             }
 
             //convert any <Layer>LayerCentre values into a JSON 'center' array attribute for the Layer, and also re-map other fields
+            
             List<LayerGroup> layerGroups = new List<LayerGroup>();
             foreach (LayerGroup layerGroup in map.LayerGroups) {
                 List<Layer> layers = new List<Layer>();
@@ -101,6 +102,12 @@ namespace MapConfig.Controllers
                     layer.Opacity = layer.LayerOpacity;
                     layer.Zoom = layer.LayerZoom;
 
+                    List<Filter> filters = new List<Filter>();
+                    foreach(Filter filter in layer.Filters) {
+                        filter.Type=filter.Type.ToLower();
+                        filters.Add(filter);
+                    }
+                    layer.Filters = filters;
                     layers.Add(layer);                    
                 }
                 layerGroup.Layers = layers;
