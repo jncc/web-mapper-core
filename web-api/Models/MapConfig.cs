@@ -13,9 +13,11 @@ namespace MapConfig.Models
         public string Name { get; set; }            //Map name
         public string Description { get; set; }     //Map description (may contain HTML)
         [JsonIgnore]
-        public string MapCentre { get; set; }       //Initial Map Centre in EPSG:4326, e.g. [-3.5,52.25]
+        public double MapCentreLon { get; set; }    //Initial Map Centre Longitude in EPSG:4326 (X)
         [JsonIgnore]
-        public int MapZoom { get; set; }            //Initial Zoom Level 1-22
+        public double MapCentreLat { get; set; }    //Initial Map Centre Latitude in EPSG:4326 (Y)
+        [JsonIgnore]
+        public int MapZoom { get; set; }            //Initial Map Zoom Level 1-22
         [JsonIgnore]
         public string BaseLayerList { get; set; }   //Comma separated list of (either BaseLayerIds or Names)
         [JsonIgnore]
@@ -70,7 +72,6 @@ namespace MapConfig.Models
         public string Type { get; set; }          //Layer Source type e.g. WMS WMTS Tile etc.
         public string Url { get; set; }           //Base Url not including filter params
         public string LayerName { get; set; }     //WMS or WMTS layer name
-        public string StyleName { get; set; }     //WMS or WMTS style name
         public string LegendLayerName { get; set; } //The name of a single layer that provides the map key       
         [JsonIgnore]
         public long LayerOrder { get; set; }           //Initial Order within the Layer Group (or SubLayerGroup)
@@ -80,7 +81,9 @@ namespace MapConfig.Models
         [Range(0.0f,1.0f)]
         public float LayerOpacity { get; set; }        //Initial Opacity
         [JsonIgnore]
-        public string LayerCentre { get; set; }   //Layer specific Centre in EPSG:4326, e.g. [-3.5,52.25] - overrides Map centre
+        public double LayerCentreLon { get; set; }    //Layer specific Centre Longitude in EPSG:4326 (X) - overrides Map centre
+        [JsonIgnore]
+        public double LayerCentreLat { get; set; }    //Layer specific Centre Latitude in EPSG:4326 (Y) - overrides Map centre
         [JsonIgnore]
         public int LayerZoom { get; set; }        //Layer specific Zoom Level 1-22 - overrides Map zoom
         

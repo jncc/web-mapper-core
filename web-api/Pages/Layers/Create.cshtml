@@ -54,11 +54,6 @@
                 <span asp-validation-for="Layer.LayerName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Layer.StyleName" class="control-label"></label>
-                <input asp-for="Layer.StyleName" class="form-control" />
-                <span asp-validation-for="Layer.StyleName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Layer.LegendLayerName" class="control-label"></label>
                 <input asp-for="Layer.LegendLayerName" class="form-control" />
                 <span asp-validation-for="Layer.LegendLayerName" class="text-danger"></span>
@@ -79,9 +74,14 @@
                 <span asp-validation-for="Layer.LayerOpacity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Layer.LayerCentre" class="control-label"></label>
-                <input asp-for="Layer.LayerCentre" class="form-control" />
-                <span asp-validation-for="Layer.LayerCentre" class="text-danger"></span>
+                <label asp-for="Layer.LayerCentreLon" class="control-label"></label>
+                <input asp-for="Layer.LayerCentreLon" class="form-control" />
+                <span asp-validation-for="Layer.LayerCentreLon" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Layer.LayerCentreLat" class="control-label"></label>
+                <input asp-for="Layer.LayerCentreLat" class="form-control" />
+                <span asp-validation-for="Layer.LayerCentreLat" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Layer.LayerZoom" class="control-label"></label>

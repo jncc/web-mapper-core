@@ -20,7 +20,10 @@
                 @Html.DisplayNameFor(model => model.MapInstance[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MapInstance[0].MapCentre)
+                @Html.DisplayNameFor(model => model.MapInstance[0].MapCentreLon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MapInstance[0].MapCentreLat)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MapInstance[0].MapZoom)
@@ -44,7 +47,10 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MapCentre)
+                @Html.DisplayFor(modelItem => item.MapCentreLon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MapCentreLat)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MapZoom)
