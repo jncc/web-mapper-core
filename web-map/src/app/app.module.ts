@@ -27,6 +27,8 @@ import { FilterControlsComponent } from './filter-controls/filter-controls.compo
 import { FilterControlComponent } from './filter-controls/filter-control/filter-control.component';
 import { SafeResourceUrlPipe } from './safe-resource-url.pipe';
 import { SafeCssPipe } from './safe-css.pipe';
+import { TooltipComponent } from './tooltip/tooltip.component';
+import { TooltipDirective } from './tooltip/tooltip.directive';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -51,7 +53,9 @@ export function initializeApp(appConfig: AppConfigService) {
     FilterControlsComponent,
     FilterControlComponent,
     SafeResourceUrlPipe,
-    SafeCssPipe
+    SafeCssPipe,
+    TooltipComponent,
+    TooltipDirective
   ],
   imports: [
     BrowserModule,
@@ -64,6 +68,7 @@ export function initializeApp(appConfig: AppConfigService) {
     AppConfigService,
     { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [AppConfigService], multi: true }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [TooltipComponent]
 })
 export class AppModule { }
