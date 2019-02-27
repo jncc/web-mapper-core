@@ -176,6 +176,7 @@ export class MapService implements OnDestroy {
     });
   }
 
+  // TODO: confusion between attributes and lookup category here FIX
   filterLayer(layerId: number, filter: any) {
     const layerConfig = this.getLayerConfig(layerId);
     const source = layerConfig.layer.getSource();
