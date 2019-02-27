@@ -1,18 +1,31 @@
 
-.material-icons.small {
-    font-size: 1rem;
+.material-icons.drag {
     cursor: pointer;
-    color: midnightblue;
+}
+
+.active-layer {
+    background-color: white;
 }
 
 .active-layer-header {
     display: flex;
-    border-bottom: 1px solid lightgrey;
-    margin: 0 -0.5rem;
-    padding: 0.5rem;
+    justify-content: space-between;
+
+}
+
+.active-layer-title {
+    display: flex;
+    align-items: center;
 }
 
 .active-layer {
+    border: 1px solid lightgrey;
+    border-radius: 2px; 
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    box-shadow: 0 0 10px -4px;
+}
+
+.active-layer-body {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
 }

@@ -1,0 +1,7 @@
+<app-filter-control *ngFor="let filter of layer.filters" [filterName]="filter.name" [filterAttribute]="filter.attribute"
+    [filterLookup]="filterLookup[filter.lookupCategory]">
+</app-filter-control>
+<div class="controls-container-footer">
+    <button (click)="onFilterApplied()">Apply</button>
+    <button (click)="onFilterCleared()">Clear</button>
+</div>

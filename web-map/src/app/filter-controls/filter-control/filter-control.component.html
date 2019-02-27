@@ -1,0 +1,14 @@
+<div>
+  {{ filterName }}
+</div>
+<div class="filter-lookup-values">
+  <ul>
+    <li *ngFor="let lookup of filterLookup">
+      <label>
+      <input type="checkbox" [id]="lookup.lookupId" [value]="lookup.code" (change)="onCheckChanged(lookup.code, $event)">
+      {{ lookup.name }}
+    </label>
+    </li>
+  </ul>
+</div>
+

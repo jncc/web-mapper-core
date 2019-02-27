@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { IMapInstance } from './models/map-instance.model';
 import { Observable, forkJoin } from 'rxjs';
+import { ILookup } from './models/lookup.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,11 @@ export class ApiService {
 
   getCapabilities(url: string): Observable<any> {
     return this.http.get(url, {responseType: 'text'});
+  }
+
+  getLookup(category: string): Observable<ILookup[]> {
+    const lookupUrl = this.apiUrl + '/lookup/' + category;
+    return this.http.get<ILookup[]>(lookupUrl);
   }
 
 }
