@@ -38,9 +38,6 @@
                 @Html.DisplayNameFor(model => model.Layer[0].LayerName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Layer[0].StyleName)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Layer[0].LegendLayerName)
             </th>
             <th>
@@ -53,7 +50,10 @@
                 @Html.DisplayNameFor(model => model.Layer[0].LayerOpacity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Layer[0].LayerCentre)
+                @Html.DisplayNameFor(model => model.Layer[0].LayerCentreLon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Layer[0].LayerCentreLat)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Layer[0].LayerZoom)
@@ -92,9 +92,6 @@
                 @Html.DisplayFor(modelItem => item.LayerName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StyleName)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.LegendLayerName)
             </td>
             <td>
@@ -107,7 +104,10 @@
                 @Html.DisplayFor(modelItem => item.LayerOpacity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LayerCentre)
+                @Html.DisplayFor(modelItem => item.LayerCentreLon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LayerCentreLat)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LayerZoom)

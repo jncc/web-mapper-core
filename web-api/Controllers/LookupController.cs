@@ -37,7 +37,7 @@ namespace MapConfig.Controllers
         public async Task<ActionResult<Lookup>> GetLookup(string lookupCategory)
         {
             var lookups = await _context.Lookup
-                .Where(l => l.LookupCategory == lookupCategory)
+                .Where(l => l.LookupCategory.ToUpper() == lookupCategory.ToUpper())
                 .ToListAsync();
 
             return Json( lookups );

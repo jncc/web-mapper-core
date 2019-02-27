@@ -2,15 +2,17 @@
 using MapConfig.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace jnccwebapi.Migrations
 {
     [DbContext(typeof(MapConfigContext))]
-    partial class MapConfigContextModelSnapshot : ModelSnapshot
+    [Migration("20190227133753_GazetteerSchemaChange1")]
+    partial class GazetteerSchemaChange1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,8 +76,6 @@ namespace jnccwebapi.Migrations
                     b.Property<long>("GazetteerId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Category");
-
                     b.Property<bool>("Imported");
 
                     b.Property<string>("Name");
@@ -102,9 +102,7 @@ namespace jnccwebapi.Migrations
 
                     b.Property<string>("DownloadURL");
 
-                    b.Property<double>("LayerCentreLat");
-
-                    b.Property<double>("LayerCentreLon");
+                    b.Property<string>("LayerCentre");
 
                     b.Property<long>("LayerGroupId");
 
@@ -125,6 +123,8 @@ namespace jnccwebapi.Migrations
                     b.Property<string>("MetadataUrl");
 
                     b.Property<string>("Name");
+
+                    b.Property<string>("StyleName");
 
                     b.Property<string>("SubLayerGroup");
 
@@ -190,9 +190,7 @@ namespace jnccwebapi.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<double>("MapCentreLat");
-
-                    b.Property<double>("MapCentreLon");
+                    b.Property<string>("MapCentre");
 
                     b.Property<int>("MapZoom");
 

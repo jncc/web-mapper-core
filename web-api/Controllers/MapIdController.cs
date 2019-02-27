@@ -43,21 +43,9 @@ namespace MapConfig.Controllers
 
             if (map == null) return NotFound();
 
-            //convert the database string representation of 'MapCentre' to a JSON 'center' array in MapInstance
-            if (map.MapCentre != null && map.MapCentre.Length > 0 )
-            {
-                var center = map.MapCentre.Replace("[","").Replace("]","").Split(",");
-                var i = 0;
-                foreach (string coordinate in center.Take(2)) {
-                    try {
-                        map.Center[i] = Convert.ToDouble(coordinate.Trim());
-                        i++;
-                    } catch {
-                       map.Center = new double[2];
-                       break;
-                    }
-                }
-            }
+            //convert the database MapCentreLon and MapCentreLat to a JSON 'center' array in MapInstance
+            map.Center[0] = map.MapCentreLon;
+            map.Center[1] = map.MapCentreLat;
 
             //zoom needs no conversion
             map.Zoom = map.MapZoom;
@@ -100,33 +88,26 @@ namespace MapConfig.Controllers
             }
 
             //convert any <Layer>LayerCentre values into a JSON 'center' array attribute for the Layer, and also re-map other fields
+            
             List<LayerGroup> layerGroups = new List<LayerGroup>();
             foreach (LayerGroup layerGroup in map.LayerGroups) {
                 List<Layer> layers = new List<Layer>();
                 foreach(Layer layer in layerGroup.Layers) {
-                    //tconvert the database string representation of 'LayerCentre' to a JSON 'center' array in Layer
-                    if (layer.LayerCentre != null && layer.LayerCentre.Length > 0 )
-                    {
-                        var center = layer.LayerCentre.Replace("[","").Replace("]","").Split(",");
-                        var i = 0;
-                        foreach (string coordinate in center.Take(2)) {
-                            try {
-                                layer.Center[i] = Convert.ToDouble(coordinate.Trim());
-                                i++;
-                            } catch {
-                                //can't find a parseable layer centre in either coordinate so set to the map centre
-                                layer.Center = map.Center;
-                                break;
-                            }
-                        }
-                    }
-
+                    //becomes an array
+                    layer.Center[0] = layer.LayerCentreLon;
+                    layer.Center[1] = layer.LayerCentreLat;
                     //these need no conversion
                     layer.Order = layer.LayerOrder;
                     layer.Visible = layer.LayerVisible;
                     layer.Opacity = layer.LayerOpacity;
                     layer.Zoom = layer.LayerZoom;
 
+                    List<Filter> filters = new List<Filter>();
+                    foreach(Filter filter in layer.Filters) {
+                        filter.Type=filter.Type.ToLower();
+                        filters.Add(filter);
+                    }
+                    layer.Filters = filters;
                     layers.Add(layer);                    
                 }
                 layerGroup.Layers = layers;

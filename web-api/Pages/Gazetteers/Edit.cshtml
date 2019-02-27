@@ -20,19 +20,34 @@
                 <span asp-validation-for="Gazetteer.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Gazetteer.Longitude" class="control-label"></label>
-                <input asp-for="Gazetteer.Longitude" class="form-control" />
-                <span asp-validation-for="Gazetteer.Longitude" class="text-danger"></span>
+                <label asp-for="Gazetteer.Category" class="control-label"></label>
+                <input asp-for="Gazetteer.Category" class="form-control" />
+                <span asp-validation-for="Gazetteer.Category" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Gazetteer.Latitude" class="control-label"></label>
-                <input asp-for="Gazetteer.Latitude" class="form-control" />
-                <span asp-validation-for="Gazetteer.Latitude" class="text-danger"></span>
+                <label asp-for="Gazetteer.Xmin" class="control-label"></label>
+                <input asp-for="Gazetteer.Xmin" class="form-control" />
+                <span asp-validation-for="Gazetteer.Xmin" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Gazetteer.Zoom" class="control-label"></label>
-                <input asp-for="Gazetteer.Zoom" class="form-control" />
-                <span asp-validation-for="Gazetteer.Zoom" class="text-danger"></span>
+                <label asp-for="Gazetteer.Ymin" class="control-label"></label>
+                <input asp-for="Gazetteer.Ymin" class="form-control" />
+                <span asp-validation-for="Gazetteer.Ymin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gazetteer.Xmax" class="control-label"></label>
+                <input asp-for="Gazetteer.Xmax" class="form-control" />
+                <span asp-validation-for="Gazetteer.Xmax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gazetteer.Ymax" class="control-label"></label>
+                <input asp-for="Gazetteer.Ymax" class="form-control" />
+                <span asp-validation-for="Gazetteer.Ymax" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Gazetteer.Imported" /> @Html.DisplayNameFor(model => model.Gazetteer.Imported)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

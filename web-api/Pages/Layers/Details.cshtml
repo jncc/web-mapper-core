@@ -60,12 +60,6 @@
             @Html.DisplayFor(model => model.Layer.LayerName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Layer.StyleName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Layer.StyleName)
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.LegendLayerName)
         </dt>
         <dd class="col-sm-10">
@@ -90,10 +84,16 @@
             @Html.DisplayFor(model => model.Layer.LayerOpacity)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Layer.LayerCentre)
+            @Html.DisplayNameFor(model => model.Layer.LayerCentreLon)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Layer.LayerCentre)
+            @Html.DisplayFor(model => model.Layer.LayerCentreLon)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Layer.LayerCentreLat)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Layer.LayerCentreLat)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Layer.LayerZoom)

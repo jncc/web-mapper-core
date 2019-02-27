@@ -29,7 +29,7 @@ namespace MapConfig.Controllers
 
         // GET: api/InitDb
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MapInstance>>> GetMapInstances()
+        public async Task<ActionResult<IEnumerable<MapInstance>>> InitDb()
         {
             var bl1 = new BaseLayer { 
                 Name = "OpenStreetMap",
@@ -55,7 +55,8 @@ namespace MapConfig.Controllers
             var map1 = new MapInstance { 
                 Name = "EMODnet",
                 Description = "<p>Configurable <strong>EMODnet</strong> description.</p><p><a href=\"http://www.emodnet.eu/\" target=\"_blank\">EMODnet</a></p>",
-                MapCentre = "[-3.507729, 52.304535]",
+                MapCentreLon = -3.507729,
+                MapCentreLat = 52.304535,
                 MapZoom = 6,
                 BaseLayerList = "OpenStreetMap,OpenTopoMap",
                 VisibleBaseLayer = "OpenStreetMap"
@@ -63,7 +64,8 @@ namespace MapConfig.Controllers
             var map2 = new MapInstance { 
                 Name = "OSPAR", 
                 Description = "<p>Configurable <strong>OSPAR</strong> description.</p><p><a href=\"https://www.ospar.org/\" target=\"_blank\">OSPAR</a></p>",
-                MapCentre = "[-3.507729, 52.304535]",
+                MapCentreLon = -3.507729,
+                MapCentreLat = 52.304535,
                 MapZoom = 6,
                 BaseLayerList = "OpenStreetMap,OpenTopoMap",
                 VisibleBaseLayer = "OpenTopoMap"               
@@ -128,10 +130,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",
                 Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
-                LayerOrder = 1,
+                LayerOrder = 10,
                 LayerVisible = true,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[-3.507729, 52.304535]",
+                LayerCentreLon = -3.507729,
+                LayerCentreLat = 52.304535,
                 LayerZoom = 6
             };
             var l2 = new Layer { 
@@ -147,7 +150,8 @@ namespace MapConfig.Controllers
                 LayerOrder = 11,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[-3.507729, 52.304535]",
+                LayerCentreLon = -3.507729,
+                LayerCentreLat = 52.304535,
                 LayerZoom = 6                
             };
 
@@ -165,7 +169,8 @@ namespace MapConfig.Controllers
                 LayerOrder = 12,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[-3.507729, 52.304535]",
+                LayerCentreLon = -3.507729,
+                LayerCentreLat = 52.304535,
                 LayerZoom = 6
             };
             var l4 = new Layer { 
@@ -179,10 +184,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
                 Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
-                LayerOrder = 2,
+                LayerOrder = 13,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[-3.507729, 52.304535]",
+                LayerCentreLon = -3.507729,
+                LayerCentreLat = 52.304535,
                 LayerZoom = 6
             };
 
@@ -200,7 +206,8 @@ namespace MapConfig.Controllers
                 LayerOrder = 21,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[-3.507729, 52.304535]",
+                LayerCentreLon = -3.507729,
+                LayerCentreLat = 52.304535,
                 LayerZoom = 6
             };
             //
@@ -218,7 +225,8 @@ namespace MapConfig.Controllers
                 LayerOrder = 21,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[36, 43]",
+                LayerCentreLon = 36,
+                LayerCentreLat = 43,
                 LayerZoom = 7
             };            
             var l7 = new Layer { 
@@ -232,10 +240,11 @@ namespace MapConfig.Controllers
                 DownloadURL = "#",               
                 Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
-                LayerOrder = 21,
+                LayerOrder = 22,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
-                LayerCentre = "[36, 43]",
+                LayerCentreLon = 36,
+                LayerCentreLat = 43,
                 LayerZoom = 7
             }; 
                
@@ -303,16 +312,17 @@ namespace MapConfig.Controllers
                 MetadataUrl = "",
                 Type = "Lookup", 
                 Attribute = "habitat", 
-                LookupCategory = "Habitat"
+                LookupCategory = "Habitat",
+                IsComplex = true
             };
             var f6 = new Filter { 
                 LayerId = l3.LayerId, 
                 Name = "Species (Test)", 
                 Description = "<p>Filter by Species Classifications</p>",
                 MetadataUrl = "",
-                Type = "Lookup", 
+                Type = "Text", 
                 Attribute = "species", 
-                LookupCategory = "Species"
+                IsComplex = true
             };
 
             var f7 = new Filter { 
@@ -397,10 +407,10 @@ namespace MapConfig.Controllers
             //Gazetteer
             var gazetteer = _context.Gazetteer.Where(g => g.Name.EndsWith("(Test)"));
             _context.Gazetteer.RemoveRange(gazetteer);
+            var ge1= new Gazetteer { Name = "Rhayader (Test)", Category = "Test", Xmin=-3.9021790028, Ymin=52.1505680545, Xmax=-3.1489288807, Ymax=52.4495366603, Imported=false };
+            var ge2= new Gazetteer { Name = "Brecon (Test)", Category = "Test", Xmin=-3.6007416248, Ymin=51.8500024602, Xmax=-3.1523621082, Ymax=51.9999034172, Imported=false };
+            var ge3= new Gazetteer { Name = "Newtown (Test)", Category = "Test", Xmin=-3.6476644545, Ymin=52.3323769212, Xmax=-2.9740652114, Ymax=52.6372051526, Imported=false };
 
-            var ge1= new Gazetteer { Name = "Rhayader (Test)", Longitude = -3.507, Latitude = 52.3, Zoom = 9 };
-            var ge2= new Gazetteer { Name = "Brecon (Test)", Longitude = -3.387, Latitude = 51.948, Zoom = 8 };
-            var ge3= new Gazetteer { Name = "Newtown (Test)", Longitude = -3.334, Latitude = 52.512, Zoom = 10 };
             _context.Gazetteer.Add(ge1);
             _context.SaveChanges();
             _context.Gazetteer.Add(ge2);
@@ -408,8 +418,7 @@ namespace MapConfig.Controllers
             _context.Gazetteer.Add(ge3);
             _context.SaveChanges();
 
-
-            return await _context.MapInstance.ToListAsync();
+            return Json ( new { result = "success" });
         }
 
         // recursively yield all children of json
