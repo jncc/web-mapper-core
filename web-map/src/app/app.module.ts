@@ -29,6 +29,7 @@ import { SafeResourceUrlPipe } from './safe-resource-url.pipe';
 import { SafeCssPipe } from './safe-css.pipe';
 import { TooltipComponent } from './tooltip/tooltip.component';
 import { TooltipDirective } from './tooltip/tooltip.directive';
+import { GazetteerComponent } from './gazetteer/gazetteer.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -55,7 +56,8 @@ export function initializeApp(appConfig: AppConfigService) {
     SafeResourceUrlPipe,
     SafeCssPipe,
     TooltipComponent,
-    TooltipDirective
+    TooltipDirective,
+    GazetteerComponent
   ],
   imports: [
     BrowserModule,
