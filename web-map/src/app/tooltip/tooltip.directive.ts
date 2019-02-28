@@ -1,4 +1,4 @@
-import { ComponentRef, Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { ComponentRef, Directive, ElementRef, HostListener, Input, OnInit, Host } from '@angular/core';
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 
@@ -12,7 +12,8 @@ export class TooltipDirective implements OnInit {
 
   @Input('tooltip') text = '';
   private overlayRef: OverlayRef;
-  delay = 700;
+  showDelay = 700;
+  hideDelay = 56000;
 
   /** The timeout ID of any current timer set to show the tooltip */
   private showTimeoutId: number | null;
@@ -42,7 +43,10 @@ export class TooltipDirective implements OnInit {
       const tooltipRef: ComponentRef<TooltipComponent> = this.overlayRef.attach(new ComponentPortal(TooltipComponent));
       tooltipRef.instance.text = this.text;
       this.showTimeoutId = null;
-    }, this.delay);
+      window.setTimeout(() => {
+        this.hide();
+      }, this.hideDelay);
+    }, this.showDelay);
   }
 
   @HostListener('mouseout')
