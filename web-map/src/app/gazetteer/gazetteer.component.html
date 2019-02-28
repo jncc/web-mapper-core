@@ -1,3 +1,9 @@
-<p>
-  gazetteer works!
-</p>
+<div id="gazetteer">
+  <ng-select [items]="results$ | async"
+  bindLabel="name"
+  placeholder="Select"
+  [(ngModel)]="selectedResult"
+  (change)="onChange()"
+  (search)="onSearch($event)">
+</ng-select>
+</div>

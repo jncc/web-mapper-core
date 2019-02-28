@@ -24,9 +24,10 @@ export class MapService implements OnDestroy {
 
   map: any;
 
-  zoomInExtent = new Subject<boolean>();
-  zoomOutExtent = new Subject<boolean>();
-  zoom = new Subject<{ center: number[], zoom: number }>();
+  dragZoomInSubject = new Subject<boolean>();
+  dragZoomOutSubject = new Subject<boolean>();
+  zoomSubject = new Subject<{ center: number[], zoom: number }>();
+  zoomToExtentSubject = new Subject<number[]>();
 
   showLegendSubject = new Subject<{ name: string, legendUrl: string }>();
 
@@ -243,20 +244,24 @@ export class MapService implements OnDestroy {
   zoomToMapExtent() {
     const center = this.dataStore.mapConfig.mapInstance.center;
     const zoom = this.dataStore.mapConfig.mapInstance.zoom;
-    this.zoom.next({ center: center, zoom: zoom });
+    this.zoomSubject.next({ center: center, zoom: zoom });
   }
 
   zoomToLayerExtent(layerId: number) {
     const layerConfig = this.getLayerConfig(layerId);
-    this.zoom.next({ center: layerConfig.center, zoom: layerConfig.zoom });
+    this.zoomSubject.next({ center: layerConfig.center, zoom: layerConfig.zoom });
   }
 
-  zoomInToExtent(activated: boolean) {
-    this.zoomInExtent.next(activated);
+  zoomToExtent(extent: number[]) {
+    this.zoomToExtentSubject.next(extent);
   }
 
-  zoomOutToExtent(activated: boolean) {
-    this.zoomOutExtent.next(activated);
+  dragZoomIn(activated: boolean) {
+    this.dragZoomInSubject.next(activated);
+  }
+
+  dragZoomOut(activated: boolean) {
+    this.dragZoomOutSubject.next(activated);
   }
 
   showFeatureInfo(urls: string[]) {

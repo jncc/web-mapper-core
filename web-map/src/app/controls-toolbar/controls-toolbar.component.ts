@@ -41,8 +41,8 @@ export class ControlsToolbarComponent implements OnInit {
   }
 
   private sendControlStateToMapService() {
-    this.mapService.zoomInToExtent(this.zoomInToExtentActivated);
-    this.mapService.zoomOutToExtent(this.zoomOutToExtentActivated);
+    this.mapService.dragZoomIn(this.zoomInToExtentActivated);
+    this.mapService.dragZoomOut(this.zoomOutToExtentActivated);
   }
 
 }

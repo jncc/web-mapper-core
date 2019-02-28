@@ -2,10 +2,13 @@ import { APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { Ng5SliderModule } from 'ng5-slider';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
@@ -62,9 +65,11 @@ export function initializeApp(appConfig: AppConfigService) {
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
     DragDropModule,
     OverlayModule,
-    Ng5SliderModule
+    Ng5SliderModule,
+    NgSelectModule
   ],
   providers: [
     AppConfigService,

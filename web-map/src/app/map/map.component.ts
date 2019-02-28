@@ -37,9 +37,10 @@ import { ILayerConfig } from '../models/layer-config.model';
 export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
-  private zoomInToExtentSubscription: Subscription;
-  private zoomOutToExtentSubscription: Subscription;
+  private dragZoomInSubscription: Subscription;
+  private dragZoomOutSubscription: Subscription;
   private zoomSubscription: Subscription;
+  private zoomToExtentSubscription: Subscription;
   private layersSubscription: Subscription;
 
   // Map defaults
@@ -132,7 +133,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     this.map.addInteraction(dragZoomIn);
     dragZoomIn.setActive(false);
-    this.zoomInToExtentSubscription = this.mapService.zoomInExtent.subscribe((active) => {
+    this.dragZoomInSubscription = this.mapService.dragZoomInSubject.subscribe((active) => {
       dragZoomIn.setActive(active);
     });
 
@@ -142,7 +143,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     this.map.addInteraction(dragZoomOut);
     dragZoomOut.setActive(false);
-    this.zoomOutToExtentSubscription = this.mapService.zoomOutExtent.subscribe((active) => {
+    this.dragZoomOutSubscription = this.mapService.dragZoomOutSubject.subscribe((active) => {
       dragZoomOut.setActive(active);
     });
 
@@ -150,13 +151,18 @@ export class MapComponent implements OnInit, OnDestroy {
     //   document.body.style.cursor = 'grabbing';
     // });
 
-    this.zoomSubscription = this.mapService.zoom.subscribe(data => {
+    this.zoomSubscription = this.mapService.zoomSubject.subscribe(data => {
       if (data.center && data.center.length === 2 && data.zoom) {
         const center = proj.fromLonLat([data.center[0], data.center[1]]);
         view.animate({center: center, zoom: data.zoom});
       } else {
         this.zoomToMapExtent();
       }
+    });
+
+    this.zoomToExtentSubscription = this.mapService.zoomToExtentSubject.subscribe(data => {
+      const extent = proj.transformExtent([data[0], data[1], data[2], data[3]], 'EPSG:4326', 'EPSG:3857');
+      view.fit(extent, {duration: 1000});
     });
   }
 
@@ -166,11 +172,11 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.zoomInToExtentSubscription) {
-      this.zoomInToExtentSubscription.unsubscribe();
+    if (this.dragZoomInSubscription) {
+      this.dragZoomInSubscription.unsubscribe();
     }
-    if (this.zoomOutToExtentSubscription) {
-      this.zoomOutToExtentSubscription.unsubscribe();
+    if (this.dragZoomOutSubscription) {
+      this.dragZoomOutSubscription.unsubscribe();
     }
     if (this.zoomSubscription) {
       this.zoomSubscription.unsubscribe();
