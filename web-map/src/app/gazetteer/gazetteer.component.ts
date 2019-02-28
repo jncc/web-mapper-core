@@ -18,10 +18,7 @@ export class GazetteerComponent implements OnInit {
   constructor(private apiService: ApiService, private mapService: MapService) { }
 
   ngOnInit() {
-    // this.results$ = this.apiService.getGazetteerResults('po');
-    // this.apiService.getGazetteerResults('po').subscribe((results) => {
-    //   console.log(results);
-    // });
+
   }
 
   onChange() {

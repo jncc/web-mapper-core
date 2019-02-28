@@ -5,6 +5,11 @@
 
 .active-layer {
     background-color: white;
+    display: flex;
+    border: 1px solid lightgrey;
+    border-radius: 2px; 
+    box-shadow: 0 0 10px -4px;
+    justify-content: space-between;
 }
 
 .active-layer-header {
@@ -16,16 +21,22 @@
 .active-layer-title {
     display: flex;
     align-items: center;
+    flex-direction: column;
 }
 
-.active-layer {
-    border: 1px solid lightgrey;
-    border-radius: 2px; 
-    padding: 0.5rem 0.5rem 0.5rem 0;
-    box-shadow: 0 0 10px -4px;
+.active-layer-name {
+    margin-bottom: 0.5rem;
+}
+
+.active-layer-close {
+    border-left: 1px solid lightgray;
 }
 
 .active-layer-body {
     display: flex;
     justify-content: flex-end;
+}
+
+.drag-handle {
+    border-right: 1px solid lightgray;
 }
