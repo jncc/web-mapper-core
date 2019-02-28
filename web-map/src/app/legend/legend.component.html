@@ -1,13 +1,18 @@
 <div id="legendPane" [ngClass]="{ 'show': show }" class="bg-secondary">
     <div *ngIf="legend">
-        <div class="legend-title bg-dark">
-            <h2>
+        <div class="panel-title bg-dark">
+            <div>
                 <i class="btn fa fa-lg fa-close" (click)="onHideLegend()"></i>
-                LEGEND
-            </h2>
+            </div>
+            <div>
+                <h2>
+                    LEGEND
+                </h2>
+            </div>
+
         </div>
         <div class="legend-title bg-primary">
-                <h2>{{ legend.name }}</h2>
+            <h2>{{ legend.name }}</h2>
         </div>
         <div class="legend-body">
             <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>

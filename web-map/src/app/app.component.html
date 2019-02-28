@@ -2,20 +2,30 @@
     <app-map></app-map>
     <div id="sideNav" [ngClass]="{ 'open': showLayers }">
         <div id="layersPanel" class="bg-secondary">
+            <div class="panel-title bg-dark">
+                <div>
+                    <h2>
+                        ALL LAYERS
+                    </h2>
+                </div>
+                <div>
+                    <i class="btn fa fa-lg fa-close" (click)="onToggleShowLayers()"></i>
+                </div>
+
+            </div>
             <app-layers></app-layers>
         </div>
         <div id="controlsPanel">
             <div class="control-item">
                 <div id="toggleLayers" (click)="onToggleShowLayers()">
-                    <i *ngIf="showLayers" class="btn fa fa-fw fa-3x fa-caret-left"></i>
-                    <i *ngIf="!showLayers" class="btn fa fa-fw fa-3x fa-caret-right"></i>
-                    <!-- <ng-container *ngIf="showLayers">HIDE </ng-container>
-                    <ng-container *ngIf="!showLayers">SHOW </ng-container>
-                    ALL LAYERS -->
+                    <i *ngIf="!showLayers" class="btn fa fa-fw fa-3x fa-bars"></i>
                 </div>
             </div>
             <div class="control-item">
                 <app-active-layers></app-active-layers>
+            </div>
+            <div class="control-item">
+                <app-gazetteer></app-gazetteer>
             </div>
             <div id="overviewMap"></div>
         </div>
@@ -26,5 +36,4 @@
     <app-controls-toolbar id="controlsToolbar"></app-controls-toolbar>
     <div id="mousePosition"></div>
     <app-legend></app-legend>
-    <app-gazetteer></app-gazetteer>
 </div>
