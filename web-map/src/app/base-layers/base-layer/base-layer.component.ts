@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import Tile from 'ol/layer/tile';
 
@@ -10,10 +10,15 @@ import Tile from 'ol/layer/tile';
 export class BaseLayerComponent implements OnInit {
 
   @Input() baseLayer: Tile;
+  @Output() setBaseLayer = new EventEmitter<void>();
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onSetBaseLayer() {
+    this.setBaseLayer.emit();
   }
 
 }

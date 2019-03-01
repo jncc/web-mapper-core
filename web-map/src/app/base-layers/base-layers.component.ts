@@ -19,4 +19,7 @@ export class BaseLayersComponent implements OnInit {
     this.baseLayers$ = this.mapService.baseLayers;
   }
 
+  onSetBaseLayer(baseLayer: Tile) {
+    this.mapService.setBaseLayer(baseLayer);
+  }
 }

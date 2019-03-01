@@ -1,5 +1,5 @@
-<div #baseLayers>
+<div id="baseLayers">
   <div *ngFor="let baseLayer of baseLayers$ | async">
-    <app-base-layer [baseLayer]="baseLayer"></app-base-layer>
+    <app-base-layer [baseLayer]="baseLayer" (setBaseLayer)="onSetBaseLayer(baseLayer)"></app-base-layer>
   </div>
 </div>

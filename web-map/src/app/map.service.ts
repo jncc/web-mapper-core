@@ -321,8 +321,6 @@ export class MapService implements OnDestroy {
       '&LEGEND_OPTIONS=fontAntiAliasing:true;fontColor:0x5A5A5A' +
       '&LAYER=' + legendLayerName;
 
-    // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
-    // console.log(url);
     this.showLegendSubject.next({ name: layerConfig.name, legendUrl: url });
   }
 
@@ -332,5 +330,15 @@ export class MapService implements OnDestroy {
 
   private getLayerConfig(layerId: number): ILayerConfig {
     return this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
+  }
+
+  setBaseLayer(baseLayer: Tile) {
+    this.dataStore.baseLayers.forEach(layer => {
+      if (layer === baseLayer) {
+        layer.setVisible(true);
+      } else {
+        layer.setVisible(false);
+      }
+    });
   }
 }
