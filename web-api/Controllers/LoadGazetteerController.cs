@@ -53,8 +53,8 @@ namespace MapConfig.Controllers
                         Name = sheet.GetRow(row).GetCell(1).StringCellValue.Trim(),
                         Category = "OSPAR Regions",
                         Xmin = sheet.GetRow(row).GetCell(2).NumericCellValue,
-                        Ymin = sheet.GetRow(row).GetCell(3).NumericCellValue,
-                        Xmax = sheet.GetRow(row).GetCell(4).NumericCellValue,
+                        Ymin = sheet.GetRow(row).GetCell(4).NumericCellValue,
+                        Xmax = sheet.GetRow(row).GetCell(3).NumericCellValue,
                         Ymax = sheet.GetRow(row).GetCell(5).NumericCellValue,
                         Imported=true
                     };
@@ -69,8 +69,8 @@ namespace MapConfig.Controllers
                         Name = sheet.GetRow(row).GetCell(1).StringCellValue.Trim(),
                         Category = "ICES ECO Regions",
                         Xmin = sheet.GetRow(row).GetCell(2).NumericCellValue,
-                        Ymin = sheet.GetRow(row).GetCell(3).NumericCellValue,
-                        Xmax = sheet.GetRow(row).GetCell(4).NumericCellValue,
+                        Ymin = sheet.GetRow(row).GetCell(4).NumericCellValue,
+                        Xmax = sheet.GetRow(row).GetCell(3).NumericCellValue,
                         Ymax = sheet.GetRow(row).GetCell(5).NumericCellValue,
                         Imported=true
                     };
@@ -85,8 +85,8 @@ namespace MapConfig.Controllers
                         Name = sheet.GetRow(row).GetCell(1).StringCellValue.Trim(),
                         Category = "EEZ",
                         Xmin = sheet.GetRow(row).GetCell(5).NumericCellValue,
-                        Ymin = sheet.GetRow(row).GetCell(6).NumericCellValue,
-                        Xmax = sheet.GetRow(row).GetCell(7).NumericCellValue,
+                        Ymin = sheet.GetRow(row).GetCell(7).NumericCellValue,
+                        Xmax = sheet.GetRow(row).GetCell(6).NumericCellValue,
                         Ymax = sheet.GetRow(row).GetCell(8).NumericCellValue,
                         Imported=true
                     };
