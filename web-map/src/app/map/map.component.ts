@@ -24,10 +24,10 @@ import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
 import MapBrowserEvent from 'ol/mapbrowserevent';
 import MousePosition from 'ol/control/mouseposition';
+import Collection from 'ol/collection';
 
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
-
 
 @Component({
   selector: 'app-map',
@@ -42,6 +42,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private zoomSubscription: Subscription;
   private zoomToExtentSubscription: Subscription;
   private layersSubscription: Subscription;
+  private baseLayersSubscription: Subscription;
 
   // Map defaults
   defaultCenter = [-2, 55];
@@ -50,23 +51,32 @@ export class MapComponent implements OnInit, OnDestroy {
     source: new OSM()
   });
 
+  private baseLayerGroup: Group;
+  private layerGroup: Group;
+
   constructor(private mapService: MapService) {
   }
 
   ngOnInit() {
     this.setupMap();
     this.layersSubscription = this.mapService.visibleLayers.subscribe(
-      (layers) => this.updateLayers(layers)
+      layers => this.updateLayers(layers)
+    );
+    this.baseLayersSubscription = this.mapService.baseLayers.subscribe(
+      baseLayers => this.baseLayerGroup.setLayers(new Collection(baseLayers))
     );
   }
 
   private updateLayers(layersConfig: ILayerConfig[]): void {
-    this.map.setLayerGroup(new Group());
-    this.map.addLayer(this.defaultBaseLayer);
-    layersConfig.slice().reverse().forEach(layerConfig => this.map.addLayer(layerConfig.layer));
+    const layers = layersConfig.slice().reverse().map(layerConfig => layerConfig.layer);
+    this.layerGroup.setLayers(new Collection(layers));
   }
 
   private setupMap() {
+    this.baseLayerGroup = new Group();
+    this.baseLayerGroup.setLayers(new Collection([this.defaultBaseLayer]));
+    this.layerGroup = new Group();
+
     const view = new View({
       center: proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]),
       zoom: this.defaultZoom,
@@ -91,11 +101,11 @@ export class MapComponent implements OnInit, OnDestroy {
         new ScaleLine()
       ],
       layers: [
-        this.defaultBaseLayer
+        this.baseLayerGroup,
+        this.layerGroup
       ],
       view: view
     });
-    // this.map.getView().fit(this.mapExtent);
 
     this.map.addInteraction(new DragZoom());
 
@@ -109,10 +119,12 @@ export class MapComponent implements OnInit, OnDestroy {
         if (layer instanceof Tile) {
           const source = (<Tile>layer).getSource();
           if (source instanceof TileWMS) {
-            const url = source.getGetFeatureInfoUrl(event.coordinate, viewResolution, 'EPSG:3857',
-              { 'INFO_FORMAT': 'text/html' });
-            // {'INFO_FORMAT': 'text/plain'});
-            // {'INFO_FORMAT': 'application/json'});
+            const url = source.getGetFeatureInfoUrl(
+              event.coordinate,
+              viewResolution,
+              'EPSG:3857',
+              { 'INFO_FORMAT': 'text/html' }
+            );
             urls.push(url);
             // console.log(url);
           }
@@ -126,7 +138,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // });
 
 
-    // TODO: speak to SB about condition and EventsConditionType
+    // TODO: why can't ol.condition.always be used here as EventsConditionType?
     const dragZoomIn = new DragZoom({
       condition: () => true,
       out: false
@@ -183,6 +195,12 @@ export class MapComponent implements OnInit, OnDestroy {
     }
     if (this.layersSubscription) {
       this.layersSubscription.unsubscribe();
+    }
+    if (this.zoomToExtentSubscription) {
+      this.zoomToExtentSubscription.unsubscribe();
+    }
+    if (this.baseLayersSubscription) {
+      this.baseLayersSubscription.unsubscribe();
     }
   }
 }

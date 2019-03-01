@@ -6,8 +6,6 @@ import { ApiService } from './api.service';
 import { IMapConfig } from './models/map-config.model';
 
 // TODO: move to another service
-import TileWMS from 'ol/source/tilewms';
-import Tile from 'ol/layer/tile';
 import { ILayerConfig } from './models/layer-config.model';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
@@ -15,6 +13,8 @@ import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import WMSCapabilities from 'ol/format/wmscapabilities';
 import { IFilterConfig } from './models/filter-config.model';
 import { ILookup } from './models/lookup.model';
+import { LayerService } from './layer.service';
+import Tile from 'ol/layer/tile';
 
 
 @Injectable({
@@ -35,6 +35,7 @@ export class MapService implements OnDestroy {
     mapConfig: IMapConfig;
     layerLookup: ILayerConfig[];
     visibleLayers: ILayerConfig[];
+    baseLayers: Tile[];
     featureInfos: any[];
     filterLookups: { [lookupCategory: string]: ILookup[]; };
   };
@@ -60,7 +61,12 @@ export class MapService implements OnDestroy {
     return this._filterLookups.asObservable();
   }
 
-  constructor(private apiService: ApiService) {
+  private _baseLayers: BehaviorSubject<Tile[]>;
+  get baseLayers() {
+    return this._baseLayers.asObservable();
+  }
+
+  constructor(private apiService: ApiService, private layerService: LayerService) {
     this.dataStore = {
       mapConfig: {
         mapInstances: [],
@@ -74,6 +80,7 @@ export class MapService implements OnDestroy {
       },
       layerLookup: [],
       visibleLayers: [],
+      baseLayers: [],
       featureInfos: [],
       filterLookups: {}
     };
@@ -81,6 +88,7 @@ export class MapService implements OnDestroy {
     this._visibleLayers = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.visibleLayers);
     this._featureInfos = <BehaviorSubject<any[]>>new BehaviorSubject(this.dataStore.featureInfos);
     this._filterLookups = new BehaviorSubject({});
+    this._baseLayers = new BehaviorSubject(this.dataStore.baseLayers);
     this.subscribeToConfig();
 
     this.subscribeToMapInstanceConfig();
@@ -96,12 +104,13 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
-      // console.log(this.dataStore.mapConfig.mapInstance);
+      console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       // TODO: move to another service
       this.createLayersForConfig();
+      this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
-      console.log(this.dataStore.mapConfig);
+      // console.log(this.dataStore.mapConfig);
 
       this.createFilterLookups();
 
@@ -132,23 +141,12 @@ export class MapService implements OnDestroy {
   private createLayersForConfig(): void {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig) => {
       if (layerGroupConfig.layers.length) {
-        layerGroupConfig.layers.forEach((layerConfig: ILayerConfig, index: number) => {
+        layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
           // TODO: styles - this is just exploring styles in getcapabilities
           // const layerName = layerConfig.layerName;
           // const legendLayerName = layerConfig.legendLayerName;
           // this.getStyles(layerName, legendLayerName, layerConfig.url);
-          const source = new TileWMS({
-            url: layerConfig.url,
-            params: { 'LAYERS': layerConfig.layerName,
-              'TILED': 'TRUE',
-              'FORMAT': 'image/png8',
-              // 'CQL_FILTER': 'hab_type IN (\'A5.27\', \'A3\', \'A4.5\')'
-            },
-            crossOrigin: 'anonymous'
-          });
-          layerConfig.layer = new Tile({
-            source: source
-          });
+          layerConfig.layer = this.layerService.createLayer(layerConfig);
           layerConfig.layer.setOpacity(layerConfig.opacity);
           layerConfig.layer.setVisible(layerConfig.visible);
 
@@ -160,6 +158,11 @@ export class MapService implements OnDestroy {
       }
     });
     this._visibleLayers.next(this.dataStore.visibleLayers);
+  }
+
+  private createBaseLayers(): void {
+    this.dataStore.baseLayers = this.layerService.createBaseLayers();
+    this._baseLayers.next(this.dataStore.baseLayers);
   }
 
   private createFilterLookups() {
@@ -280,14 +283,14 @@ export class MapService implements OnDestroy {
   }
 
   changeLayerVisibility(layerId: number, visible: boolean) {
-    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
-    currentLayerConfig.layer.setVisible(visible);
-    currentLayerConfig.visible = visible;
+    const layerConfig = this.getLayerConfig(layerId);
+    layerConfig.layer.setVisible(visible);
+    layerConfig.visible = visible;
 
     if (visible) {
-      this.dataStore.visibleLayers = [currentLayerConfig, ...this.dataStore.visibleLayers];
+      this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
     } else {
-      this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== currentLayerConfig);
+      this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
     }
     this._visibleLayers.next(this.dataStore.visibleLayers);
     this._mapConfig.next(this.dataStore.mapConfig);

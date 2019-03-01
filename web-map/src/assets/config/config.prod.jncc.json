@@ -2,5 +2,6 @@
     "name": "prod mapper",
     "logging": false,
     "apiUrl": "//api.emodnet-seabedhabitats.eu/api",
-    "mapInstance": "EMODnet"
+    "mapInstance": "EMODnet",
+    "bingMapsApiKey": "Aga4e1A89vNBHNtP4nBTmHkKEECEgu5zxqVOjdpJ9LMSVoakhoOAOnLs4iNDrSOY"
 }

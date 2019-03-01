@@ -33,6 +33,8 @@ import { SafeCssPipe } from './safe-css.pipe';
 import { TooltipComponent } from './tooltip/tooltip.component';
 import { TooltipDirective } from './tooltip/tooltip.directive';
 import { GazetteerComponent } from './gazetteer/gazetteer.component';
+import { BaseMapsComponent } from './base-maps/base-maps.component';
+import { BaseMapComponent } from './base-maps/base-map/base-map.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -60,7 +62,9 @@ export function initializeApp(appConfig: AppConfigService) {
     SafeCssPipe,
     TooltipComponent,
     TooltipDirective,
-    GazetteerComponent
+    GazetteerComponent,
+    BaseMapsComponent,
+    BaseMapComponent
   ],
   imports: [
     BrowserModule,
