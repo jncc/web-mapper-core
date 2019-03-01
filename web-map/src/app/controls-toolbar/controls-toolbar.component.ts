@@ -17,8 +17,8 @@ export class ControlsToolbarComponent implements OnInit {
   zoomOutToExtentActivated = false;
 
   backdropSubscription: Subscription;
-  @ViewChild('baseMapsOverlay') baseMapsOverlay: TemplateRef<any>;
-  baseMapsOverlayRef: OverlayRef | null;
+  @ViewChild('baseLayersOverlay') baseLayersOverlay: TemplateRef<any>;
+  baseLayersOverlayRef: OverlayRef | null;
 
   ngOnInit() {
   }
@@ -53,7 +53,7 @@ export class ControlsToolbarComponent implements OnInit {
   }
 
   onShowBaseMaps({x, y}) {
-    this.closeBaseMaps();
+    this.closeBaseLayers();
     const positionStrategy = this.overlay.position()
     .flexibleConnectedTo({ x, y })
     .withPositions([
@@ -64,19 +64,19 @@ export class ControlsToolbarComponent implements OnInit {
         overlayY: 'bottom',
       }
     ]);
-    this.baseMapsOverlayRef = this.overlay.create({
+    this.baseLayersOverlayRef = this.overlay.create({
       hasBackdrop: true,
       positionStrategy,
       scrollStrategy: this.overlay.scrollStrategies.close()
     });
-    this.baseMapsOverlayRef.attach(new TemplatePortal(this.baseMapsOverlay, this.viewContainerRef));
-    this.backdropSubscription = this.baseMapsOverlayRef.backdropClick().subscribe(() => this.closeBaseMaps());
+    this.baseLayersOverlayRef.attach(new TemplatePortal(this.baseLayersOverlay, this.viewContainerRef));
+    this.backdropSubscription = this.baseLayersOverlayRef.backdropClick().subscribe(() => this.closeBaseLayers());
   }
 
-  closeBaseMaps() {
-    if (this.baseMapsOverlayRef) {
-      this.baseMapsOverlayRef.dispose();
-      this.baseMapsOverlayRef = null;
+  closeBaseLayers() {
+    if (this.baseLayersOverlayRef) {
+      this.baseLayersOverlayRef.dispose();
+      this.baseLayersOverlayRef = null;
     }
     if (this.backdropSubscription) {
       this.backdropSubscription.unsubscribe();

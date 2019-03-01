@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 import Tile from 'ol/layer/tile';
 
 @Component({
-  selector: 'app-base-maps',
-  templateUrl: './base-maps.component.html',
-  styleUrls: ['./base-maps.component.scss']
+  selector: 'app-base-layers',
+  templateUrl: './base-layers.component.html',
+  styleUrls: ['./base-layers.component.scss']
 })
-export class BaseMapsComponent implements OnInit {
+export class BaseLayersComponent implements OnInit {
 
   baseLayers$: Observable<Tile[]>;
 
@@ -17,7 +17,6 @@ export class BaseMapsComponent implements OnInit {
 
   ngOnInit() {
     this.baseLayers$ = this.mapService.baseLayers;
-    console.log("basemaps");
   }
 
 }

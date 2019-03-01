@@ -8,16 +8,16 @@
       <i tooltip="drag zoom out" class="btn fa fa-fw fa-lg fa-search-minus" [class.active]="zoomOutToExtentActivated" (click)="onZoomOutToExtent()"></i>
   </div>
 
-  <ng-template #baseMapsOverlay>
+  <ng-template #baseLayersOverlay>
       <div class="controls-container" id="filter-settings" cdkDrag>
           <div class="controls-container-header">
               <h6>
-                  <span>BASE MAPS</span>
+                  <span>BASE LAYERS</span>
               </h6>
               <div>
-                  <i class="btn fa fa-close" (click)="closeBaseMaps()"></i>
+                  <i class="btn fa fa-close" (click)="closeBaseLayers()"></i>
               </div>
-              <app-base-maps></app-base-maps>
+              <app-base-layers></app-base-layers>
           </div>
       </div>
   </ng-template>
