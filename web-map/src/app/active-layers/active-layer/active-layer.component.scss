@@ -5,6 +5,10 @@
 
 .active-layer {
     background-color: white;
+    display: flex;
+    border: 1px solid lightgrey;
+    border-radius: 2px; 
+    box-shadow: 0 0 10px -4px;
 }
 
 .active-layer-header {
@@ -16,16 +20,20 @@
 .active-layer-title {
     display: flex;
     align-items: center;
+    flex-direction: column;
 }
 
-.active-layer {
-    border: 1px solid lightgrey;
-    border-radius: 2px; 
-    padding: 0.5rem 0.5rem 0.5rem 0;
-    box-shadow: 0 0 10px -4px;
+.active-layer-content {
+    flex-grow: 1;
+    padding: 0.25rem;
 }
 
 .active-layer-body {
     display: flex;
     justify-content: flex-end;
+}
+
+.drag-handle {
+    display: flex;
+    align-items: center;
 }

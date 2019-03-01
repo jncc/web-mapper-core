@@ -48,3 +48,16 @@ table.featureInfo caption {
     color: black;
     text-align: left;
 }
+
+.panel-title {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    
+}
+
+.panel-title h2 {
+    font-size: 1rem;
+    color: white;
+}

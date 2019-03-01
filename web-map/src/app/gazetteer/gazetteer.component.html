@@ -1,0 +1,10 @@
+<div id="gazetteer">
+  <ng-select  [items]="results$ | async"
+              bindLabel="name"
+              placeholder="Search ..."
+              [(ngModel)]="selectedResult"
+              (change)="onChange()"
+              [typeahead]="searchInput$"
+              [loading]="resultsLoading">
+  </ng-select>
+</div>
