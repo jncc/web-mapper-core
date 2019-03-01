@@ -86,7 +86,7 @@ export class MapComponent implements OnInit, OnDestroy {
           projection: 'EPSG:4326',
           target: document.getElementById('mousePosition'),
           className: 'custom-mouse-position',
-          coordinateFormat: coordinate =>  'lon: ' + coordinate[0].toFixed(3) + ' lat: ' + coordinate[1].toFixed(3)
+          coordinateFormat: coordinate => 'lon: ' + coordinate[0].toFixed(3) + ' lat: ' + coordinate[1].toFixed(3)
         }),
         new ScaleLine()
       ],
@@ -154,7 +154,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.zoomSubscription = this.mapService.zoomSubject.subscribe(data => {
       if (data.center && data.center.length === 2 && data.zoom) {
         const center = proj.fromLonLat([data.center[0], data.center[1]]);
-        view.animate({center: center, zoom: data.zoom});
+        view.animate({ center: center, zoom: data.zoom });
       } else {
         this.zoomToMapExtent();
       }
@@ -162,7 +162,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.zoomToExtentSubscription = this.mapService.zoomToExtentSubject.subscribe(data => {
       const extent = proj.transformExtent([data[0], data[1], data[2], data[3]], 'EPSG:4326', 'EPSG:3857');
-      view.fit(extent, {duration: 1000});
+      view.fit(extent, { duration: 1000 });
     });
   }
 
