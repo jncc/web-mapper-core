@@ -344,8 +344,8 @@ export class MapService implements OnDestroy {
   }
 
   onMapMoveEnd(zoom: number, center: number[]) {
-    console.log(zoom, center);
     const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
-    this.permalinkService.updateUrl(zoom, center, layerIds, 0);
+    const baseLayerId = this.dataStore.baseLayers.findIndex(layer => layer.getVisible());
+    this.permalinkService.updateUrl(zoom, center, layerIds, baseLayerId);
   }
 }
