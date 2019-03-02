@@ -35,6 +35,7 @@ import { TooltipDirective } from './tooltip/tooltip.directive';
 import { GazetteerComponent } from './gazetteer/gazetteer.component';
 import { BaseLayersComponent } from './base-layers/base-layers.component';
 import { BaseLayerComponent } from './base-layers/base-layer/base-layer.component';
+import { RouterModule } from '@angular/router';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -70,6 +71,7 @@ export function initializeApp(appConfig: AppConfigService) {
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    RouterModule.forRoot([]),
     DragDropModule,
     OverlayModule,
     Ng5SliderModule,

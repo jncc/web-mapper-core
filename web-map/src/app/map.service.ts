@@ -15,6 +15,7 @@ import { IFilterConfig } from './models/filter-config.model';
 import { ILookup } from './models/lookup.model';
 import { LayerService } from './layer.service';
 import Tile from 'ol/layer/tile';
+import { PermalinkService } from './permalink.service';
 
 
 @Injectable({
@@ -66,7 +67,7 @@ export class MapService implements OnDestroy {
     return this._baseLayers.asObservable();
   }
 
-  constructor(private apiService: ApiService, private layerService: LayerService) {
+  constructor(private apiService: ApiService, private layerService: LayerService, private permalinkService: PermalinkService) {
     this.dataStore = {
       mapConfig: {
         mapInstances: [],
@@ -340,5 +341,11 @@ export class MapService implements OnDestroy {
         layer.setVisible(false);
       }
     });
+  }
+
+  onMapMoveEnd(zoom: number, center: number[]) {
+    console.log(zoom, center);
+    const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
+    this.permalinkService.updateUrl(zoom, center, layerIds, 0);
   }
 }
