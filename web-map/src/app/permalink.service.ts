@@ -13,7 +13,7 @@ export class PermalinkService {
    updateUrl(zoom: number, center: number[], layerIds: number[], baseLayerId: number) {
      const queryParams: Params = {
        zoom: zoom,
-       center: center,
+       center: center.map(coord => Math.round(coord)).join(),
        layerIds: layerIds.join(),
        baseLayerId: baseLayerId
      };
