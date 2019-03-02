@@ -4,8 +4,9 @@
     display: flex;
     background-color: white;
     padding: $container-padding;
+    color: black;
 }
 
-.controls-container {
-    background-color: green;
+.controls-toolbar h6 {
+    color: black;
 }

@@ -5,6 +5,7 @@ import TileWMS from 'ol/source/tilewms';
 import OSM from 'ol/source/osm';
 import BingMaps from 'ol/source/bingmaps';
 import Tile from 'ol/layer/tile';
+import XYZ from 'ol/source/xyz';
 import { AppConfigService } from './app-config.service';
 
 @Injectable({
@@ -37,12 +38,19 @@ export class LayerService {
     });
     baseLayers.push(baseLayer);
     baseLayer = new Tile({
+      visible: false,
       source: new BingMaps({
         key: AppConfigService.settings.bingMapsApiKey,
         imagerySet: 'Aerial'
       })
     });
-    baseLayer.setVisible(false);
+    baseLayers.push(baseLayer);
+    baseLayer = new Tile({
+      visible: false,
+      source: new XYZ({
+        url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
+      })
+    });
     baseLayers.push(baseLayer);
     return baseLayers;
   }

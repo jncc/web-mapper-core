@@ -100,25 +100,26 @@ div.custom-mouse-position {
   background-color: transparent;
 }
 
-/*
-table.featureInfo {
-  border-collapse: collapse;
-  border: 1px solid grey;
-  margin: 1rem;
+.controls-container {
+  user-select: none;
+  border-radius: $container-border-radius;
+  box-shadow: $container-shadow;
+  background-color: white;
 }
-table.featureInfo th, table.featureInfo td {
-  border: 1px solid grey;
+ 
+.controls-container-header {
+  display: flex;
+  padding: $container-padding;
+  border-bottom: 1px solid $border-color;
+  // background-color: rgb(216, 233, 245);
+  border-radius: $container-border-radius;
+  cursor: pointer;
 }
 
-caption.featureInfo {
-  text-align: left;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
+.controls-container-header h6 {
+  color: black;
 }
-*/
 
-// #active-layers {
-//   position: absolute;
-//   left: 20rem;
-//   top: 10rem;
-// }
+.controls-container-body {
+    // padding: $container-padding;
+}
