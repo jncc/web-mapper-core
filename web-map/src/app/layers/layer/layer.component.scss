@@ -1,6 +1,7 @@
 .layer {
     display:flex;
     line-height: 1.4rem;
+    padding: 0.25rem;
 }
 
 .layer-toggle, .layer-name {
@@ -75,3 +76,5 @@
   .slider.round:before {
     border-radius: 50%;
   }
+
+  

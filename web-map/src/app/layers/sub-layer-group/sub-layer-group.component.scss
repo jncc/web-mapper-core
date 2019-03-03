@@ -1,5 +1,12 @@
 .sub-layer-group-header {
-    margin-left: 0.5rem;
     cursor: pointer;
-    background-color: whitesmoke;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    color: white;
+}
+
+.sub-layer-group-body.closed {
+    height: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #012E58;
 }
