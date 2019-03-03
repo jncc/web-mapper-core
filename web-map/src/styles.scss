@@ -88,6 +88,8 @@ div#mousePosition {
   background-color: white;
   padding: $container-padding;
   pointer-events: none;
+  box-shadow: $container-shadow;
+
 }
 
 div.custom-mouse-position {
