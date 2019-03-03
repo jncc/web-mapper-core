@@ -6,21 +6,11 @@ import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
 import Group from 'ol/layer/group';
-import VectorLayer from 'ol/layer/vector';
-import VectorSource from 'ol/source/vector';
 import OSM from 'ol/source/osm';
 import TileWMS from 'ol/source/tilewms';
-import Image from 'ol/layer/image';
-import ImageWMS from 'ol/source/imagewms';
-import GeoJSON from 'ol/format/geojson';
 import proj from 'ol/proj';
-import Style from 'ol/style/style';
-import Icon from 'ol/style/icon';
-import Select from 'ol/interaction/select';
-import condition from 'ol/events/condition';
 import OverviewMap from 'ol/control/overviewmap';
 import ScaleLine from 'ol/control/scaleline';
-import ImageLayer from 'ol/layer/image';
 import DragZoom from 'ol/interaction/dragzoom';
 import MapBrowserEvent from 'ol/mapbrowserevent';
 import MousePosition from 'ol/control/mouseposition';
@@ -63,7 +53,7 @@ export class MapComponent implements OnInit, OnDestroy {
       layers => this.updateLayers(layers)
     );
     this.baseLayersSubscription = this.mapService.baseLayers.subscribe(
-      baseLayers => this.baseLayerGroup.setLayers(new Collection(baseLayers))
+      baseLayers => this.baseLayerGroup.setLayers(new Collection(baseLayers.map(layer => layer.layer)))
     );
   }
 
@@ -98,7 +88,10 @@ export class MapComponent implements OnInit, OnDestroy {
           className: 'custom-mouse-position',
           coordinateFormat: coordinate => 'lon: ' + coordinate[0].toFixed(3) + ' lat: ' + coordinate[1].toFixed(3)
         }),
-        new ScaleLine()
+        new ScaleLine({
+          // target: document.getElementById('scaleLine'),
+          // className: 'custom-scale-line'
+        })
       ],
       layers: [
         this.baseLayerGroup,
@@ -126,7 +119,6 @@ export class MapComponent implements OnInit, OnDestroy {
               { 'INFO_FORMAT': 'text/html' }
             );
             urls.push(url);
-            // console.log(url);
           }
         }
       });

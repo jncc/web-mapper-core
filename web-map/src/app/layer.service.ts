@@ -7,6 +7,7 @@ import BingMaps from 'ol/source/bingmaps';
 import Tile from 'ol/layer/tile';
 import XYZ from 'ol/source/xyz';
 import { AppConfigService } from './app-config.service';
+import { IBaseLayerConfig } from './models/base-layer-config.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,27 +32,49 @@ export class LayerService {
     return layer;
   }
 
-  createBaseLayers(): Tile[] {
-    const baseLayers = [];
-    let baseLayer = new Tile({
+  createBaseLayers(): IBaseLayerConfig[] {
+    const baseLayers: IBaseLayerConfig[] = [];
+
+    // OpenStreetMap
+    let layer = new Tile({
       source: new OSM()
     });
-    baseLayers.push(baseLayer);
-    baseLayer = new Tile({
+    let baseLayerConfig: IBaseLayerConfig = {
+      baseLayerId: 1,
+      name: 'OpenStreetMap',
+      layer: layer
+    };
+    baseLayers.push(baseLayerConfig);
+
+    // Bing Maps
+    layer = new Tile({
       visible: false,
       source: new BingMaps({
         key: AppConfigService.settings.bingMapsApiKey,
         imagerySet: 'Aerial'
       })
     });
-    baseLayers.push(baseLayer);
-    baseLayer = new Tile({
+    baseLayerConfig = {
+      baseLayerId: 2,
+      name: 'Bing Maps',
+      layer: layer
+    };
+    baseLayers.push(baseLayerConfig);
+
+    // OpenTopoMap
+    layer = new Tile({
       visible: false,
       source: new XYZ({
         url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
       })
     });
-    baseLayers.push(baseLayer);
+    baseLayerConfig = {
+      baseLayerId: 3,
+      name: 'OpenTopoMap',
+      layer: layer
+    };
+    baseLayers.push(baseLayerConfig);
+
     return baseLayers;
   }
 }

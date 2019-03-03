@@ -16,6 +16,7 @@ import { ILookup } from './models/lookup.model';
 import { LayerService } from './layer.service';
 import Tile from 'ol/layer/tile';
 import { PermalinkService } from './permalink.service';
+import { IBaseLayerConfig } from './models/base-layer-config.model';
 
 
 @Injectable({
@@ -36,7 +37,7 @@ export class MapService implements OnDestroy {
     mapConfig: IMapConfig;
     layerLookup: ILayerConfig[];
     visibleLayers: ILayerConfig[];
-    baseLayers: Tile[];
+    baseLayers: IBaseLayerConfig[];
     featureInfos: any[];
     filterLookups: { [lookupCategory: string]: ILookup[]; };
   };
@@ -62,7 +63,7 @@ export class MapService implements OnDestroy {
     return this._filterLookups.asObservable();
   }
 
-  private _baseLayers: BehaviorSubject<Tile[]>;
+  private _baseLayers: BehaviorSubject<IBaseLayerConfig[]>;
   get baseLayers() {
     return this._baseLayers.asObservable();
   }
@@ -333,19 +334,19 @@ export class MapService implements OnDestroy {
     return this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
   }
 
-  setBaseLayer(baseLayer: Tile) {
-    this.dataStore.baseLayers.forEach(layer => {
-      if (layer === baseLayer) {
-        layer.setVisible(true);
+  setBaseLayer(baseLayerId: number) {
+    this.dataStore.baseLayers.forEach(baseLayer => {
+      if (baseLayer.baseLayerId === baseLayerId) {
+        baseLayer.layer.setVisible(true);
       } else {
-        layer.setVisible(false);
+        baseLayer.layer.setVisible(false);
       }
     });
   }
 
   onMapMoveEnd(zoom: number, center: number[]) {
     const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
-    const baseLayerId = this.dataStore.baseLayers.findIndex(layer => layer.getVisible());
+    const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
     this.permalinkService.updateUrl(zoom, center, layerIds, baseLayerId);
   }
 }

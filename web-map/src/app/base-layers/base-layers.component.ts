@@ -3,6 +3,7 @@ import { MapService } from '../map.service';
 import { Observable } from 'rxjs';
 
 import Tile from 'ol/layer/tile';
+import { IBaseLayerConfig } from '../models/base-layer-config.model';
 
 @Component({
   selector: 'app-base-layers',
@@ -11,7 +12,7 @@ import Tile from 'ol/layer/tile';
 })
 export class BaseLayersComponent implements OnInit {
 
-  baseLayers$: Observable<Tile[]>;
+  baseLayers$: Observable<IBaseLayerConfig[]>;
 
   constructor(private mapService: MapService) { }
 
@@ -19,7 +20,7 @@ export class BaseLayersComponent implements OnInit {
     this.baseLayers$ = this.mapService.baseLayers;
   }
 
-  onSetBaseLayer(baseLayer: Tile) {
-    this.mapService.setBaseLayer(baseLayer);
+  onSetBaseLayer(baseLayerId: number) {
+    this.mapService.setBaseLayer(baseLayerId);
   }
 }
