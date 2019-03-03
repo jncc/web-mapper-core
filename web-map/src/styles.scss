@@ -109,6 +109,7 @@ div.custom-mouse-position {
  
 .controls-container-header {
   display: flex;
+  align-items: center;
   padding: $container-padding;
   border-bottom: 1px solid $border-color;
   // background-color: rgb(216, 233, 245);
@@ -116,9 +117,6 @@ div.custom-mouse-position {
   cursor: pointer;
 }
 
-.controls-container-header h6 {
-  color: black;
-}
 
 .controls-container-body {
     // padding: $container-padding;
