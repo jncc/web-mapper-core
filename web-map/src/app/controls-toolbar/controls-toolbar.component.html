@@ -4,10 +4,8 @@
     <i tooltip="zoom in" class="btn fa fa-fw fa-lg fa-plus" (click)="onZoomIn()"></i>
     <i tooltip="zoom out" class="btn fa fa-fw fa-lg fa-minus" (click)="onZoomOut()"></i>
     <i tooltip="zoom to map extent" class="btn fa fa-fw fa-lg fa-globe" (click)="onZoomToMapExtent()"></i>
-    <i tooltip="drag zoom in" class="btn fa fa-fw fa-lg fa-search-plus" [class.active]="zoomInToExtentActivated"
-        (click)="onZoomInToExtent()"></i>
-    <i tooltip="drag zoom out" class="btn fa fa-fw fa-lg fa-search-minus" [class.active]="zoomOutToExtentActivated"
-        (click)="onZoomOutToExtent()"></i>
+    <i tooltip="drag zoom in" class="btn fa fa-fw fa-lg fa-search-plus" (click)="onZoomInToExtent()"></i>
+    <i tooltip="drag zoom out" class="btn fa fa-fw fa-lg fa-search-minus" (click)="onZoomOutToExtent()"></i>
 </div>
 
 <ng-template #baseLayersOverlay>

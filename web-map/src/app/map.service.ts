@@ -26,8 +26,8 @@ export class MapService implements OnDestroy {
 
   map: any;
 
-  dragZoomInSubject = new Subject<boolean>();
-  dragZoomOutSubject = new Subject<boolean>();
+  dragZoomInSubject = new Subject<void>();
+  dragZoomOutSubject = new Subject<void>();
   zoomSubject = new Subject<{ center: number[], zoom: number }>();
   zoomToExtentSubject = new Subject<number[]>();
 
@@ -266,12 +266,14 @@ export class MapService implements OnDestroy {
     this.zoomToExtentSubject.next(extent);
   }
 
-  dragZoomIn(activated: boolean) {
-    this.dragZoomInSubject.next(activated);
+  dragZoomIn() {
+    console.log("drag zoom in")
+    this.dragZoomInSubject.next();
   }
 
-  dragZoomOut(activated: boolean) {
-    this.dragZoomOutSubject.next(activated);
+  dragZoomOut() {
+    console.log("drag zoom out")
+    this.dragZoomOutSubject.next();
   }
 
   showFeatureInfo(urls: string[]) {

@@ -140,7 +140,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.addInteraction(dragZoomIn);
     dragZoomIn.setActive(false);
     this.dragZoomInSubscription = this.mapService.dragZoomInSubject.subscribe((active) => {
-      dragZoomIn.setActive(active);
+      dragZoomIn.setActive(true);
+      dragZoomIn.on('boxend', () => dragZoomIn.setActive(false));
     });
 
     const dragZoomOut = new DragZoom({
@@ -150,7 +151,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.addInteraction(dragZoomOut);
     dragZoomOut.setActive(false);
     this.dragZoomOutSubscription = this.mapService.dragZoomOutSubject.subscribe((active) => {
-      dragZoomOut.setActive(active);
+      dragZoomOut.setActive(true);
+      dragZoomOut.on('boxend', () => dragZoomOut.setActive(false));
     });
 
     // this.map.on('pointerdrag', event => {

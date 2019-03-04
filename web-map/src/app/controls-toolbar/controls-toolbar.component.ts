@@ -13,9 +13,6 @@ export class ControlsToolbarComponent implements OnInit {
 
   constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) { }
 
-  zoomInToExtentActivated = false;
-  zoomOutToExtentActivated = false;
-
   backdropSubscription: Subscription;
   @ViewChild('baseLayersOverlay') baseLayersOverlay: TemplateRef<any>;
   baseLayersOverlayRef: OverlayRef | null;
@@ -36,20 +33,11 @@ export class ControlsToolbarComponent implements OnInit {
   }
 
   onZoomInToExtent() {
-    this.zoomOutToExtentActivated = false;
-    this.zoomInToExtentActivated = !this.zoomInToExtentActivated;
-    this.sendControlStateToMapService();
+    this.mapService.dragZoomIn();
   }
 
   onZoomOutToExtent() {
-    this.zoomInToExtentActivated = false;
-    this.zoomOutToExtentActivated = !this.zoomOutToExtentActivated;
-    this.sendControlStateToMapService();
-  }
-
-  private sendControlStateToMapService() {
-    this.mapService.dragZoomIn(this.zoomInToExtentActivated);
-    this.mapService.dragZoomOut(this.zoomOutToExtentActivated);
+    this.mapService.dragZoomOut();
   }
 
   onShowBaseMaps({x, y}) {
