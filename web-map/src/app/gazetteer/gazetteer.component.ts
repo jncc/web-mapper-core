@@ -25,7 +25,6 @@ export class GazetteerComponent implements OnInit {
   }
 
   onChange() {
-    console.log(this.selectedResult);
     if (this.selectedResult) {
       this.mapService.zoomToExtent(this.selectedResult.extent);
     }

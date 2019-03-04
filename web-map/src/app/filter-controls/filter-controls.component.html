@@ -8,8 +8,8 @@
         </div>
     </div>
     <div class="controls-container-body">
-        <app-filter-control *ngFor="let filter of layer.filters" [filterName]="filter.name" [filterType]="filter.type"
-            [filterAttribute]="filter.attribute" [filterLookup]="filterLookup[filter.lookupCategory]">
+        <app-filter-control *ngFor="let filter of layer.filters"
+            [filterConfig]="filter" [filterLookup]="filterLookup[filter.lookupCategory]" [activeFilters]="activeFilters">
         </app-filter-control>
         <div class="controls-container-footer">
             <button (click)="onFilterApplied()">Apply</button>

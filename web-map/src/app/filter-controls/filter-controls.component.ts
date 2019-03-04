@@ -3,6 +3,7 @@ import { ILayerConfig } from '../models/layer-config.model';
 import { MapService } from '../map.service';
 import { ILookup } from '../models/lookup.model';
 import { FilterControlComponent } from './filter-control/filter-control.component';
+import { IActiveFilter } from '../models/active-filter.model';
 
 
 @Component({
@@ -16,31 +17,23 @@ export class FilterControlsComponent implements OnInit {
   @Output() closeFilter = new EventEmitter<void>();
 
   filterLookup: { [lookupCategory: string]: ILookup[] } = {};
+  activeFilters: IActiveFilter[];
 
   constructor(private mapService: MapService) { }
 
   ngOnInit() {
     this.mapService.lookups.subscribe(data => this.filterLookup = data);
+    this.mapService.activeFilters.subscribe(data => {
+      this.activeFilters = data.filter(f => f.layerId === this.layer.layerId);
+    });
   }
 
   onFilterApplied() {
-    const filter = {};
-    let paramName = '';
-    let filterString = '';
-    this.filterControls.forEach(control => {
-      if (control.filterCodes.length > 0) {
-        filter[control.filterAttribute] = control.filterCodes;
-      }
-    });
-
     if (this.isComplexFilter()) {
-      paramName = 'viewParams';
-      filterString = this.createSqlViewFilterString();
+      this.applySqlViewFilter();
     } else {
-      paramName = 'CQL_FILTER';
-      filterString = this.createCqlFilterString();
+      this.applyCqlFilter();
     }
-    this.mapService.filterLayer(this.layer.layerId, paramName, filterString);
   }
 
   onFilterCleared() {
@@ -66,27 +59,37 @@ export class FilterControlsComponent implements OnInit {
     return value.replace(/,/g, '\\,').replace(/;/g, '\\;');
   }
 
-  private createCqlFilterString(): string {
+  private applyCqlFilter() {
+    const paramName = 'CQL_FILTER';
     let filterString = '';
+    const newActiveFilters: IActiveFilter[] = [];
     this.filterControls.forEach(control => {
-      if (control.filterType === 'lookup' && control.filterCodes.length > 0) {
+      if (control.filterConfig.type === 'lookup' && control.filterCodes.length > 0) {
         if (filterString.length > 0) {
           // there is already at least one filter in the string so use AND
           filterString += ' AND ';
         }
-        filterString += control.filterAttribute + ' IN (' + control.filterCodes.map(code => `'${code}'`).join() + ')';
+        filterString += control.filterConfig.attribute + ' IN (' + control.filterCodes.map(code => `'${code}'`).join() + ')';
+        newActiveFilters.push({
+          layerId: this.layer.layerId,
+          filterId: control.filterConfig.filterId,
+          filterCodes: control.filterCodes,
+          filterText: control.filterText
+        });
       }
     });
-    return filterString;
+    this.mapService.filterLayer(this.layer.layerId, paramName, filterString, newActiveFilters);
   }
 
-  private createSqlViewFilterString(): string {
+  private applySqlViewFilter() {
+    const paramName = 'viewParams';
     let filterString = '';
+    const newActiveFilters: IActiveFilter[] = [];
     this.filterControls.forEach(control => {
-      if (control.filterType === 'lookup' && control.filterCodes.length > 0) {
+      if (control.filterConfig.type === 'lookup' && control.filterCodes.length > 0) {
         // filterString += control.filterAttribute + ':' + control.filterCodes.map(code => `'${
         //   code.replace(/,/g, '\\,').replace(/:/g, '\\,')}'`).join('\\,') + ';';
-        filterString += control.filterAttribute + ':';
+        filterString += control.filterConfig.attribute + ':';
         control.filterCodes.forEach((filterCode, index) => {
           const code = '\'' + this.escapeSpecialCharacters(filterCode) + '\'';
           filterString += code;
@@ -95,48 +98,27 @@ export class FilterControlsComponent implements OnInit {
           }
         });
         filterString += ';';
+
+        newActiveFilters.push({
+          layerId: this.layer.layerId,
+          filterId: control.filterConfig.filterId,
+          filterCodes: control.filterCodes,
+          filterText: control.filterText
+        });
       }
-      if (control.filterType === 'text' && control.filterText.length > 0) {
-        filterString += control.filterAttribute + ':';
+      if (control.filterConfig.type === 'text' && control.filterText.length > 0) {
+        filterString += control.filterConfig.attribute + ':';
         filterString += this.escapeSpecialCharacters(control.filterText);
         filterString += ';';
+
+        newActiveFilters.push({
+          layerId: this.layer.layerId,
+          filterId: control.filterConfig.filterId,
+          filterCodes: control.filterCodes,
+          filterText: control.filterText
+        });
       }
     });
-    return filterString;
+    this.mapService.filterLayer(this.layer.layerId, paramName, filterString, newActiveFilters);
   }
-
-/*
-
-  // FROM map service
-
-  // TODO: this doesn't work if you supply the same attribute twice
-  // the filterAttributes will get overwritten
-  filterLayer(layerId: number, filter: any) {
-    const layerConfig = this.getLayerConfig(layerId);
-    const source = layerConfig.layer.getSource();
-    const params = layerConfig.layer.getSource().getParams();
-    const filterAttributes = Object.keys(filter);
-    let cqlFilter = '';
-    filterAttributes.forEach(attribute => {
-      if (cqlFilter.length > 0) {
-        // there is already at least one filter so use AND
-        cqlFilter += ' AND ';
-      }
-      cqlFilter += cqlFilter + attribute + ' IN (' + filter[attribute].map(code => `'${code}'`).join() + ')';
-    });
-    params['CQL_FILTER'] = cqlFilter;
-    console.log(cqlFilter);
-    source.updateParams(params);
-  }
-
-  clearFilterLayer(layerId) {
-    const layerConfig = this.getLayerConfig(layerId);
-    const source = layerConfig.layer.getSource();
-    const params = layerConfig.layer.getSource().getParams();
-    delete params['CQL_FILTER'];
-    source.updateParams(params);
-  }
-
- */
-
 }

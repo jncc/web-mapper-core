@@ -86,7 +86,6 @@ export class ActiveLayersComponent implements OnInit {
 
   // Filter
   openFilter(activeLayer) {
-    console.log(activeLayer.layerName);
     this.closeFilter();
     const positionStrategy = this.overlay.position()
       .global()

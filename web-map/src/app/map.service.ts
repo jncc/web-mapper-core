@@ -16,6 +16,7 @@ import { ILookup } from './models/lookup.model';
 import { LayerService } from './layer.service';
 import { PermalinkService } from './permalink.service';
 import { IBaseLayerConfig } from './models/base-layer-config.model';
+import { IActiveFilter } from './models/active-filter.model';
 
 
 @Injectable({
@@ -39,6 +40,7 @@ export class MapService implements OnDestroy {
     baseLayers: IBaseLayerConfig[];
     featureInfos: any[];
     filterLookups: { [lookupCategory: string]: ILookup[]; };
+    activeFilters: IActiveFilter[];
   };
 
   private _mapConfig: BehaviorSubject<IMapConfig>;
@@ -67,6 +69,11 @@ export class MapService implements OnDestroy {
     return this._baseLayers.asObservable();
   }
 
+  private _activeFilters: BehaviorSubject<IActiveFilter[]>;
+  get activeFilters() {
+    return this._activeFilters.asObservable();
+  }
+
   constructor(private apiService: ApiService, private layerService: LayerService, private permalinkService: PermalinkService) {
     this.dataStore = {
       mapConfig: {
@@ -83,13 +90,15 @@ export class MapService implements OnDestroy {
       visibleLayers: [],
       baseLayers: [],
       featureInfos: [],
-      filterLookups: {}
+      filterLookups: {},
+      activeFilters: []
     };
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
     this._visibleLayers = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.visibleLayers);
     this._featureInfos = <BehaviorSubject<any[]>>new BehaviorSubject(this.dataStore.featureInfos);
     this._filterLookups = new BehaviorSubject({});
     this._baseLayers = new BehaviorSubject(this.dataStore.baseLayers);
+    this._activeFilters = new BehaviorSubject(this.dataStore.activeFilters);
     this.subscribeToConfig();
 
     this.subscribeToMapInstanceConfig();
@@ -181,13 +190,17 @@ export class MapService implements OnDestroy {
     });
   }
 
-  filterLayer(layerId: number, paramName: string, filterString: string) {
+  filterLayer(layerId: number, paramName: string, filterString: string, activeFilters: IActiveFilter[]) {
     const layerConfig = this.getLayerConfig(layerId);
     const source = layerConfig.layer.getSource();
     const params = layerConfig.layer.getSource().getParams();
     params[paramName] = filterString;
-    console.log(paramName + ': ' + filterString);
+    // console.log(paramName + ': ' + filterString);
     source.updateParams(params);
+
+    this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+    this.dataStore.activeFilters = [...this.dataStore.activeFilters, ...activeFilters];
+    this._activeFilters.next(this.dataStore.activeFilters);
   }
 
   clearFilterLayer(layerId: number, paramName: string) {
@@ -196,6 +209,9 @@ export class MapService implements OnDestroy {
     const params = layerConfig.layer.getSource().getParams();
     delete params[paramName];
     source.updateParams(params);
+
+    this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+    this._activeFilters.next(this.dataStore.activeFilters);
   }
 
   private getStyles(layerName, legendLayerName, url) {
@@ -282,6 +298,9 @@ export class MapService implements OnDestroy {
       this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
     } else {
       this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
+
+      this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+      this._activeFilters.next(this.dataStore.activeFilters);
     }
     this._visibleLayers.next(this.dataStore.visibleLayers);
     this._mapConfig.next(this.dataStore.mapConfig);
