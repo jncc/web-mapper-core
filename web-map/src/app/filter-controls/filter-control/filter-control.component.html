@@ -1,7 +1,10 @@
 <div>
   {{ filterName }}
 </div>
-<div class="filter-lookup-values">
+<div *ngIf="filterType==='lookup'">
+  {{ filterAttribute }}: {{ filterSummary }}
+</div>
+<div *ngIf="filterType==='lookup'" class="filter-lookup-values">
   <ul>
     <li *ngFor="let lookup of filterLookup">
       <label>
@@ -10,5 +13,8 @@
     </label>
     </li>
   </ul>
+</div>
+<div *ngIf="filterType==='text'" class="filter-text">
+  <input [(ngModel)]="filterText" type="text">
 </div>
 

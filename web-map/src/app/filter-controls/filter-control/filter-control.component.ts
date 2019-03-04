@@ -9,10 +9,14 @@ import { ILookup } from 'src/app/models/lookup.model';
 export class FilterControlComponent implements OnInit {
   @Input() filterName: string;
   @Input() filterAttribute: string;
+  @Input() filterType: string;
   @Input() filterLookup: { [lookupCategory: string]: ILookup[] };
 
 
   filterCodes: string[] = [];
+  filterText = '';
+
+  filterSummary = '';
 
   ngOnInit() {
   }
@@ -24,6 +28,7 @@ export class FilterControlComponent implements OnInit {
     } else {
       this.filterCodes = this.filterCodes.filter(value => value !== code);
     }
-    console.log(this.filterCodes);
+    this.filterSummary = this.filterCodes.join(' ');
+    // console.log(this.filterCodes);
   }
 }

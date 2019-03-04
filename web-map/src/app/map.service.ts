@@ -181,31 +181,20 @@ export class MapService implements OnDestroy {
     });
   }
 
-  // TODO: this doesn't work if you supply the same attribute twice
-  // the filterAttributes will get overwritten
-  filterLayer(layerId: number, filter: any) {
+  filterLayer(layerId: number, paramName: string, filterString: string) {
     const layerConfig = this.getLayerConfig(layerId);
     const source = layerConfig.layer.getSource();
     const params = layerConfig.layer.getSource().getParams();
-    const filterAttributes = Object.keys(filter);
-    let cqlFilter = '';
-    filterAttributes.forEach(attribute => {
-      if (cqlFilter.length > 0) {
-        // there is already at least one filter so use AND
-        cqlFilter += ' AND ';
-      }
-      cqlFilter += cqlFilter + attribute + ' IN (' + filter[attribute].map(code => `'${code}'`).join() + ')';
-    });
-    params['CQL_FILTER'] = cqlFilter;
-    console.log(cqlFilter);
+    params[paramName] = filterString;
+    console.log(paramName + ': ' + filterString);
     source.updateParams(params);
   }
 
-  clearFilterLayer(layerId) {
+  clearFilterLayer(layerId: number, paramName: string) {
     const layerConfig = this.getLayerConfig(layerId);
     const source = layerConfig.layer.getSource();
     const params = layerConfig.layer.getSource().getParams();
-    delete params['CQL_FILTER'];
+    delete params[paramName];
     source.updateParams(params);
   }
 

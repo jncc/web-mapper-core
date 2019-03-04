@@ -1,5 +1,5 @@
 <div class="controls-container" id="filter-settings" cdkDrag>
-    <div class="controls-container-header bg-primary">
+    <div class="controls-container-header bg-primary" cdkDragHandle>
         <h6>
             <span>FILTER LAYER {{ layer.name }}</span>
         </h6>
@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="controls-container-body">
-        <app-filter-control *ngFor="let filter of layer.filters" [filterName]="filter.name"
+        <app-filter-control *ngFor="let filter of layer.filters" [filterName]="filter.name" [filterType]="filter.type"
             [filterAttribute]="filter.attribute" [filterLookup]="filterLookup[filter.lookupCategory]">
         </app-filter-control>
         <div class="controls-container-footer">
