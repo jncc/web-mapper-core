@@ -30,9 +30,9 @@
                     <i class="btn fa fa-lg fa-info-circle"></i>
                 </a>
             </div>
-
             <div tooltip="filter layer" *ngIf="layer.filters && layer.filters.length">
-                <i class="btn fa fa-lg fa-filter" (click)="onOpenFilter()"></i>
+                <i class="btn fa fa-lg fa-filter" [ngClass]="{'filter-active' : filterActive}" (click)="onOpenFilter()"></i>
+                <i *ngIf="isFiltered" class="fa fa-lg fa-filter"></i>
             </div>
         </div>
 
