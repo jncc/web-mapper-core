@@ -108,7 +108,7 @@ div.custom-mouse-position {
   box-shadow: $container-shadow;
   background-color: white;
 }
- 
+
 .controls-container-header {
   display: flex;
   align-items: center;
@@ -119,7 +119,22 @@ div.custom-mouse-position {
   cursor: pointer;
 }
 
-
 .controls-container-body {
-    // padding: $container-padding;
+  padding: $container-padding;
+}
+
+.controls-container-footer {
+  padding: $container-padding;
+}
+
+
+
+
+.controls-container-header {
+  display: flex;
+  padding: $container-padding;
+  border-bottom: 1px solid $border-color;
+  background-color: #0A71B4;
+  border-radius: $container-border-radius;
+  cursor: pointer;
 }

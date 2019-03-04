@@ -10,41 +10,6 @@
     width: 25rem;
 }
 
-.controls-container {
-    user-select: none;
-    border-radius: $container-border-radius;
-    box-shadow: $container-shadow;
-    background-color: white;
-  }
-
-  #filter-settings .controls-container-header {
-    justify-content: space-between;
-    color: white;
-    line-height: 1.5rem;
-    cursor: auto;
-  }
-   
-  .controls-container-header {
-    display: flex;
-    padding: $container-padding;
-    border-bottom: 1px solid $border-color;
-    background-color: #0A71B4;
-    border-radius: $container-border-radius;
-    cursor: pointer;
-  }
-  
-  .controls-container-header h6 {
-    color: white;
-  }
-  
-  .controls-container-body {
-      padding: $container-padding;
-  }
-
-  .controls-container-footer {
-      padding: $container-padding;
-  }
-
 .active-layers.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     list-style: none;

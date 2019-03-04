@@ -14,7 +14,6 @@ import WMSCapabilities from 'ol/format/wmscapabilities';
 import { IFilterConfig } from './models/filter-config.model';
 import { ILookup } from './models/lookup.model';
 import { LayerService } from './layer.service';
-import Tile from 'ol/layer/tile';
 import { PermalinkService } from './permalink.service';
 import { IBaseLayerConfig } from './models/base-layer-config.model';
 
@@ -182,7 +181,8 @@ export class MapService implements OnDestroy {
     });
   }
 
-  // TODO: confusion between attributes and lookup category here FIX
+  // TODO: this doesn't work if you supply the same attribute twice
+  // the filterAttributes will get overwritten
   filterLayer(layerId: number, filter: any) {
     const layerConfig = this.getLayerConfig(layerId);
     const source = layerConfig.layer.getSource();
