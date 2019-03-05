@@ -50,6 +50,17 @@ export class FilterControlsComponent implements OnInit {
     this.closeFilter.emit();
   }
 
+  // TODO: check filter validity
+  private isValidFilter(): boolean {
+    if (this.layer.filters.every(filter => filter.isComplex)) {
+      return true;
+    }
+    if (this.layer.filters.every(filter => !filter.isComplex)) {
+      return true;
+    }
+    return false;
+  }
+
   private isComplexFilter(): boolean {
     return this.layer.filters.every(filter => filter.isComplex);
   }
