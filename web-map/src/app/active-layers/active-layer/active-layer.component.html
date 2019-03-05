@@ -8,9 +8,6 @@
         </div>
 
         <div class="active-layer-body">
-            <div>
-                <i *ngIf="filtered" class="fa fa-sm fa-filter"></i>
-            </div>
             <div [tooltip]="'opacity ' + layer.opacity">
                 <i class="btn fa fa-lg fa-adjust" (click)="onShowOpacity($event)"></i>
             </div>
@@ -32,7 +29,6 @@
             </div>
             <div tooltip="filter layer" *ngIf="layer.filters && layer.filters.length">
                 <i class="btn fa fa-lg fa-filter" [ngClass]="{'filter-active' : filterActive}" (click)="onOpenFilter()"></i>
-                <i *ngIf="isFiltered" class="fa fa-lg fa-filter"></i>
             </div>
         </div>
 
