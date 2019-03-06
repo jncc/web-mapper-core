@@ -231,13 +231,13 @@ namespace MapConfig.Controllers
             };            
             var l7 = new Layer { 
                 LayerGroupId = lg2.LayerGroupId,
-                LayerName = "eusm_oxy",
-                LegendLayerName = "eusm2016_oxy_full",
-                Name = "EUSeaMap 2016 Oxygen Regime Group (Test)",
-                SubLayerGroup = "Regional broad-scale seabed habitat maps",
-                MetadataUrl = "#",
-                MetadataDescription = "Decription",
-                DownloadURL = "#",               
+                LayerName = "Test",
+                LegendLayerName = "eusm2016_full",
+                Name = "Test Layer with Complex Filters (Test)",
+                SubLayerGroup = "",
+                MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/02a444c8-bd2d-4e15-8e69-806059103760",
+                MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified in EUNIS classification system, except where translation is not possible.",
+                DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
                 Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 22,
@@ -246,7 +246,25 @@ namespace MapConfig.Controllers
                 LayerCentreLon = 36,
                 LayerCentreLat = 43,
                 LayerZoom = 7
-            }; 
+            };
+            var l8 = new Layer { 
+                LayerGroupId = lg2.LayerGroupId,
+                LayerName = "Test1",
+                LegendLayerName = "eusm2016_full",
+                Name = "Test Layer with Complex Filters(2) (Test)",
+                SubLayerGroup = "",
+                MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/02a444c8-bd2d-4e15-8e69-806059103760",
+                MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified in EUNIS classification system, except where translation is not possible.",
+                DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
+                Type = "WMS",
+                Url=_webapiconfig.Value.TestDataWMSUrl,
+                LayerOrder = 23,
+                LayerVisible = false,
+                LayerOpacity = 0.8f,
+                LayerCentreLon = 37,
+                LayerCentreLat = 44,
+                LayerZoom = 7
+            };
                
             _context.Layer.Add(l1);
             _context.SaveChanges();
@@ -261,6 +279,8 @@ namespace MapConfig.Controllers
             _context.Layer.Add(l6);
             _context.SaveChanges();
             _context.Layer.Add(l7);
+            _context.SaveChanges();
+            _context.Layer.Add(l8);
             _context.SaveChanges();
 
             //Filters
@@ -306,22 +326,22 @@ namespace MapConfig.Controllers
             };
 
             var f5 = new Filter { 
-                LayerId = l3.LayerId, 
+                LayerId = l7.LayerId, 
                 Name = "Habitat (Test)", 
                 Description = "<p>Filter by Habitat Classifications</p>",
                 MetadataUrl = "",
                 Type = "Lookup", 
-                Attribute = "habitat", 
-                LookupCategory = "Habitat",
+                Attribute = "code", 
+                LookupCategory = "EunisHabitats",
                 IsComplex = true
             };
             var f6 = new Filter { 
-                LayerId = l3.LayerId, 
-                Name = "Species (Test)", 
-                Description = "<p>Filter by Species Classifications</p>",
+                LayerId = l7.LayerId, 
+                Name = "Habitat Code (Test)", 
+                Description = "<p>Filter by Habitat Classifications</p>",
                 MetadataUrl = "",
                 Type = "Text", 
-                Attribute = "species", 
+                Attribute = "code", 
                 IsComplex = true
             };
 
@@ -343,6 +363,26 @@ namespace MapConfig.Controllers
                 Attribute = "habitat", 
                 LookupCategory = "Habitat"
             };
+
+            var f9 = new Filter { 
+                LayerId = l8.LayerId, 
+                Name = "Habitat (Test)", 
+                Description = "<p>Filter by Habitat Classifications</p>",
+                MetadataUrl = "",
+                Type = "Lookup", 
+                Attribute = "code", 
+                LookupCategory = "EunisHabitats",
+                IsComplex = true
+            };
+            var f10 = new Filter { 
+                LayerId = l8.LayerId, 
+                Name = "Substrate (Test)", 
+                Description = "<p>Filter by Substrate</p>",
+                MetadataUrl = "",
+                Type = "Text", 
+                Attribute = "substrate", 
+                IsComplex = true
+            };
              
             _context.Filter.Add(f1);
             _context.SaveChanges();
@@ -359,6 +399,10 @@ namespace MapConfig.Controllers
             _context.Filter.Add(f7);
             _context.SaveChanges();
             _context.Filter.Add(f8);
+            _context.SaveChanges();
+            _context.Filter.Add(f9);
+            _context.SaveChanges();
+            _context.Filter.Add(f10);
             _context.SaveChanges();
 
             //Lookups (from JSON files)
