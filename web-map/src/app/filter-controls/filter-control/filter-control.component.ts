@@ -44,6 +44,7 @@ export class FilterControlComponent implements OnInit, OnChanges {
         });
       }
     } else {
+      this.filterText = '';
       this.filterLookup.forEach(lookup => {
         this.filterState.push({lookup: lookup, checked: false});
       });

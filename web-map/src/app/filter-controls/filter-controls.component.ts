@@ -119,7 +119,7 @@ export class FilterControlsComponent implements OnInit {
       }
       if (control.filterConfig.type === 'text' && control.filterText.length > 0) {
         filterString += control.filterConfig.attribute + ':';
-        filterString += this.escapeSpecialCharacters(control.filterText);
+        filterString += '\'' + this.escapeSpecialCharacters(control.filterText) + '\'';
         filterString += ';';
 
         newActiveFilters.push({
