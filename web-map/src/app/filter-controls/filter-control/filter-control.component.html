@@ -1,14 +1,20 @@
 <div>
-  {{ filterName }}
+  {{ filterConfig.name }}
 </div>
-<div class="filter-lookup-values">
+<div *ngIf="filterConfig.type==='lookup'">
+  {{ filterConfig.attribute }}: {{ filterSummary }}
+</div>
+<div *ngIf="filterConfig.type==='lookup'" class="filter-lookup-values">
   <ul>
-    <li *ngFor="let lookup of filterLookup">
+    <li *ngFor="let state of filterState">
       <label>
-      <input type="checkbox" [id]="lookup.lookupId" [value]="lookup.code" (change)="onCheckChanged(lookup.code, $event)">
-      {{ lookup.name }}
+      <input type="checkbox" [id]="state.lookup.lookupId" [value]="state.lookup.code" [checked]="state.checked" (change)="onCheckChanged(state.lookup.code, $event)">
+      {{ state.lookup.name }}
     </label>
     </li>
   </ul>
+</div>
+<div *ngIf="filterConfig.type==='text'" class="filter-text">
+  <input [(ngModel)]="filterText" type="text">
 </div>
 

@@ -1,4 +1,9 @@
 .filter-lookup-values {
     max-height: 10rem;
     overflow-y: auto;
+    box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, .25);
+}
+
+.filter-text input {
+    width: 100%;
 }

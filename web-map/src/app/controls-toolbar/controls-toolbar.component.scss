@@ -1,7 +1,7 @@
 @import '../../variables.scss';
 
 .controls-toolbar {
-    display: inline-block;
+    display: flex;
     background-color: white;
     padding: $container-padding;
 }

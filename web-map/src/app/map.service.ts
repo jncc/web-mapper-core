@@ -6,8 +6,6 @@ import { ApiService } from './api.service';
 import { IMapConfig } from './models/map-config.model';
 
 // TODO: move to another service
-import TileWMS from 'ol/source/tilewms';
-import Tile from 'ol/layer/tile';
 import { ILayerConfig } from './models/layer-config.model';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
@@ -15,6 +13,10 @@ import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
 import WMSCapabilities from 'ol/format/wmscapabilities';
 import { IFilterConfig } from './models/filter-config.model';
 import { ILookup } from './models/lookup.model';
+import { LayerService } from './layer.service';
+import { PermalinkService } from './permalink.service';
+import { IBaseLayerConfig } from './models/base-layer-config.model';
+import { IActiveFilter } from './models/active-filter.model';
 
 
 @Injectable({
@@ -24,8 +26,8 @@ export class MapService implements OnDestroy {
 
   map: any;
 
-  dragZoomInSubject = new Subject<boolean>();
-  dragZoomOutSubject = new Subject<boolean>();
+  dragZoomInSubject = new Subject<void>();
+  dragZoomOutSubject = new Subject<void>();
   zoomSubject = new Subject<{ center: number[], zoom: number }>();
   zoomToExtentSubject = new Subject<number[]>();
 
@@ -35,8 +37,10 @@ export class MapService implements OnDestroy {
     mapConfig: IMapConfig;
     layerLookup: ILayerConfig[];
     visibleLayers: ILayerConfig[];
+    baseLayers: IBaseLayerConfig[];
     featureInfos: any[];
     filterLookups: { [lookupCategory: string]: ILookup[]; };
+    activeFilters: IActiveFilter[];
   };
 
   private _mapConfig: BehaviorSubject<IMapConfig>;
@@ -60,7 +64,17 @@ export class MapService implements OnDestroy {
     return this._filterLookups.asObservable();
   }
 
-  constructor(private apiService: ApiService) {
+  private _baseLayers: BehaviorSubject<IBaseLayerConfig[]>;
+  get baseLayers() {
+    return this._baseLayers.asObservable();
+  }
+
+  private _activeFilters: BehaviorSubject<IActiveFilter[]>;
+  get activeFilters() {
+    return this._activeFilters.asObservable();
+  }
+
+  constructor(private apiService: ApiService, private layerService: LayerService, private permalinkService: PermalinkService) {
     this.dataStore = {
       mapConfig: {
         mapInstances: [],
@@ -74,13 +88,17 @@ export class MapService implements OnDestroy {
       },
       layerLookup: [],
       visibleLayers: [],
+      baseLayers: [],
       featureInfos: [],
-      filterLookups: {}
+      filterLookups: {},
+      activeFilters: []
     };
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
     this._visibleLayers = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.visibleLayers);
     this._featureInfos = <BehaviorSubject<any[]>>new BehaviorSubject(this.dataStore.featureInfos);
     this._filterLookups = new BehaviorSubject({});
+    this._baseLayers = new BehaviorSubject(this.dataStore.baseLayers);
+    this._activeFilters = new BehaviorSubject(this.dataStore.activeFilters);
     this.subscribeToConfig();
 
     this.subscribeToMapInstanceConfig();
@@ -96,12 +114,13 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
-      // console.log(this.dataStore.mapConfig.mapInstance);
+      console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       // TODO: move to another service
       this.createLayersForConfig();
+      this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
-      console.log(this.dataStore.mapConfig);
+      // console.log(this.dataStore.mapConfig);
 
       this.createFilterLookups();
 
@@ -132,23 +151,12 @@ export class MapService implements OnDestroy {
   private createLayersForConfig(): void {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig) => {
       if (layerGroupConfig.layers.length) {
-        layerGroupConfig.layers.forEach((layerConfig: ILayerConfig, index: number) => {
+        layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
           // TODO: styles - this is just exploring styles in getcapabilities
           // const layerName = layerConfig.layerName;
           // const legendLayerName = layerConfig.legendLayerName;
           // this.getStyles(layerName, legendLayerName, layerConfig.url);
-          const source = new TileWMS({
-            url: layerConfig.url,
-            params: { 'LAYERS': layerConfig.layerName,
-              'TILED': 'TRUE',
-              'FORMAT': 'image/png8',
-              // 'CQL_FILTER': 'hab_type IN (\'A5.27\', \'A3\', \'A4.5\')'
-            },
-            crossOrigin: 'anonymous'
-          });
-          layerConfig.layer = new Tile({
-            source: source
-          });
+          layerConfig.layer = this.layerService.createLayer(layerConfig);
           layerConfig.layer.setOpacity(layerConfig.opacity);
           layerConfig.layer.setVisible(layerConfig.visible);
 
@@ -160,6 +168,11 @@ export class MapService implements OnDestroy {
       }
     });
     this._visibleLayers.next(this.dataStore.visibleLayers);
+  }
+
+  private createBaseLayers(): void {
+    this.dataStore.baseLayers = this.layerService.createBaseLayers();
+    this._baseLayers.next(this.dataStore.baseLayers);
   }
 
   private createFilterLookups() {
@@ -177,31 +190,28 @@ export class MapService implements OnDestroy {
     });
   }
 
-  // TODO: confusion between attributes and lookup category here FIX
-  filterLayer(layerId: number, filter: any) {
+  filterLayer(layerId: number, paramName: string, filterString: string, activeFilters: IActiveFilter[]) {
     const layerConfig = this.getLayerConfig(layerId);
     const source = layerConfig.layer.getSource();
     const params = layerConfig.layer.getSource().getParams();
-    const filterAttributes = Object.keys(filter);
-    let cqlFilter = '';
-    filterAttributes.forEach(attribute => {
-      if (cqlFilter.length > 0) {
-        // there is already at least one filter so use AND
-        cqlFilter += ' AND ';
-      }
-      cqlFilter += cqlFilter + attribute + ' IN (' + filter[attribute].map(code => `'${code}'`).join() + ')';
-    });
-    params['CQL_FILTER'] = cqlFilter;
-    console.log(cqlFilter);
+    params[paramName] = filterString;
+    // console.log(paramName + ': ' + filterString);
     source.updateParams(params);
+
+    this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+    this.dataStore.activeFilters = [...this.dataStore.activeFilters, ...activeFilters];
+    this._activeFilters.next(this.dataStore.activeFilters);
   }
 
-  clearFilterLayer(layerId) {
+  clearFilterLayer(layerId: number, paramName: string) {
     const layerConfig = this.getLayerConfig(layerId);
     const source = layerConfig.layer.getSource();
     const params = layerConfig.layer.getSource().getParams();
-    delete params['CQL_FILTER'];
+    delete params[paramName];
     source.updateParams(params);
+
+    this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+    this._activeFilters.next(this.dataStore.activeFilters);
   }
 
   private getStyles(layerName, legendLayerName, url) {
@@ -256,12 +266,14 @@ export class MapService implements OnDestroy {
     this.zoomToExtentSubject.next(extent);
   }
 
-  dragZoomIn(activated: boolean) {
-    this.dragZoomInSubject.next(activated);
+  dragZoomIn() {
+    console.log("drag zoom in")
+    this.dragZoomInSubject.next();
   }
 
-  dragZoomOut(activated: boolean) {
-    this.dragZoomOutSubject.next(activated);
+  dragZoomOut() {
+    console.log("drag zoom out")
+    this.dragZoomOutSubject.next();
   }
 
   showFeatureInfo(urls: string[]) {
@@ -280,14 +292,17 @@ export class MapService implements OnDestroy {
   }
 
   changeLayerVisibility(layerId: number, visible: boolean) {
-    const currentLayerConfig = this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
-    currentLayerConfig.layer.setVisible(visible);
-    currentLayerConfig.visible = visible;
+    const layerConfig = this.getLayerConfig(layerId);
+    layerConfig.layer.setVisible(visible);
+    layerConfig.visible = visible;
 
     if (visible) {
-      this.dataStore.visibleLayers = [currentLayerConfig, ...this.dataStore.visibleLayers];
+      this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
     } else {
-      this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== currentLayerConfig);
+      this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
+
+      this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+      this._activeFilters.next(this.dataStore.activeFilters);
     }
     this._visibleLayers.next(this.dataStore.visibleLayers);
     this._mapConfig.next(this.dataStore.mapConfig);
@@ -318,8 +333,6 @@ export class MapService implements OnDestroy {
       '&LEGEND_OPTIONS=fontAntiAliasing:true;fontColor:0x5A5A5A' +
       '&LAYER=' + legendLayerName;
 
-    // &LEGEND_OPTIONS=dpi:180;bgColor:0xFF0000
-    // console.log(url);
     this.showLegendSubject.next({ name: layerConfig.name, legendUrl: url });
   }
 
@@ -329,5 +342,21 @@ export class MapService implements OnDestroy {
 
   private getLayerConfig(layerId: number): ILayerConfig {
     return this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
+  }
+
+  setBaseLayer(baseLayerId: number) {
+    this.dataStore.baseLayers.forEach(baseLayer => {
+      if (baseLayer.baseLayerId === baseLayerId) {
+        baseLayer.layer.setVisible(true);
+      } else {
+        baseLayer.layer.setVisible(false);
+      }
+    });
+  }
+
+  onMapMoveEnd(zoom: number, center: number[]) {
+    const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
+    const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
+    this.permalinkService.updateUrl(zoom, center, layerIds, baseLayerId);
   }
 }

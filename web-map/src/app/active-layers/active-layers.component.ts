@@ -7,7 +7,6 @@ import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { ILookup } from '../models/lookup.model';
 
 @Component({
   selector: 'app-active-layers',
@@ -87,7 +86,6 @@ export class ActiveLayersComponent implements OnInit {
 
   // Filter
   openFilter(activeLayer) {
-    console.log(activeLayer.layerName);
     this.closeFilter();
     const positionStrategy = this.overlay.position()
       .global()

@@ -13,7 +13,7 @@ export class TooltipDirective implements OnInit {
   @Input('tooltip') text = '';
   private overlayRef: OverlayRef;
   showDelay = 500;
-  hideDelay = 1000;
+  hideDelay = 1500;
 
   /** The timeout ID of any current timer set to show the tooltip */
   private showTimeoutId: number | null;

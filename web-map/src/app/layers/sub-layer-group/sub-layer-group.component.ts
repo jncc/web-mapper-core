@@ -13,6 +13,10 @@ export class SubLayerGroupComponent implements OnInit {
 
   show = false;
 
+  get visibleLayers(): number {
+    return (this.subLayerGroup.layers.filter((l) => l.visible === true)).length;
+  }
+
   constructor() { }
 
   ngOnInit() {
@@ -24,5 +28,15 @@ export class SubLayerGroupComponent implements OnInit {
 
   onLayerVisibilityChanged(layer: ILayerConfig, visible: boolean) {
     this.layerVisibilityChanged.emit({ layerId: layer.layerId, visible: visible });
+  }
+
+  onToggleLayers() {
+    let visible = true;
+    if (this.subLayerGroup.layers.every(layerConfig => layerConfig.layer.getVisible())) {
+      visible = false;
+    }
+    this.subLayerGroup.layers.forEach(layerConfig =>
+      this.layerVisibilityChanged.emit({ layerId: layerConfig.layerId, visible: visible })
+    );
   }
 }

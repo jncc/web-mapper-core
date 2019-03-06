@@ -1,36 +1,37 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ILayerConfig } from 'src/app/models/layer-config.model';
 import { MapService } from 'src/app/map.service';
 import { ILookup } from 'src/app/models/lookup.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-active-layer',
   templateUrl: './active-layer.component.html',
   styleUrls: ['./active-layer.component.scss']
 })
-export class ActiveLayerComponent implements OnInit {
+export class ActiveLayerComponent implements OnInit, OnDestroy {
   @Input() layer: ILayerConfig;
   @Output() showOpacity: EventEmitter<{x: number, y: number}> = new EventEmitter();
   @Output() openFilter: EventEmitter<any> = new EventEmitter();
 
-  showFilter = false;
-  filtered = false;
-
-  filterLookup: { [lookupCategory: string]: ILookup[] } = {};
+  filterActive = false;
+  activeFiltersSubscription: Subscription;
 
   constructor(private mapService: MapService) { }
 
   ngOnInit() {
-    this.mapService.lookups.subscribe(data => this.filterLookup = data);
-  }
-
-  onShowFilter() {
-    this.showFilter = !this.showFilter;
+    this.activeFiltersSubscription = this.mapService.activeFilters.subscribe(activeFilters => {
+      if (activeFilters.some(activeFilter => activeFilter.layerId === this.layer.layerId)) {
+        this.filterActive = true;
+      } else {
+        this.filterActive = false;
+      }
+    });
   }
 
   onToggleFilter() {
-    this.filtered = !this.filtered;
-    alert('Filter status: ' + this.filtered);
+    this.filterActive = !this.filterActive;
+    alert('Filter status: ' + this.filterActive);
   }
 
   onRemoveLayer() {
@@ -55,6 +56,10 @@ export class ActiveLayerComponent implements OnInit {
 
   onOpenFilter() {
     this.openFilter.emit();
+  }
+
+  ngOnDestroy() {
+    this.activeFiltersSubscription.unsubscribe();
   }
 
 }

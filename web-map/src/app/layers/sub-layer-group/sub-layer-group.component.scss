@@ -1,5 +1,31 @@
 .sub-layer-group-header {
-    margin-left: 0.5rem;
+    display: flex;
+    justify-content: space-between;
     cursor: pointer;
-    background-color: whitesmoke;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    color: white;
+}
+
+.sub-layer-group-body.closed {
+    height: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #0A71B4;
+}
+
+span.badge {
+    font-size: 0.7rem;
+    color: #fff;
+    float: right;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+    text-align: center;
+    border-radius: 50%;
+    vertical-align: middle;
+    line-height: 1rem;
+    background-color: rgb(90, 90, 90);
+}
+
+.visible-layers {
+    padding: 0.25rem;
 }

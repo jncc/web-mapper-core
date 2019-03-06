@@ -1,22 +1,29 @@
 /* Map Styles */
+body {
+    color: rgb(90, 90, 90);
+}
 
 /* Primary background colour */
 .bg-primary {
     background-color: #0A71B4;
+    color: white;
 }
 
 /* Secondary background colour */
 .bg-secondary {
     background-color: #61AADF;
+    color: white;
 }
 
 .bg-dark {
     background-color: #012E58;
+    color: white;
 }
 
 
 .bg-light {
-    background-color: white;
+    background-color: aliceblue;
+    color: rgb(90, 90, 90);
 }
 
 /* GetFeatureInfo Styles */

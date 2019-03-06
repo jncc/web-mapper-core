@@ -1,6 +1,7 @@
 .layer {
     display:flex;
     line-height: 1.4rem;
+    padding: 0.25rem;
 }
 
 .layer-toggle, .layer-name {
@@ -9,6 +10,7 @@
 
 .layer-name {
     flex-grow: 1;
+    cursor: pointer;
 }
 
 /* The switch - the box around the slider */
@@ -75,3 +77,5 @@
   .slider.round:before {
     border-radius: 50%;
   }
+
+  

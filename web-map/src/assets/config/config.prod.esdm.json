@@ -2,5 +2,6 @@
     "name": "prod mapper",
     "logging": false,
     "apiUrl": "//jnccdev-api.esdm.co.uk/api",
-    "mapInstance": "EMODnet"
+    "mapInstance": "EMODnet",
+    "bingMapsApiKey": "Aga4e1A89vNBHNtP4nBTmHkKEECEgu5zxqVOjdpJ9LMSVoakhoOAOnLs4iNDrSOY"
 }

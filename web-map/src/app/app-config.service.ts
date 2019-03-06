@@ -11,7 +11,9 @@ export class AppConfigService {
     static settings: IAppConfig;
     constructor(private http: HttpClient) {}
     load() {
-        const configFile = `assets/config/config.${environment.name}.json`;
+        // date to number in base36 to prevent caching
+        const dateHash = (+new Date).toString(36);
+        const configFile = `assets/config/config.${environment.name}.json?v=${dateHash}`;
         return new Promise<void>((resolve, reject) => {
             this.http.get(configFile).toPromise().then((response: IAppConfig) => {
                AppConfigService.settings = <IAppConfig>response;

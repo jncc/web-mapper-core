@@ -24,6 +24,7 @@ html {
 body {
   font-family: $main-font-family;
   font-weight: 400;
+  color: $text-color;
 }
   
 h1, h2, h3, h4, h5, h6 {
@@ -35,7 +36,6 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
   margin: 0;
   padding: 0;
   font-size: 12px;
-  color: $text-color;
 }
 
 a {
@@ -75,19 +75,21 @@ img {
 .ol-scale-line {
   position: absolute;
   bottom: 1rem;
-  right: 1rem;
+  right: 12rem;
   left: auto;
   background: rgba(0,60,136,0.7);
 }
 
 div#mousePosition {
   position: absolute;
-  right: 8rem;
+  right: 1rem;
   bottom: 1rem;
   width: 10rem;
   background-color: white;
   padding: $container-padding;
   pointer-events: none;
+  box-shadow: $container-shadow;
+
 }
 
 div.custom-mouse-position {
@@ -100,25 +102,39 @@ div.custom-mouse-position {
   background-color: transparent;
 }
 
-/*
-table.featureInfo {
-  border-collapse: collapse;
-  border: 1px solid grey;
-  margin: 1rem;
-}
-table.featureInfo th, table.featureInfo td {
-  border: 1px solid grey;
+.controls-container {
+  user-select: none;
+  border-radius: $container-border-radius;
+  box-shadow: $container-shadow;
+  background-color: white;
 }
 
-caption.featureInfo {
-  text-align: left;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
+.controls-container-header {
+  display: flex;
+  align-items: center;
+  padding: $container-padding;
+  border-bottom: 1px solid $border-color;
+  // background-color: rgb(216, 233, 245);
+  border-radius: $container-border-radius;
+  cursor: pointer;
 }
-*/
 
-// #active-layers {
-//   position: absolute;
-//   left: 20rem;
-//   top: 10rem;
-// }
+.controls-container-body {
+  padding: $container-padding;
+}
+
+.controls-container-footer {
+  padding: $container-padding;
+}
+
+
+
+
+.controls-container-header {
+  display: flex;
+  padding: $container-padding;
+  border-bottom: 1px solid $border-color;
+  background-color: #0A71B4;
+  border-radius: $container-border-radius;
+  cursor: pointer;
+}
