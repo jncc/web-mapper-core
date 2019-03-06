@@ -16,7 +16,7 @@ span.badge {
 .layer-group-body.closed {
     height: 0;
     overflow: hidden;
-    border-bottom: 1px solid #012E58;
+    border-bottom: 1px groove rgba(0, 0, 0, 0.25);
 }
 
 .layer-group-header {
