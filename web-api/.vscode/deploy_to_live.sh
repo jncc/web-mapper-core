@@ -11,7 +11,7 @@ ssh $user@$host "mkdir $remotepath 2>/dev/null; rsync -e ssh -zauvE --delete --p
 [ $? -ne 0 ] && echo "Deploy to Live Task Failed!" && exit 1
 
 echo "Installing Correct Configuration on Live Server and Restarting Process..."
-rc="ssh $user@$livehost \"cd $remotepath/$project && cp -f appsettings.jncc.json appsettings.json && kill \\\$(pgrep -f -o '$project')\""
+rc="ssh $user@$livehost \"cd $remotepath/$project && cp -f appsettings.jncc.json appsettings.json && cp -f appsettings.jncc.json appsettings.Development.json && kill \\\$(pgrep -f -o '$project')\""
 echo $rc
 ssh $user@$host "$rc"
 [ $? -ne 0 ] && echo "Installing Configuration and Restarting Failed!" && exit 1
