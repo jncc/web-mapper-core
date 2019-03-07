@@ -11,6 +11,7 @@ namespace MapConfig.Models
 
         public DbSet<MapConfig.Models.MapInstance> MapInstance { get; set; }
         public DbSet<MapConfig.Models.BaseLayer> BaseLayer { get; set; }
+        public DbSet<MapConfig.Models.ExternalWmsUrl> ExternalWmsUrl { get; set; }
         public DbSet<MapConfig.Models.LayerGroup> LayerGroup { get; set; }
         public DbSet<MapConfig.Models.Layer> Layer { get; set; }
         public DbSet<MapConfig.Models.Filter> Filter { get; set; }
@@ -24,13 +25,12 @@ namespace MapConfig.Models
         {
             modelBuilder.Entity<MapInstance>().HasIndex(m => m.Name).IsUnique();
             modelBuilder.Entity<BaseLayer>().HasIndex(b => b.Name).IsUnique();
-            modelBuilder.Entity<Layer>().HasIndex(l => l.Name);
+            modelBuilder.Entity<ExternalWmsUrl>().HasIndex(e => e.Name);
             modelBuilder.Entity<LayerGroup>().HasIndex(l => l.Name);
+            modelBuilder.Entity<Layer>().HasIndex(l => l.Name);
             modelBuilder.Entity<Filter>().HasIndex(f => f.Name);
             modelBuilder.Entity<Lookup>().HasIndex(l => l.LookupCategory);
             modelBuilder.Entity<Gazetteer>().HasIndex(g => g.Name);
         }
-
-
     }
 }

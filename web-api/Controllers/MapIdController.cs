@@ -36,6 +36,7 @@ namespace MapConfig.Controllers
         public async Task<ActionResult<MapInstance>> GetMapInstances(long id)
         {
             var map = await _context.MapInstance
+                .Include(e => e.ExternalWmsUrls)
                 .Include(m => m.LayerGroups)
                 .ThenInclude(l => l.Layers)
                 .ThenInclude(f => f.Filters)

@@ -87,6 +87,36 @@ namespace MapConfig.Controllers
                     .SingleOrDefaultAsync(m => m.Name == "OSPAR");
             }
 
+            //External WMS Sources
+            var externalwms = _context.ExternalWmsUrl.Where(e =>e.Name.EndsWith("(Test)"));
+            _context.ExternalWmsUrl.RemoveRange(externalwms);
+
+            var ew1 = new ExternalWmsUrl {
+                MapInstanceId = map1.MapInstanceId,
+                Name = "EMODnet Biology (Test)",
+                Description = "EMODnet Biology",
+                Url = "http://geo.vliz.be/geoserver/wms?version=1.1.1"
+            };
+            var ew2 = new ExternalWmsUrl {
+                MapInstanceId = map1.MapInstanceId,
+                Name = "EMODnet Geology (Test)",
+                Description = "EMODnet Geology",
+                Url = "http://drive.emodnet-geology.eu/geoserver/EMODnetGeology/wms?version=1.1.1"
+            };
+            var ew3 = new ExternalWmsUrl {
+                MapInstanceId = map1.MapInstanceId,
+                Name = "EMODnet Human Activities (Test)",
+                Description = "EMODnet Human Activities",
+                Url = "http://77.246.172.208/geoserver/emodnet/wms?version=1.1.1"
+            };
+
+            _context.ExternalWmsUrl.Add(ew1);
+            _context.SaveChanges();
+            _context.ExternalWmsUrl.Add(ew2);
+            _context.SaveChanges();
+            _context.ExternalWmsUrl.Add(ew3);
+            _context.SaveChanges();
+
             //LayerGroups
             var layergroups = _context.LayerGroup.Where(f => f.Name.EndsWith("(Test)"));
             _context.LayerGroup.RemoveRange(layergroups);
@@ -95,18 +125,29 @@ namespace MapConfig.Controllers
                 MapInstanceId = map1.MapInstanceId,
                 Name = "EMODnet broad-scale seabed habitat map for Europe (EUSeaMap) (Test)",
                 Description = "<p>Collection of <strong>Layers</strong></p>",
-                Order = 10
+                Order = 10,
+                IsExternal = false
             };
             var lg2 = new LayerGroup { 
                 MapInstanceId = map1.MapInstanceId,
                 Name = "Environmental variables that influence habitat type (Test)",
                 Description = "<p>Collection of <strong>Layers</strong></p>",
-                Order = 20
+                Order = 20,
+                IsExternal = false
             };
             var lg3 = new LayerGroup { 
-                MapInstanceId = map2.MapInstanceId,
+                MapInstanceId = map1.MapInstanceId,
                 Name = "Collection of Layers (Test)",
-                Description = "<p>Collection of <strong>Layers</strong></p>"
+                Description = "<p>Collection of <strong>Layers</strong></p>",
+                Order = 30,
+                IsExternal = false
+            };
+            var lg4 = new LayerGroup { 
+                MapInstanceId = map1.MapInstanceId,
+                Name = "External Layers (Test)",
+                Description = "<p>Add Layers from <strong>External Sources</strong></p>",
+                Order = 999,
+                IsExternal = true
             };
               
             _context.LayerGroup.Add(lg1);
@@ -114,6 +155,8 @@ namespace MapConfig.Controllers
             _context.LayerGroup.Add(lg2);
             _context.SaveChanges();
             _context.LayerGroup.Add(lg3);
+            _context.SaveChanges();
+            _context.LayerGroup.Add(lg4);
             _context.SaveChanges();
 
             //Layers
@@ -174,7 +217,7 @@ namespace MapConfig.Controllers
                 LayerZoom = 6
             };
             var l4 = new Layer { 
-                LayerGroupId = lg1.LayerGroupId,
+                LayerGroupId = lg2.LayerGroupId,
                 LayerName = "eusm_sub",
                 LegendLayerName = "eusm2016_subs_full",
                 Name = "Substrate type (Test)",
@@ -193,7 +236,7 @@ namespace MapConfig.Controllers
             };
 
             var l5 = new Layer { 
-                LayerGroupId = lg1.LayerGroupId,
+                LayerGroupId = lg3.LayerGroupId,
                 LayerName = "uksm2016",
                 LegendLayerName = "uk3as",
                 Name = "EUNIS classification for the UK shelf area at 3 arc-second resolution (Test)",
@@ -230,7 +273,7 @@ namespace MapConfig.Controllers
                 LayerZoom = 7
             };            
             var l7 = new Layer { 
-                LayerGroupId = lg2.LayerGroupId,
+                LayerGroupId = lg3.LayerGroupId,
                 LayerName = "Test",
                 LegendLayerName = "eusm2016_full",
                 Name = "Test Layer with Complex Filters (Test)",
@@ -248,7 +291,7 @@ namespace MapConfig.Controllers
                 LayerZoom = 7
             };
             var l8 = new Layer { 
-                LayerGroupId = lg2.LayerGroupId,
+                LayerGroupId = lg3.LayerGroupId,
                 LayerName = "Test1",
                 LegendLayerName = "eusm2016_full",
                 Name = "Test Layer with Complex Filters(2) (Test)",
@@ -259,6 +302,25 @@ namespace MapConfig.Controllers
                 Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 23,
+                LayerVisible = false,
+                LayerOpacity = 0.8f,
+                LayerCentreLon = 37,
+                LayerCentreLat = 44,
+                LayerZoom = 7
+            };
+
+            var l9 = new Layer { 
+                LayerGroupId = lg4.LayerGroupId,
+                LayerName = "lighthouses",
+                LegendLayerName = "lighthouses",
+                Name = "EMODnet Human Activity - Lighthouses (Test)",
+                SubLayerGroup = "",
+                MetadataUrl = "",
+                MetadataDescription = "",
+                DownloadURL = "",               
+                Type = "WMS",
+                Url = "http://geo.vliz.be/geoserver/wms?version=1.1.1",
+                LayerOrder = 1,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
                 LayerCentreLon = 37,
@@ -281,6 +343,8 @@ namespace MapConfig.Controllers
             _context.Layer.Add(l7);
             _context.SaveChanges();
             _context.Layer.Add(l8);
+            _context.SaveChanges();
+            _context.Layer.Add(l9);
             _context.SaveChanges();
 
             //Filters

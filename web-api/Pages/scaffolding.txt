@@ -6,3 +6,4 @@ dotnet aspnet-codegenerator razorpage -m Layer -dc MapConfigContext -udl -outDir
 dotnet aspnet-codegenerator razorpage -m Filter -dc MapConfigContext -udl -outDir Pages/Filters --referenceScriptLibraries
 dotnet aspnet-codegenerator razorpage -m Lookup -dc MapConfigContext -udl -outDir Pages/Lookups --referenceScriptLibraries
 dotnet aspnet-codegenerator razorpage -m MapConfig.Models.Gazetteer -dc MapConfigContext -udl -outDir Pages/Gazetteers --referenceScriptLibraries
+dotnet aspnet-codegenerator razorpage -m MapConfig.Models.ExternalWmsUrl -dc MapConfigContext -udl -outDir Pages/ExternalWmsUrls --referenceScriptLibraries

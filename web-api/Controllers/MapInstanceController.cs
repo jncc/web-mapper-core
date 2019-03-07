@@ -37,6 +37,7 @@ namespace MapConfig.Controllers
         public async Task<ActionResult<MapInstance>> GetMapInstances(string name)
         {
             var map = await _context.MapInstance
+                .Include(e => e.ExternalWmsUrls)
                 .Include(m => m.LayerGroups)
                 .ThenInclude(l => l.Layers)
                 .ThenInclude(f => f.Filters)
@@ -89,7 +90,6 @@ namespace MapConfig.Controllers
             }
 
             //convert any LayerCentreLon/Lat values into a JSON 'center' array attribute for the layer, and re-map other fields
-
             List<LayerGroup> layerGroups = new List<LayerGroup>();
             foreach (LayerGroup layerGroup in map.LayerGroups) {
                 List<Layer> layers = new List<Layer>();

@@ -31,6 +31,7 @@ namespace MapConfig.Models
         public List<BaseLayer> BaseLayers { get; set; }
 
         //foreign keys
+        public List<ExternalWmsUrl> ExternalWmsUrls { get; set; }
         public List<LayerGroup> LayerGroups { get; set; }
     }
 
@@ -46,6 +47,19 @@ namespace MapConfig.Models
         public Boolean Visible { get; set; }    //set by the /api/MapInstance endpoint if this baselayer is the default visible
     }
 
+    public class ExternalWmsUrl
+    {
+        [Key]
+        public long ExternalWmsUrlId { get; set; } //Unique External WMS ID
+        public string Name { get; set; }        //External WMS Name
+        public string Description { get; set; } //Short Descriptive text about the External WMS source (can contain HTML)
+        public string Url { get; set; }         //URL of the WMS source
+
+        //foreign keys
+        public long MapInstanceId { get; set; }  //Which MapInstance do I belong to?
+        public MapInstance Map { get; set; }
+    }
+
     public class LayerGroup
     {
         [Key]
@@ -53,6 +67,7 @@ namespace MapConfig.Models
         public string Name { get; set; }         //Layer Group Name
         public string Description { get; set; }  //Short Descriptive text about the LayerGroup (can contain HTML)
         public long Order { get; set; }           //Initial Order for the Layer Group
+        public Boolean IsExternal { get; set; }   //Is this Layer Group used for external Layers?
 
         //foreign keys
         public long MapInstanceId { get; set; }  //Which MapInstance do I belong to?

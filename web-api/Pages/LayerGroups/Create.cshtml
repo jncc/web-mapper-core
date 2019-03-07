@@ -28,6 +28,11 @@
                 <input asp-for="LayerGroup.Order" class="form-control" />
                 <span asp-validation-for="LayerGroup.Order" class="text-danger"></span>
             </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="LayerGroup.IsExternal" /> @Html.DisplayNameFor(model => model.LayerGroup.IsExternal))
+                </label>
+            </div>
             <div class="form-group">
                 <label asp-for="LayerGroup.MapInstanceId" class="control-label"></label>
                 <select asp-for="LayerGroup.MapInstanceId" class ="form-control" asp-items="ViewBag.MapInstanceId"></select>
