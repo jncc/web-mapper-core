@@ -1,4 +1,4 @@
-<div *ngIf="subLayerGroup.name === null">
+<div *ngIf="subLayerGroup.name === null || subLayerGroup.name == ''">
   <ul>
     <li *ngFor="let layer of subLayerGroup.layers">
       <app-layer [layer]="layer" (visibilityChanged)="onLayerVisibilityChanged(layer, $event)"></app-layer>
@@ -6,20 +6,20 @@
   </ul>
 </div>
 
-<div *ngIf="subLayerGroup.name !== null" class="sub-layer-group bg-secondary">
+<div *ngIf="subLayerGroup.name !== null && subLayerGroup.name !== ''" class="sub-layer-group bg-secondary">
   <div class="sub-layer-group-header">
-    <h6  (click)="toggleShow()">
+    <div class="sub-layer-group-title" (click)="toggleShow()">
       <i *ngIf="show" class="btn fa fa-fw fa-caret-down"></i>
       <i *ngIf="!show" class="btn fa fa-fw fa-caret-right"></i>
       {{ subLayerGroup.name }}
-    </h6>
-    <div (click)="onToggleLayers()" class="visible-layers">
-        <span class="badge"
-            [tooltip]="visibleLayers + ' active. Click to toggle all layers in this sub-group'">
-            {{ visibleLayers }}
-        </span>
     </div>
+    <div (click)="onToggleLayers()" class="visible-layers">
+        <span class="badge" [tooltip]="visibleLayers + ' active. Click to toggle all layers in this sub-group'">
+          {{ visibleLayers }}
+        </span>
+      </div>
   </div>
+  
   <div [ngClass]="{'closed': !show}" class="sub-layer-group-body">
     <ul>
       <li *ngFor="let layer of subLayerGroup.layers">
@@ -27,5 +27,5 @@
       </li>
     </ul>
   </div>
-  
+
 </div>

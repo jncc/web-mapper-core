@@ -297,7 +297,9 @@ export class MapService implements OnDestroy {
     layerConfig.visible = visible;
 
     if (visible) {
-      this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+      if (!this.dataStore.visibleLayers.some(visibleLayerConfig => visibleLayerConfig.layerId == layerId)) {
+        this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+      }
     } else {
       this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
 
