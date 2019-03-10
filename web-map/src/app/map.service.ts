@@ -267,12 +267,10 @@ export class MapService implements OnDestroy {
   }
 
   dragZoomIn() {
-    console.log("drag zoom in")
     this.dragZoomInSubject.next();
   }
 
   dragZoomOut() {
-    console.log("drag zoom out")
     this.dragZoomOutSubject.next();
   }
 
