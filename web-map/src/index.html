@@ -9,7 +9,14 @@
 
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/map-styles.css">
+
+  <script>
+    var dateHash = (+new Date).toString(36);
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/assets/css/map-styles.css?v=' + dateHash;
+    document.head.appendChild(link);
+  </script>
 </head>
 <body>
   <app-root></app-root>
