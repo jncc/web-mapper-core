@@ -10,7 +10,6 @@ import { ILayerConfig } from './models/layer-config.model';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
-import WMSCapabilities from 'ol/format/wmscapabilities';
 import { IFilterConfig } from './models/filter-config.model';
 import { ILookup } from './models/lookup.model';
 import { LayerService } from './layer.service';
@@ -83,7 +82,8 @@ export class MapService implements OnDestroy {
           description: '',
           layerGroups: [],
           center: [],
-          zoom: 0
+          zoom: 0,
+          externalWmsUrls: []
         }
       },
       layerLookup: [],
@@ -123,6 +123,11 @@ export class MapService implements OnDestroy {
       // console.log(this.dataStore.mapConfig);
 
       this.createFilterLookups();
+
+      this.layerService.getExternalLayers(
+        // this.dataStore.mapConfig.mapInstance.externalWmsUrls[0].url
+        this.dataStore.visibleLayers[0].url
+      );
 
       this.zoomToMapExtent();
     }, error => console.log('Could not load map instance config.'));
@@ -214,31 +219,6 @@ export class MapService implements OnDestroy {
     this._activeFilters.next(this.dataStore.activeFilters);
   }
 
-  private getStyles(layerName, legendLayerName, url) {
-    const capabilitiesUrl = url + '?REQUEST=GetCapabilities&VERSION=1.3.0';
-    this.apiService.getCapabilities(capabilitiesUrl).subscribe(data => {
-      const parser = new WMSCapabilities();
-      const result = parser.read(data);
-      console.log(layerName);
-      const layer = result.Capability.Layer.Layer.find(l => l.Name === layerName);
-      if (layer.hasOwnProperty('Layer')) {
-        console.log('I\'m a group layer');
-        if (layer.Layer) {
-          console.log(legendLayerName);
-          console.log(layer.Layer);
-          const layer2 = layer.Layer.find(l => l.Name === 'emodnet:' + legendLayerName);
-          if (layer2.Style) {
-            console.log(layer2.Style);
-          }
-          // console.log(layer2);
-        }
-      } else {
-        console.log('I\'m just a layer');
-      }
-      // console.log(result.Capability.Layer.Layer.find(l => l.Name === layerName));
-    });
-  }
-
   mapReady(map: any) {
     this.map = map;
   }
@@ -295,7 +275,7 @@ export class MapService implements OnDestroy {
     layerConfig.visible = visible;
 
     if (visible) {
-      if (!this.dataStore.visibleLayers.some(visibleLayerConfig => visibleLayerConfig.layerId == layerId)) {
+      if (!this.dataStore.visibleLayers.some(visibleLayerConfig => visibleLayerConfig.layerId === layerId)) {
         this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
       }
     } else {

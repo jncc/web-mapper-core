@@ -5,4 +5,12 @@
       </app-layer-group>
     </li>
   </ul>
+  <div>
+    <button (click)="onAddExternalLayers()">Add External Layers</button>
+  </div>
 </div>
+
+
+<ng-template #externalLayersOverlay>
+  <app-add-external-layers></app-add-external-layers>
+</ng-template>

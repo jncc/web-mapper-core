@@ -6,15 +6,18 @@ import OSM from 'ol/source/osm';
 import BingMaps from 'ol/source/bingmaps';
 import Tile from 'ol/layer/tile';
 import XYZ from 'ol/source/xyz';
+import WMSCapabilities from 'ol/format/wmscapabilities';
+
 import { AppConfigService } from './app-config.service';
 import { IBaseLayerConfig } from './models/base-layer-config.model';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LayerService {
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   createLayer(layerConfig: ILayerConfig): Tile {
     const source = new TileWMS({
@@ -76,5 +79,36 @@ export class LayerService {
     baseLayers.push(baseLayerConfig);
 
     return baseLayers;
+  }
+
+  getExternalLayers(url: string) {
+    const capabilitiesUrl = url + '?SERVICE=wms&REQUEST=GetCapabilities&VERSION=1.3.0';
+    this.apiService.getCapabilities(capabilitiesUrl).subscribe(data => {
+      const parser = new WMSCapabilities();
+      const capabilities = parser.read(data);
+      const layers = capabilities.Capability.Layer.Layer;
+      // console.log(layers);
+      layers.forEach(layer => {
+        console.log(layer.Name, layer.Title);
+      });
+      // console.log(capabilities);
+
+      // const layer = result.Capability.Layer.Layer.find(l => l.Name === layerName);
+      // if (layer.hasOwnProperty('Layer')) {
+      //   console.log('I\'m a group layer');
+      //   if (layer.Layer) {
+      //     console.log(legendLayerName);
+      //     console.log(layer.Layer);
+      //     const layer2 = layer.Layer.find(l => l.Name === 'emodnet:' + legendLayerName);
+      //     if (layer2.Style) {
+      //       console.log(layer2.Style);
+      //     }
+      //     // console.log(layer2);
+      //   }
+      // } else {
+      //   console.log('I\'m just a layer');
+      // }
+            // console.log(result.Capability.Layer.Layer.find(l => l.Name === layerName));
+    });
   }
 }
