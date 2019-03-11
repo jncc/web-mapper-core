@@ -10,7 +10,6 @@
   </div>
 </div>
 
-
 <ng-template #externalLayersOverlay>
-  <app-add-external-layers></app-add-external-layers>
+  <app-external-layers (closeExternalLayers)="closeExternalLayers()"></app-external-layers>
 </ng-template>

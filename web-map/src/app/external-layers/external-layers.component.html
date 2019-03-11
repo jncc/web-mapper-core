@@ -1,0 +1,20 @@
+<div class="controls-container" id="external-layers" cdkDrag>
+  <div class="controls-container-header bg-primary" cdkDragHandle>
+      <h6>
+          <span>ADD EXTERNAL LAYERS</span>
+      </h6>
+      <div>
+          <i class="btn fa fa-close" (click)="onCloseExternalLayers()"></i>
+      </div>
+  </div>
+  <div class="controls-container-body">
+      <!-- <app-filter-control *ngFor="let filter of layer.filters"
+          [filterConfig]="filter" [filterLookup]="filterLookup[filter.lookupCategory]" [activeFilters]="activeFilters">
+      </app-filter-control>
+      <div class="controls-container-footer">
+          <button (click)="onFilterApplied()">Apply</button>
+          <button (click)="onFilterCleared()">Clear</button>
+      </div> -->
+      <div>Add External Layers from the following sources or enter a wms url</div>
+  </div>
+</div>

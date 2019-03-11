@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef } from '@an
 import { MapService } from '../map.service';
 import { ILayerGroupConfig } from '../models/layer-group-config';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { OverlayRef, Overlay } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -16,9 +16,6 @@ export class LayersComponent implements OnInit {
 
   layerGroups$: Observable<ILayerGroupConfig[]>;
 
-  // show = true;
-
-  backdropSubscription: Subscription;
   @ViewChild('externalLayersOverlay') externalLayersOverlay: TemplateRef<any>;
   externalLayersOverlayRef: OverlayRef | null;
 
@@ -34,10 +31,6 @@ export class LayersComponent implements OnInit {
     this.mapService.changeLayerVisibility(event.layerId, event.visible);
   }
 
-  // toggleShow() {
-  //   this.show = !this.show;
-  // }
-
   onAddExternalLayers() {
     this.closeExternalLayers();
     const positionStrategy = this.overlay.position()
@@ -51,17 +44,12 @@ export class LayersComponent implements OnInit {
       });
 
       this.externalLayersOverlayRef.attach(new TemplatePortal(this.externalLayersOverlay, this.viewContainerRef));
-
-      this.backdropSubscription = this.externalLayersOverlayRef.backdropClick().subscribe(() => this.closeExternalLayers());
   }
 
-  private closeExternalLayers() {
+  closeExternalLayers() {
     if (this.externalLayersOverlayRef) {
       this.externalLayersOverlayRef.dispose();
       this.externalLayersOverlayRef = null;
-    }
-    if (this.backdropSubscription) {
-      this.backdropSubscription.unsubscribe();
     }
   }
 
