@@ -136,7 +136,12 @@ export class MapService implements OnDestroy {
   // transform map instance config received from api into hierarchy of layergroups, sublayergroups, layers
   private createMapInstanceConfig() {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig: ILayerGroupConfig) => {
-      const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
+      this.createSubLayerGroups(layerGroupConfig);
+    });
+  }
+
+  private createSubLayerGroups(layerGroupConfig: ILayerGroupConfig) {
+    const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
         map((layer) => layer.subLayerGroup).
         reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
           if (!a.find((slg) => subLayerGroup === slg.name)) {
@@ -149,30 +154,33 @@ export class MapService implements OnDestroy {
         subLayerGroup.layers.push(layerConfig);
       });
       layerGroupConfig.subLayerGroups = subLayerGroups;
-    });
   }
 
   // TODO: move to another service
   private createLayersForConfig(): void {
-    this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig) => {
-      if (layerGroupConfig.layers.length) {
-        layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
-          // TODO: styles - this is just exploring styles in getcapabilities
-          // const layerName = layerConfig.layerName;
-          // const legendLayerName = layerConfig.legendLayerName;
-          // this.getStyles(layerName, legendLayerName, layerConfig.url);
-          layerConfig.layer = this.layerService.createLayer(layerConfig);
-          layerConfig.layer.setOpacity(layerConfig.opacity);
-          layerConfig.layer.setVisible(layerConfig.visible);
-
-          if (layerConfig.visible) {
-            this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
-          }
-          this.dataStore.layerLookup.push(layerConfig);
-        });
-      }
+    this.dataStore.mapConfig.mapInstance.layerGroups.forEach(layerGroupConfig => {
+      this.createLayersForLayerGroupConfig(layerGroupConfig);
     });
     this._visibleLayers.next(this.dataStore.visibleLayers);
+  }
+
+  private createLayersForLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
+    if (layerGroupConfig.layers.length) {
+      layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
+        // TODO: styles - this is just exploring styles in getcapabilities
+        // const layerName = layerConfig.layerName;
+        // const legendLayerName = layerConfig.legendLayerName;
+        // this.getStyles(layerName, legendLayerName, layerConfig.url);
+        layerConfig.layer = this.layerService.createLayer(layerConfig);
+        layerConfig.layer.setOpacity(layerConfig.opacity);
+        layerConfig.layer.setVisible(layerConfig.visible);
+
+        if (layerConfig.visible) {
+          this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+        }
+        this.dataStore.layerLookup.push(layerConfig);
+      });
+    }
   }
 
   private createBaseLayers(): void {
@@ -338,5 +346,13 @@ export class MapService implements OnDestroy {
     const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
     const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
     this.permalinkService.updateUrl(zoom, center, layerIds, baseLayerId);
+  }
+
+  addExternalLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
+    this.createSubLayerGroups(layerGroupConfig);
+    this.createLayersForLayerGroupConfig(layerGroupConfig);
+    this.dataStore.mapConfig.mapInstance.layerGroups.push(layerGroupConfig);
+    this._mapConfig.next(this.dataStore.mapConfig);
+    console.log(this.dataStore.mapConfig.mapInstance);
   }
 }

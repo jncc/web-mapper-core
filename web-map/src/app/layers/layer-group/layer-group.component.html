@@ -1,5 +1,5 @@
 <div class="layer-group bg-secondary">
-    <div class="layer-group-header bg-primary">
+    <div class="layer-group-header" [ngClass]="{'highlight': layerGroup.isExternal, 'bg-primary': !layerGroup.isExternal }">
         <div class="layer-group-title" (click)="onToggleShow()">
             <div>
                 <i *ngIf="show" class="btn fa fa-fw fa-caret-down"></i>

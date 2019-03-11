@@ -1,13 +1,18 @@
 <div class="layers">
+  <div class="external-layers bg-primary">
+    <div class="add-external-layers" (click)="onAddExternalLayers()">
+      <div>
+        Add external layers
+      </div>
+      <i class="btn fa fa-lg fa-plus" tooltip="add external layers"></i>
+    </div>
+  </div>
   <ul>
     <li *ngFor="let layerGroup of layerGroups$ | async">
       <app-layer-group [layerGroup]="layerGroup" (layerVisibilityChanged)="onLayerVisiblityChanged($event)">
       </app-layer-group>
     </li>
   </ul>
-  <div>
-    <button (click)="onAddExternalLayers()">Add External Layers</button>
-  </div>
 </div>
 
 <ng-template #externalLayersOverlay>

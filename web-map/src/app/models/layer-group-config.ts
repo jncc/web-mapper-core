@@ -6,4 +6,5 @@ export interface ILayerGroupConfig {
         name: string;
         layers: ILayerConfig[];
         subLayerGroups: ISubLayerGroupConfig[];
+        isExternal: boolean;
 }

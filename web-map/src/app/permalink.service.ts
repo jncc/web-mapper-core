@@ -24,6 +24,6 @@ export class PermalinkService {
         queryParams: queryParams
       });
 
-      console.log(this.activatedRoute.snapshot.queryParams);
+      // console.log(this.activatedRoute.snapshot.queryParams);
    }
 }
