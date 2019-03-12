@@ -98,7 +98,14 @@ export class LayerService {
   private parseCapabilities(url: string, data: any): ILayerGroupConfig {
     if (data === null) {
       console.log('there was an error');
-      return null;
+      // an 'empty' layer group
+      return {
+        layerGroupId: null,
+        name: null,
+        layers: [],
+        subLayerGroups: [],
+        isExternal: true
+      };
     } else {
       const parser = new WMSCapabilities();
       const capabilities = parser.read(data);

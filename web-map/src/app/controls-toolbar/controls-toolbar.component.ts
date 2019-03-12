@@ -40,6 +40,10 @@ export class ControlsToolbarComponent implements OnInit {
     this.mapService.dragZoomOut();
   }
 
+  onCreatePermalink() {
+    this.mapService.createPermalink();
+  }
+
   onShowBaseMaps({x, y}) {
     this.closeBaseLayers();
     const positionStrategy = this.overlay.position()

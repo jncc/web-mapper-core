@@ -1,4 +1,19 @@
+#external-layers.controls-container {
+  width: 600px;
+}
+
 #external-layers .controls-container-header {
-    justify-content: space-between;
-    cursor: auto;
-  }
+  justify-content: space-between;
+  cursor: auto;
+}
+
+.external-layers-container {
+  padding: 5px;
+  max-height: 10rem;
+  overflow-y: auto;
+  box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, .25);
+}
+
+.external-service-text input {
+  width: 100%;
+}

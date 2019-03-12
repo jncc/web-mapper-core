@@ -17,25 +17,26 @@
       </div> -->
         <div>Add External Layers from the following sources or enter a wms url</div>
         <div>http://jnccdev-geo.esdm.co.uk/geoserver/emodnet/wms</div>
-        <div>
+        <div class="external-service-text">
             <input type="text" [(ngModel)]="url">
         </div>
         <button (click)="onGetExternalLayers()">Get</button>
-        <div *ngIf="layerGroupConfig$ | async as layerGroupConfig; else loading">
-            <ng-container *ngIf="layerGroupConfig.layers.length; else noLayers">
+        <div *ngIf="layerGroupConfig$ | async as layerGroupConfig">
+            <div *ngIf="layerGroupConfig.layers.length; else noLayers" class="external-layers-container">
                 <ul>
                     <li *ngFor="let layerConfig of layerGroupConfig.layers">
-                        {{layerConfig.name}} {{layerConfig.layerName}}
+                        {{layerConfig.layerName}}
                     </li>
                 </ul>
+
+            </div>
+            <div>
                 <button (click)="onAddToMap(layerGroupConfig)">Add to Map</button>
-            </ng-container>
+            </div>
+
             <ng-template #noLayers>
-                NO LAYERS
+                No layers available from this source
             </ng-template>
         </div>
-        <ng-template #loading>
-            loading animation...
-        </ng-template>
     </div>
 </div>

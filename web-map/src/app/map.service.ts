@@ -5,17 +5,17 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { ApiService } from './api.service';
 import { IMapConfig } from './models/map-config.model';
 
-// TODO: move to another service
 import { ILayerConfig } from './models/layer-config.model';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
-import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
-import { IFilterConfig } from './models/filter-config.model';
 import { ILookup } from './models/lookup.model';
 import { LayerService } from './layer.service';
 import { PermalinkService } from './permalink.service';
 import { IBaseLayerConfig } from './models/base-layer-config.model';
 import { IActiveFilter } from './models/active-filter.model';
+import { IPermalink } from './models/permalink.model';
+
+import proj from 'ol/proj';
 
 
 @Injectable({
@@ -116,20 +116,11 @@ export class MapService implements OnDestroy {
       this.dataStore.mapConfig.mapInstance = data;
       console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
-      // TODO: move to another service
       this.createLayersForConfig();
       this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
-      // console.log(this.dataStore.mapConfig);
-
       this.createFilterLookups();
-
-      this.layerService.getExternalLayers(
-        // this.dataStore.mapConfig.mapInstance.externalWmsUrls[0].url
-        this.dataStore.visibleLayers[0].url
-      );
-
-      this.zoomToMapExtent();
+      this.applyPermalink();
     }, error => console.log('Could not load map instance config.'));
   }
 
@@ -167,10 +158,6 @@ export class MapService implements OnDestroy {
   private createLayersForLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
     if (layerGroupConfig.layers.length) {
       layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
-        // TODO: styles - this is just exploring styles in getcapabilities
-        // const layerName = layerConfig.layerName;
-        // const legendLayerName = layerConfig.legendLayerName;
-        // this.getStyles(layerName, legendLayerName, layerConfig.url);
         layerConfig.layer = this.layerService.createLayer(layerConfig);
         layerConfig.layer.setOpacity(layerConfig.opacity);
         layerConfig.layer.setVisible(layerConfig.visible);
@@ -296,6 +283,11 @@ export class MapService implements OnDestroy {
     this._mapConfig.next(this.dataStore.mapConfig);
   }
 
+  removeAllVisibleLayers() {
+    const layersToRemove = [...this.dataStore.visibleLayers];
+    layersToRemove.forEach(layer => this.changeLayerVisibility(layer.layerId, false));
+  }
+
   changeLayerOpacity(layerId: number, opacity: number) {
     const layerConfig = this.getLayerConfig(layerId);
     layerConfig.layer.setOpacity(opacity);
@@ -343,9 +335,9 @@ export class MapService implements OnDestroy {
   }
 
   onMapMoveEnd(zoom: number, center: number[]) {
-    const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
-    const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
-    this.permalinkService.updateUrl(zoom, center, layerIds, baseLayerId);
+    // const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
+    // const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
+    // this.permalinkService.updateUrl(zoom, center, layerIds, baseLayerId);
   }
 
   addExternalLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
@@ -354,5 +346,25 @@ export class MapService implements OnDestroy {
     this.dataStore.mapConfig.mapInstance.layerGroups.push(layerGroupConfig);
     this._mapConfig.next(this.dataStore.mapConfig);
     console.log(this.dataStore.mapConfig.mapInstance);
+  }
+
+  createPermalink() {
+    const zoom = this.map.getView().getZoom();
+    const center = proj.toLonLat(this.map.getView().getCenter());
+    const layerIds = this.dataStore.visibleLayers.slice().reverse().map(layer => layer.layerId);
+    const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
+    this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId);
+  }
+
+  applyPermalink() {
+    const permalink: IPermalink = this.permalinkService.readPermalink();
+    if (permalink) {
+      this.zoomSubject.next({ center: permalink.center, zoom: permalink.zoom });
+      this.setBaseLayer(permalink.baseLayerId);
+      this.removeAllVisibleLayers();
+      permalink.layerIds.forEach(id => this.changeLayerVisibility(id, true));
+    } else {
+      this.zoomToMapExtent();
+    }
   }
 }
