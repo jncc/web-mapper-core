@@ -95,19 +95,19 @@ namespace MapConfig.Controllers
                 MapInstanceId = map1.MapInstanceId,
                 Name = "EMODnet Biology (Test)",
                 Description = "EMODnet Biology",
-                Url = "http://geo.vliz.be/geoserver/wms?version=1.1.1"
+                Url = "http://geo.vliz.be/geoserver/wms"
             };
             var ew2 = new ExternalWmsUrl {
                 MapInstanceId = map1.MapInstanceId,
                 Name = "EMODnet Geology (Test)",
                 Description = "EMODnet Geology",
-                Url = "http://drive.emodnet-geology.eu/geoserver/EMODnetGeology/wms?version=1.1.1"
+                Url = "http://drive.emodnet-geology.eu/geoserver/EMODnetGeology/wms"
             };
             var ew3 = new ExternalWmsUrl {
                 MapInstanceId = map1.MapInstanceId,
                 Name = "EMODnet Human Activities (Test)",
                 Description = "EMODnet Human Activities",
-                Url = "http://77.246.172.208/geoserver/emodnet/wms?version=1.1.1"
+                Url = "http://77.246.172.208/geoserver/emodnet/wms"
             };
 
             _context.ExternalWmsUrl.Add(ew1);
