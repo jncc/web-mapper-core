@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef } from '@angular/core';
 import { MapService } from '../map.service';
 import { ILayerGroupConfig } from '../models/layer-group-config';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { OverlayRef, Overlay } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-layers',
@@ -14,9 +16,10 @@ export class LayersComponent implements OnInit {
 
   layerGroups$: Observable<ILayerGroupConfig[]>;
 
-  show = true;
+  @ViewChild('externalLayersOverlay') externalLayersOverlay: TemplateRef<any>;
+  externalLayersOverlayRef: OverlayRef | null;
 
-  constructor(private mapService: MapService) { }
+  constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     this.layerGroups$ = this.mapService.mapConfig.pipe(
@@ -28,8 +31,26 @@ export class LayersComponent implements OnInit {
     this.mapService.changeLayerVisibility(event.layerId, event.visible);
   }
 
-  toggleShow() {
-    this.show = !this.show;
+  onAddExternalLayers() {
+    this.closeExternalLayers();
+    const positionStrategy = this.overlay.position()
+      .global()
+      .centerHorizontally()
+      .centerVertically();
+
+      this.externalLayersOverlayRef = this.overlay.create({
+        hasBackdrop: true,
+        positionStrategy,
+      });
+
+      this.externalLayersOverlayRef.attach(new TemplatePortal(this.externalLayersOverlay, this.viewContainerRef));
+  }
+
+  closeExternalLayers() {
+    if (this.externalLayersOverlayRef) {
+      this.externalLayersOverlayRef.dispose();
+      this.externalLayersOverlayRef = null;
+    }
   }
 
 }

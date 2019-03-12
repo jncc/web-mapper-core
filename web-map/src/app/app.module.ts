@@ -36,6 +36,7 @@ import { GazetteerComponent } from './gazetteer/gazetteer.component';
 import { BaseLayersComponent } from './base-layers/base-layers.component';
 import { BaseLayerComponent } from './base-layers/base-layer/base-layer.component';
 import { RouterModule } from '@angular/router';
+import { ExternalLayersComponent } from './external-layers/external-layers.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -65,7 +66,8 @@ export function initializeApp(appConfig: AppConfigService) {
     TooltipDirective,
     GazetteerComponent,
     BaseLayersComponent,
-    BaseLayerComponent
+    BaseLayerComponent,
+    ExternalLayersComponent
   ],
   imports: [
     BrowserModule,

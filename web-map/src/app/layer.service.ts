@@ -6,15 +6,24 @@ import OSM from 'ol/source/osm';
 import BingMaps from 'ol/source/bingmaps';
 import Tile from 'ol/layer/tile';
 import XYZ from 'ol/source/xyz';
+import WMSCapabilities from 'ol/format/wmscapabilities';
+
 import { AppConfigService } from './app-config.service';
 import { IBaseLayerConfig } from './models/base-layer-config.model';
+import { ApiService } from './api.service';
+import { ILayerGroupConfig } from './models/layer-group-config';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LayerService {
 
-  constructor() { }
+  layerId = 999;
+  layerGroupId = 999;
+
+  constructor(private apiService: ApiService) { }
 
   createLayer(layerConfig: ILayerConfig): Tile {
     const source = new TileWMS({
@@ -76,5 +85,57 @@ export class LayerService {
     baseLayers.push(baseLayerConfig);
 
     return baseLayers;
+  }
+
+  getExternalLayers(url: string): Observable<ILayerGroupConfig> {
+    const capabilitiesUrl = url + '?SERVICE=wms&REQUEST=GetCapabilities&VERSION=1.3.0';
+    return this.apiService.getCapabilities(capabilitiesUrl).pipe(
+      catchError(error => { console.log('getexternallayers error'); return of(null); }),
+      map(data => this.parseCapabilities(url, data))
+    );
+  }
+
+  private parseCapabilities(url: string, data: any): ILayerGroupConfig {
+    if (data === null) {
+      console.log('there was an error');
+      return null;
+    } else {
+      const parser = new WMSCapabilities();
+      const capabilities = parser.read(data);
+      const title = capabilities.Capability.Layer.Title;
+      const layers = capabilities.Capability.Layer.Layer;
+      const layerConfigs: ILayerConfig[] = [];
+      layers.forEach(layer => {
+        this.layerId += 1;
+        layerConfigs.push(
+          {
+            layerId: this.layerId,
+            layerName: layer.Name,
+            name: layer.Title,
+            url: url,
+            visible: false,
+            opacity: 1,
+            layer: null,
+            subLayerGroup: null,
+            center: null,
+            zoom: null,
+            metadataUrl: null,
+            downloadURL: null,
+            legendLayerName: null,
+            filters: null
+          }
+        );
+      });
+      layerConfigs.forEach(layerConfig => this.createLayer(layerConfig));
+      this.layerGroupId += 1;
+      const layerGroupConfig = {
+        layerGroupId: this.layerGroupId,
+        name: title,
+        layers: layerConfigs,
+        subLayerGroups: [],
+        isExternal: true
+      };
+      return layerGroupConfig;
+    }
   }
 }

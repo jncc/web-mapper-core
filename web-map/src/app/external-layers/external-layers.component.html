@@ -1,0 +1,41 @@
+<div class="controls-container" id="external-layers" cdkDrag>
+    <div class="controls-container-header bg-primary" cdkDragHandle>
+        <h6>
+            <span>ADD EXTERNAL LAYERS</span>
+        </h6>
+        <div>
+            <i class="btn fa fa-close" (click)="onCloseExternalLayers()"></i>
+        </div>
+    </div>
+    <div class="controls-container-body">
+        <!-- <app-filter-control *ngFor="let filter of layer.filters"
+          [filterConfig]="filter" [filterLookup]="filterLookup[filter.lookupCategory]" [activeFilters]="activeFilters">
+      </app-filter-control>
+      <div class="controls-container-footer">
+          <button (click)="onFilterApplied()">Apply</button>
+          <button (click)="onFilterCleared()">Clear</button>
+      </div> -->
+        <div>Add External Layers from the following sources or enter a wms url</div>
+        <div>http://jnccdev-geo.esdm.co.uk/geoserver/emodnet/wms</div>
+        <div>
+            <input type="text" [(ngModel)]="url">
+        </div>
+        <button (click)="onGetExternalLayers()">Get</button>
+        <div *ngIf="layerGroupConfig$ | async as layerGroupConfig; else loading">
+            <ng-container *ngIf="layerGroupConfig.layers.length; else noLayers">
+                <ul>
+                    <li *ngFor="let layerConfig of layerGroupConfig.layers">
+                        {{layerConfig.name}} {{layerConfig.layerName}}
+                    </li>
+                </ul>
+                <button (click)="onAddToMap(layerGroupConfig)">Add to Map</button>
+            </ng-container>
+            <ng-template #noLayers>
+                NO LAYERS
+            </ng-template>
+        </div>
+        <ng-template #loading>
+            loading animation...
+        </ng-template>
+    </div>
+</div>

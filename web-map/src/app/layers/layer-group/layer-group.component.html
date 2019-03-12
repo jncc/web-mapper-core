@@ -1,15 +1,15 @@
 <div class="layer-group bg-secondary">
-    <div class="layer-group-header bg-primary">
-        <div (click)="onToggleShow()">
-            <i *ngIf="show" class="btn fa fa-fw fa-caret-down"></i>
-            <i *ngIf="!show" class="btn fa fa-fw fa-caret-right"></i>
+    <div class="layer-group-header" [ngClass]="{'highlight': layerGroup.isExternal, 'bg-primary': !layerGroup.isExternal }">
+        <div class="layer-group-title" (click)="onToggleShow()">
+            <div>
+                <i *ngIf="show" class="btn fa fa-fw fa-caret-down"></i>
+                <i *ngIf="!show" class="btn fa fa-fw fa-caret-right"></i>
+                {{ layerGroup.name }}
+            </div>
         </div>
-        <div (click)="onToggleShow()">
-            {{ layerGroup.name }}
-        </div>
+
         <div (click)="onToggleLayers()" class="visible-layers">
-            <span class="badge"
-                [tooltip]="visibleLayers + ' active. Click to toggle all layers in this group'">
+            <span class="badge" [tooltip]="visibleLayers + ' active. Click to toggle all layers in this group'">
                 {{ visibleLayers }}
             </span>
         </div>

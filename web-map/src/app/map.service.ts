@@ -10,7 +10,6 @@ import { ILayerConfig } from './models/layer-config.model';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
 import { FeatureInfosComponent } from './feature-infos/feature-infos.component';
-import WMSCapabilities from 'ol/format/wmscapabilities';
 import { IFilterConfig } from './models/filter-config.model';
 import { ILookup } from './models/lookup.model';
 import { LayerService } from './layer.service';
@@ -83,7 +82,8 @@ export class MapService implements OnDestroy {
           description: '',
           layerGroups: [],
           center: [],
-          zoom: 0
+          zoom: 0,
+          externalWmsUrls: []
         }
       },
       layerLookup: [],
@@ -124,6 +124,11 @@ export class MapService implements OnDestroy {
 
       this.createFilterLookups();
 
+      this.layerService.getExternalLayers(
+        // this.dataStore.mapConfig.mapInstance.externalWmsUrls[0].url
+        this.dataStore.visibleLayers[0].url
+      );
+
       this.zoomToMapExtent();
     }, error => console.log('Could not load map instance config.'));
   }
@@ -131,7 +136,12 @@ export class MapService implements OnDestroy {
   // transform map instance config received from api into hierarchy of layergroups, sublayergroups, layers
   private createMapInstanceConfig() {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig: ILayerGroupConfig) => {
-      const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
+      this.createSubLayerGroups(layerGroupConfig);
+    });
+  }
+
+  private createSubLayerGroups(layerGroupConfig: ILayerGroupConfig) {
+    const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
         map((layer) => layer.subLayerGroup).
         reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
           if (!a.find((slg) => subLayerGroup === slg.name)) {
@@ -144,30 +154,33 @@ export class MapService implements OnDestroy {
         subLayerGroup.layers.push(layerConfig);
       });
       layerGroupConfig.subLayerGroups = subLayerGroups;
-    });
   }
 
   // TODO: move to another service
   private createLayersForConfig(): void {
-    this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig) => {
-      if (layerGroupConfig.layers.length) {
-        layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
-          // TODO: styles - this is just exploring styles in getcapabilities
-          // const layerName = layerConfig.layerName;
-          // const legendLayerName = layerConfig.legendLayerName;
-          // this.getStyles(layerName, legendLayerName, layerConfig.url);
-          layerConfig.layer = this.layerService.createLayer(layerConfig);
-          layerConfig.layer.setOpacity(layerConfig.opacity);
-          layerConfig.layer.setVisible(layerConfig.visible);
-
-          if (layerConfig.visible) {
-            this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
-          }
-          this.dataStore.layerLookup.push(layerConfig);
-        });
-      }
+    this.dataStore.mapConfig.mapInstance.layerGroups.forEach(layerGroupConfig => {
+      this.createLayersForLayerGroupConfig(layerGroupConfig);
     });
     this._visibleLayers.next(this.dataStore.visibleLayers);
+  }
+
+  private createLayersForLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
+    if (layerGroupConfig.layers.length) {
+      layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
+        // TODO: styles - this is just exploring styles in getcapabilities
+        // const layerName = layerConfig.layerName;
+        // const legendLayerName = layerConfig.legendLayerName;
+        // this.getStyles(layerName, legendLayerName, layerConfig.url);
+        layerConfig.layer = this.layerService.createLayer(layerConfig);
+        layerConfig.layer.setOpacity(layerConfig.opacity);
+        layerConfig.layer.setVisible(layerConfig.visible);
+
+        if (layerConfig.visible) {
+          this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+        }
+        this.dataStore.layerLookup.push(layerConfig);
+      });
+    }
   }
 
   private createBaseLayers(): void {
@@ -214,31 +227,6 @@ export class MapService implements OnDestroy {
     this._activeFilters.next(this.dataStore.activeFilters);
   }
 
-  private getStyles(layerName, legendLayerName, url) {
-    const capabilitiesUrl = url + '?REQUEST=GetCapabilities&VERSION=1.3.0';
-    this.apiService.getCapabilities(capabilitiesUrl).subscribe(data => {
-      const parser = new WMSCapabilities();
-      const result = parser.read(data);
-      console.log(layerName);
-      const layer = result.Capability.Layer.Layer.find(l => l.Name === layerName);
-      if (layer.hasOwnProperty('Layer')) {
-        console.log('I\'m a group layer');
-        if (layer.Layer) {
-          console.log(legendLayerName);
-          console.log(layer.Layer);
-          const layer2 = layer.Layer.find(l => l.Name === 'emodnet:' + legendLayerName);
-          if (layer2.Style) {
-            console.log(layer2.Style);
-          }
-          // console.log(layer2);
-        }
-      } else {
-        console.log('I\'m just a layer');
-      }
-      // console.log(result.Capability.Layer.Layer.find(l => l.Name === layerName));
-    });
-  }
-
   mapReady(map: any) {
     this.map = map;
   }
@@ -267,12 +255,10 @@ export class MapService implements OnDestroy {
   }
 
   dragZoomIn() {
-    console.log("drag zoom in")
     this.dragZoomInSubject.next();
   }
 
   dragZoomOut() {
-    console.log("drag zoom out")
     this.dragZoomOutSubject.next();
   }
 
@@ -297,7 +283,9 @@ export class MapService implements OnDestroy {
     layerConfig.visible = visible;
 
     if (visible) {
-      this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+      if (!this.dataStore.visibleLayers.some(visibleLayerConfig => visibleLayerConfig.layerId === layerId)) {
+        this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+      }
     } else {
       this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
 
@@ -358,5 +346,13 @@ export class MapService implements OnDestroy {
     const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
     const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
     this.permalinkService.updateUrl(zoom, center, layerIds, baseLayerId);
+  }
+
+  addExternalLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
+    this.createSubLayerGroups(layerGroupConfig);
+    this.createLayersForLayerGroupConfig(layerGroupConfig);
+    this.dataStore.mapConfig.mapInstance.layerGroups.push(layerGroupConfig);
+    this._mapConfig.next(this.dataStore.mapConfig);
+    console.log(this.dataStore.mapConfig.mapInstance);
   }
 }

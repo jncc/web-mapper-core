@@ -1,10 +1,13 @@
 .sub-layer-group-header {
     display: flex;
-    justify-content: space-between;
     cursor: pointer;
     padding: 0.5rem;
     padding-left: 0.75rem;
     color: white;
+}
+
+.sub-layer-group-title {
+    flex-grow: 1;
 }
 
 .sub-layer-group-body.closed {
