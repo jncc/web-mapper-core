@@ -15,9 +15,6 @@ import { IBaseLayerConfig } from './models/base-layer-config.model';
 import { IActiveFilter } from './models/active-filter.model';
 import { IPermalink } from './models/permalink.model';
 
-import proj from 'ol/proj';
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -350,7 +347,7 @@ export class MapService implements OnDestroy {
 
   createPermalink() {
     const zoom = this.map.getView().getZoom();
-    const center = proj.toLonLat(this.map.getView().getCenter());
+    const center = this.map.getView().getCenter();
     const layerIds = this.dataStore.visibleLayers.slice().reverse().map(layer => layer.layerId);
     const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
     this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId);

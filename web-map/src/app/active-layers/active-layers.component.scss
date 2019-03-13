@@ -6,6 +6,16 @@
     pointer-events: auto;
 }
 
+.active-layers-title {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.active-layers-title h6 {
+    flex-grow: 1;
+}
+
 #filterOverlay {
     width: 25rem;
 }

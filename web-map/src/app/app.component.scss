@@ -6,41 +6,45 @@
     height: 100%;
 }
 
-#sideNav {
-    position: fixed;
-    height: 100%;
+#appOverlay {
+    position: absolute;
     top: 0;
-    display:flex;
-    flex-direction: row;
-    margin-left: -350px;
-    overflow: hidden;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
     pointer-events: none;
-    transition: margin-left 350ms ease-out;
-}
-
-#sideNav.open {
-    margin-left: 0;
 }
 
 #layersPanel {
     pointer-events: auto;
-    width: 350px;
+    width: 20rem;
     box-shadow: $container-shadow;
     overflow-y: auto;
+    transition: margin-left 350ms ease-out;
+    margin-left: -20rem;
 }
 
-#controlsPanel {
+#layersPanel.open {
+    margin-left: 0;
+}
+
+#viewportPanel {
     position: relative;
     padding-left: 1rem;
+    flex-grow: 1;
+    overflow: hidden;
 }
 
-#overviewMap {
+#overviewMap, #featureInfos, #legend {
     pointer-events: auto;
 }
 
-.control-item {
+#gazetteer {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
     pointer-events: auto;
-    margin-bottom: 0.5rem;
 }
 
 #toggleLayers {
@@ -54,6 +58,7 @@
     margin-top: 0.25rem;
     margin-left: -1rem;
     box-shadow: $container-shadow;
+    pointer-events: auto;
 }
 
 #controlsToolbar {
@@ -61,4 +66,5 @@
     bottom: 3.5rem;
     right: 1rem;
     box-shadow: $container-shadow;
+    pointer-events: auto;
 }
