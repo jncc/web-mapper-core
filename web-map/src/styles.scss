@@ -67,11 +67,6 @@ img {
   background-color: aliceblue;
 }
 
-.ol-dragzoom {
-  border: 2px midnightblue dashed;
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
 .ol-scale-line {
   position: absolute;
   bottom: 1rem;
@@ -126,6 +121,17 @@ div.custom-mouse-position {
   padding: $container-padding;
 }
 
+.panel-title {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  
+}
 
+.panel-title h2 {
+  font-size: 1rem;
+  color: white;
+}
 
 

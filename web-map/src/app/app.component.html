@@ -2,8 +2,8 @@
     <app-map></app-map>
     <div id="appOverlay">
 
-        <div id="layersPanel" class="bg-secondary" [ngClass]="{ 'open': showLayers }">
-            <div class="panel-title bg-dark">
+        <div id="layersPanel" class="secondary" [ngClass]="{ 'open': showLayers }">
+            <div class="panel-title title">
                 <div>
                     <h2>
                         ALL LAYERS
@@ -16,7 +16,7 @@
             <app-layers></app-layers>
         </div>
         <div id="viewportPanel">
-            <div id="toggleLayers" (click)="onToggleShowLayers()">
+            <div id="toggleLayers" class="primary" (click)="onToggleShowLayers()">
                 <i *ngIf="!showLayers" class="btn fa fa-fw fa-2x fa-bars"></i>
             </div>
             <app-active-layers></app-active-layers>

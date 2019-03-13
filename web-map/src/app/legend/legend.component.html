@@ -1,6 +1,6 @@
-<div id="legendPane" [ngClass]="{ 'show': show }" class="bg-secondary">
+<div id="legendPane" [ngClass]="{ 'show': show }" class="secondary">
     <div *ngIf="legend">
-        <div class="panel-title bg-dark">
+        <div class="panel-title title">
             <div>
                 <i class="btn fa fa-lg fa-close" (click)="onHideLegend()"></i>
             </div>
@@ -11,7 +11,7 @@
             </div>
 
         </div>
-        <div class="panel-title bg-primary">
+        <div class="panel-title primary">
             <h2>{{ legend.name }}</h2>
         </div>
         <div class="legend-body">

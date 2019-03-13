@@ -1,75 +1,35 @@
 /* Map Styles */
+
 body {
     color: rgb(90, 90, 90);
 }
 
-/* Primary background colour */
-.bg-primary {
+/* Primary colours e.g. layer groups in the layer panel, dialog titles */
+.primary {
     background-color: #0A71B4;
     color: white;
 }
 
-/* Secondary background colour */
-.bg-secondary {
+/* Secondary colours e.g. sub layer groups in the layer panel */
+.secondary {
     background-color: #61AADF;
     color: white;
 }
 
-.bg-dark {
-    background-color: #012E58;
-    color: white;
-}
-
-
-.bg-light {
+/* Tertiary colours e.g. layers in the layer panel */
+.tertiary {
     background-color: aliceblue;
     color: rgb(90, 90, 90);
 }
 
+/* Title at the top of side panels */
+.title {
+    background-color: #012E58;
+    color: white;
+}
+
+/* Highlight colour e.g. for external layers */
 .highlight {
     background-color: #F8B334;
     color: #333;
-}
-
-/* GetFeatureInfo Styles */
-
-/* Default Geoserver featureInfo table */
-table.featureInfo {
-    border-collapse: collapse;
-    margin: 1rem;
-}
-
-table.featureInfo, table.featureInfo th, table.featureInfo td {
-    border: 1px solid black;
-}
-
-table.featureInfo th {
-    background-color: #0A71B4;
-    color: white;
-    font-weight: 400;
-}
-
-table.featureInfo td {
-    background-color: white;
-    color: black;
-    font-weight: 400;
-}
-
-table.featureInfo caption {
-    font-size: 2rem;
-    color: black;
-    text-align: left;
-}
-
-.panel-title {
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    color: white;
-    
-}
-
-.panel-title h2 {
-    font-size: 1rem;
-    color: white;
 }
