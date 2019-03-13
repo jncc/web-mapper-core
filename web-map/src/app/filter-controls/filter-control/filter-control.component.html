@@ -1,6 +1,7 @@
 <div>
   {{ filterConfig.name }}
 </div>
+<div [innerHTML]="filterConfig.description"></div>
 <div *ngIf="filterConfig.type==='lookup'">
   {{ filterConfig.attribute }}: {{ filterSummary }}
 </div>
