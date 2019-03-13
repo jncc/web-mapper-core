@@ -414,7 +414,7 @@ namespace MapConfig.Controllers
                 Name = "Species (Test)", 
                 Description = "<p>Filter by Species Classifications</p>",
                 MetadataUrl = "",
-                Type = "LookupMulti", 
+                Type = "Lookup", 
                 Attribute = "species", 
                 LookupCategory = "Species"
             };
@@ -423,7 +423,7 @@ namespace MapConfig.Controllers
                 Name = "Habitat (Test)", 
                 Description = "<p>Filter by Habitat Classifications</p>",
                 MetadataUrl = "",
-                Type = "LookupMulti", 
+                Type = "Lookup", 
                 Attribute = "habitat", 
                 LookupCategory = "Habitat"
             };
