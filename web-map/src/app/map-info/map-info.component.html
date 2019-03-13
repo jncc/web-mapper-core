@@ -1,0 +1,18 @@
+<p>
+  map-info works!
+</p>
+
+
+<div class="controls-container" id="map-info">
+  <div class="controls-container-header primary">
+      <h6>
+          <span>{{ mapInstance.name }}</span>
+      </h6>
+      <div>
+          <i class="btn fa fa-close" (click)="onCloseMapInfo()"></i>
+      </div>
+  </div>
+  <div class="controls-container-body">
+      <div [innerHTML]="mapInstance.description"></div>
+  </div>
+</div>
