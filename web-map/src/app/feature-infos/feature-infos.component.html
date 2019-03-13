@@ -1,9 +1,23 @@
-<div id="featureInfoOutput" *ngIf="(featureInfos$ | async).length">
-  <div>
-    <button type="button" (click)="clearFeatureInfo()">Clear Feature Info</button>
-  </div>
+<div id="featureInfoPane" [ngClass]="{ 'show': (featureInfos$ | async).length }">
+    <div class="panel-title title">
+        <div>
+            <i class="btn fa fa-lg fa-close" (click)="clearFeatureInfo()"></i>
+        </div>
+        <div>
+            <h2>
+                FEATURE INFO
+            </h2>
+        </div>
+    </div>
   <div *ngFor="let featureInfo of featureInfos$ | async">
     <div [innerHTML]="featureInfo"></div>
     <hr>
   </div>
+  <!-- <div class="panel-title primary">
+      <h2>{{ legend.name }}</h2>
+  </div>
+  <div class="legend-body">
+      <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+      <img #legendImage [hidden]="loading" [src]="legend.legendUrl" (load)="onLegendImageLoaded()" alt="legend">
+  </div> -->
 </div>

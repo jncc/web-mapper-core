@@ -1,9 +1,21 @@
-#featureInfoOutput {
+@import '../../variables.scss';
+
+#featureInfoPane {
+    width: 30%;
     position: absolute;
-    top: 30rem;
-    bottom: 0;
-    left: 0;
+    z-index: 1;
     right: 0;
-    background-color: aliceblue;
+    top: 0;
+    margin-right: -30%;
+    background-color: white;
+    transition: margin-right 350ms ease-out;
+    height: 100%;
+    box-shadow: $container-shadow;
+    overflow: hidden;
+}
+
+#featureInfoPane.show {
+    margin-right: 0;
     overflow-y: auto;
+    overflow-x: auto;
 }
