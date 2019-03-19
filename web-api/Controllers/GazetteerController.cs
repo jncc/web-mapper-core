@@ -31,12 +31,14 @@ namespace MapConfig.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<Gazetteer>> GetGazetteer(string name)
         {
-
-            var gazetteer = await _context.Gazetteer
-                .Where(m => m.Name.ToUpper().StartsWith(name.ToUpper()))
-                .ToListAsync();   
-
-            if (gazetteer == null) return NotFound();
+            List<Gazetteer> gazetteer;
+            if(name.Length<3) {
+                gazetteer = new List<Gazetteer>();
+            } else {
+                gazetteer = await _context.Gazetteer
+                    .Where(m => m.Name.ToUpper().Contains(name.ToUpper()))
+                    .ToListAsync();
+            }  
 
             int gazcount = gazetteer.Count();
             for(var i=0;i<gazcount;i++) {
