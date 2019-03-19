@@ -5,6 +5,7 @@ import { IMapInstance } from './models/map-instance.model';
 import { Observable, forkJoin } from 'rxjs';
 import { ILookup } from './models/lookup.model';
 import { IGazetteerResult } from './models/gazetteer-result.model';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +32,17 @@ export class ApiService {
   getFeatureInfoForUrls(urls: string[]): Observable<any[]> {
     const responses = [];
     urls.forEach(
-      url => responses.push(this.http.get(url, {responseType: 'text'}))
+      url => responses.push(this.http.get(url, {responseType: 'text'}).pipe(
+        map(response => this.processGetFeatureInfo(response)))
+      )
     );
     return forkJoin(responses);
+  }
+
+  processGetFeatureInfo(htmlContent: string): string {
+    const parser = new DOMParser();
+    const parsedHtml = parser.parseFromString(htmlContent, 'text/html');
+    return parsedHtml.body.innerHTML;
   }
 
   getCapabilities(url: string): Observable<any> {
