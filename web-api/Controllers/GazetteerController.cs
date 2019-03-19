@@ -21,11 +21,11 @@ namespace MapConfig.Controllers
         }
 
         // GET: api/Gazetteer
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Gazetteer>>> GetGazetteer()
-        {
-            return await _context.Gazetteer.ToListAsync();
-        }
+        // [HttpGet]
+        // public async Task<ActionResult<IEnumerable<Gazetteer>>> GetGazetteer()
+        // {
+        //     return await _context.Gazetteer.ToListAsync();
+        // }
 
         // GET: api/Gazetteer/name
         [HttpGet("{name}")]
