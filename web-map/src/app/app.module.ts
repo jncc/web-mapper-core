@@ -37,6 +37,7 @@ import { BaseLayersComponent } from './base-layers/base-layers.component';
 import { BaseLayerComponent } from './base-layers/base-layer/base-layer.component';
 import { RouterModule } from '@angular/router';
 import { ExternalLayersComponent } from './external-layers/external-layers.component';
+import { MapInfoComponent } from './map-info/map-info.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -67,7 +68,8 @@ export function initializeApp(appConfig: AppConfigService) {
     GazetteerComponent,
     BaseLayersComponent,
     BaseLayerComponent,
-    ExternalLayersComponent
+    ExternalLayersComponent,
+    MapInfoComponent
   ],
   imports: [
     BrowserModule,

@@ -21,6 +21,9 @@
                     <i class="btn fa fa-lg fa-download"></i>
                 </a>
             </div>
+            <div tooltip="not currently downloadable" *ngIf="!layer.downloadURL">
+                <i class="btn fa fa-lg fa-download no-download"></i>
+            </div>
             <div tooltip="view metadata" *ngIf="layer.metadataUrl">
                 <a [href]="layer.metadataUrl" target="_blank">
                     <i class="btn fa fa-lg fa-info-circle"></i>

@@ -117,7 +117,7 @@ export class MapComponent implements OnInit, OnDestroy {
               event.coordinate,
               viewResolution,
               'EPSG:3857',
-              { 'INFO_FORMAT': 'text/html' }
+              { 'INFO_FORMAT': 'text/html', 'feature_count': '50' }
             );
             urls.push(url);
           }
