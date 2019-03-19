@@ -12,6 +12,7 @@ export interface ILayerConfig {
     center: number[];
     zoom: number;
     metadataUrl: string;
+    metadataDescription: string;
     downloadURL: string;
     legendLayerName: string;
     filters: IFilterConfig[];

@@ -129,7 +129,8 @@ export class LayerService {
             metadataUrl: null,
             downloadURL: null,
             legendLayerName: null,
-            filters: null
+            filters: null,
+            metadataDescription: null
           }
         );
       });
