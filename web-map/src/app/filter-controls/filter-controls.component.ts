@@ -33,11 +33,11 @@ export class FilterControlsComponent implements OnInit {
         activeFilters.push({
           layerId: this.layer.layerId,
           filterId: control.filterConfig.filterId,
-          filterCodes: control.filterCodes,
+          filterLookupIds: control.filterLookupIds,
           filterText: control.filterText
         });
     });
-    this.mapService.createLayerFilter(activeFilters);
+    this.mapService.createLayerFilter(this.layer.layerId, activeFilters);
   }
 
   onFilterCleared() {

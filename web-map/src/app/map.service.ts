@@ -76,7 +76,7 @@ export class MapService implements OnDestroy {
     private layerService: LayerService,
     private permalinkService: PermalinkService,
     private filterService: FilterService
-    ) {
+  ) {
     this.dataStore = {
       mapConfig: {
         mapInstances: [],
@@ -136,18 +136,18 @@ export class MapService implements OnDestroy {
 
   private createSubLayerGroups(layerGroupConfig: ILayerGroupConfig) {
     const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
-        map((layer) => layer.subLayerGroup).
-        reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
-          if (!a.find((slg) => subLayerGroup === slg.name)) {
-            a.push({ name: subLayerGroup, layers: [], sublayerGroupId: index });
-          }
-          return a;
-        }, []);
-      layerGroupConfig.layers.forEach((layerConfig) => {
-        const subLayerGroup = subLayerGroups.find((slg) => slg.name === layerConfig.subLayerGroup);
-        subLayerGroup.layers.push(layerConfig);
-      });
-      layerGroupConfig.subLayerGroups = subLayerGroups;
+      map((layer) => layer.subLayerGroup).
+      reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
+        if (!a.find((slg) => subLayerGroup === slg.name)) {
+          a.push({ name: subLayerGroup, layers: [], sublayerGroupId: index });
+        }
+        return a;
+      }, []);
+    layerGroupConfig.layers.forEach((layerConfig) => {
+      const subLayerGroup = subLayerGroups.find((slg) => slg.name === layerConfig.subLayerGroup);
+      subLayerGroup.layers.push(layerConfig);
+    });
+    layerGroupConfig.subLayerGroups = subLayerGroups;
   }
 
   // TODO: move to another service
@@ -180,36 +180,40 @@ export class MapService implements OnDestroy {
 
   private createFilterLookups() {
     const filterLookups = this.dataStore.filterLookups;
-    this.dataStore.layerLookup.forEach(layerConfig => {
-      layerConfig.filters.forEach(filterConfig => {
-        if (!Object.keys(filterLookups).includes(filterConfig.lookupCategory)) {
-          filterLookups[filterConfig.lookupCategory] = [];
-          this.apiService.getLookup(filterConfig.lookupCategory).subscribe( (data: ILookup[]) => {
-            filterLookups[filterConfig.lookupCategory] = data;
-            this._filterLookups.next(filterLookups);
-          });
-        }
-      });
-    });
+    const lookupCategories = this.dataStore.layerLookup.
+      map(layerConfig => layerConfig.filters.map(filterConfig => filterConfig.lookupCategory));
+    console.log(lookupCategories);
+    // this.apiService.getLookups(categories);
+    // this.dataStore.layerLookup.forEach(layerConfig => {
+    //   layerConfig.filters.forEach(filterConfig => {
+    //     if (!Object.keys(filterLookups).includes(filterConfig.lookupCategory)) {
+    //       filterLookups[filterConfig.lookupCategory] = [];
+    //       this.apiService.getLookup(filterConfig.lookupCategory).subscribe((data: ILookup[]) => {
+    //         filterLookups[filterConfig.lookupCategory] = data;
+    //         this._filterLookups.next(filterLookups);
+    //       });
+    //     }
+    //   });
+    // });
+
   }
 
   applyActiveFilters(activeFilters: IActiveFilter[]) {
     const layerIds = Array.from(new Set(activeFilters.map(activeFilter => activeFilter.layerId)));
     layerIds.forEach(layerId => {
       const activeFiltersForLayer = activeFilters.filter(activeFilter => activeFilter.layerId === layerId);
-      this.createLayerFilter(activeFiltersForLayer);
+      this.createLayerFilter(layerId, activeFiltersForLayer);
     });
   }
 
-  createLayerFilter(activeFilters: IActiveFilter[]) {
+  createLayerFilter(layerId: number, activeFilters: IActiveFilter[]) {
     if (activeFilters.length > 0) {
-      const layerId = activeFilters[0].layerId;
       const layerConfig = this.getLayerConfig(layerId);
       if (this.isComplexFilter(layerConfig)) {
-           this.applySqlViewFilter(activeFilters, layerConfig);
-         } else {
-           this.applyCqlFilter(activeFilters, layerConfig);
-         }
+        this.applySqlViewFilter(activeFilters, layerConfig);
+      } else {
+        this.applyCqlFilter(activeFilters, layerConfig);
+      }
     }
   }
 
@@ -223,12 +227,14 @@ export class MapService implements OnDestroy {
     activeFilters.forEach(activeFilter => {
       const filterConfig = layerConfig.filters.find(f => f.filterId === activeFilter.filterId);
       if (filterConfig) {
-        if (filterConfig.type === 'lookup' && activeFilter.filterCodes.length > 0) {
+        if (filterConfig.type === 'lookup' && activeFilter.filterLookupIds.length > 0) {
           filterString += filterConfig.attribute + ':';
-          activeFilter.filterCodes.forEach((filterCode, index) => {
+          const filterLookup = this.dataStore.filterLookups[filterConfig.lookupCategory];
+          activeFilter.filterLookupIds.forEach((lookupId, index) => {
+            const filterCode = filterLookup.find(lookup => lookup.lookupId === lookupId).code;
             const code = '\'' + this.escapeSpecialCharacters(filterCode) + '\'';
             filterString += code;
-            if (index < activeFilter.filterCodes.length - 1) {
+            if (index < activeFilter.filterLookupIds.length - 1) {
               filterString += '\\,';
             }
           });
@@ -237,7 +243,7 @@ export class MapService implements OnDestroy {
           filterString += filterConfig.attribute + ':';
           filterString += this.escapeSpecialCharacters(activeFilter.filterText);
           filterString += ';';
-       }
+        }
       }
     });
     this.filterLayer(layerConfig.layerId, paramName, filterString, activeFilters);
@@ -248,12 +254,24 @@ export class MapService implements OnDestroy {
     let filterString = '';
     activeFilters.forEach(activeFilter => {
       const filterConfig = layerConfig.filters.find(f => f.filterId === activeFilter.filterId);
-      if (filterConfig.type === 'lookup' && activeFilter.filterCodes.length > 0) {
-        if (filterString.length > 0) {
-          // there is already at least one filter in the string so use AND
-          filterString += ' AND ';
+      if (filterConfig) {
+        if (filterConfig.type === 'lookup' && activeFilter.filterLookupIds.length > 0) {
+          if (filterString.length > 0) {
+            // there is already at least one filter in the string so use AND
+            filterString += ' AND ';
+          }
+          filterString += filterConfig.attribute + ' IN (';
+          const filterLookup = this.dataStore.filterLookups[filterConfig.lookupCategory];
+          console.log(filterLookup);
+          activeFilter.filterLookupIds.forEach((lookupId, index) => {
+            const filterCode = filterLookup.find(lookup => lookup.lookupId === lookupId).code;
+            filterString += `'${filterCode}'`;
+            if (index < activeFilter.filterLookupIds.length - 1) {
+              filterString += ',';
+            }
+          });
+          filterString += ')';
         }
-        filterString += filterConfig.attribute + ' IN (' + activeFilter.filterCodes.map(code => `'${code}'`).join() + ')';
       }
     });
     this.filterLayer(layerConfig.layerId, paramName, filterString, activeFilters);

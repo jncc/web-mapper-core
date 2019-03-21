@@ -1,6 +1,6 @@
 export interface IActiveFilter {
     layerId: number;
     filterId: number;
-    filterCodes: string[];
+    filterLookupIds: number[];
     filterText: string;
 }
