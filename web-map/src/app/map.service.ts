@@ -350,7 +350,8 @@ export class MapService implements OnDestroy {
     const center = this.map.getView().getCenter();
     const layerIds = this.dataStore.visibleLayers.slice().reverse().map(layer => layer.layerId);
     const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
-    this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId);
+    const activeFilters = this.dataStore.activeFilters;
+    this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId, activeFilters);
   }
 
   applyPermalink() {
