@@ -45,7 +45,6 @@ export class PermalinkService {
       const layerIds: number[] = queryDict['layerIds'].split(',').filter(layerId => layerId !== '').map(layerId => +layerId);
       const baseLayerId: number = +queryDict['baseLayerId'];
       const activeFilters: IActiveFilter[] = JSON.parse(decodeURIComponent(queryDict['activeFilters']));
-      console.log(activeFilters);
 
       const permaLink: IPermalink = {
         center: center,

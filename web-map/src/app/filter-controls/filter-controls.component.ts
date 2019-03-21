@@ -5,7 +5,6 @@ import { ILookup } from '../models/lookup.model';
 import { FilterControlComponent } from './filter-control/filter-control.component';
 import { IActiveFilter } from '../models/active-filter.model';
 
-
 @Component({
   selector: 'app-filter-controls',
   templateUrl: './filter-controls.component.html',
@@ -29,11 +28,22 @@ export class FilterControlsComponent implements OnInit {
   }
 
   onFilterApplied() {
-    if (this.isComplexFilter()) {
-      this.applySqlViewFilter();
-    } else {
-      this.applyCqlFilter();
-    }
+    // if (this.isComplexFilter()) {
+    //   this.applySqlViewFilter();
+    // } else {
+    //   this.applyCqlFilter();
+    // }
+
+    const newActiveFilters: IActiveFilter[] = [];
+    this.filterControls.forEach(control => {
+        newActiveFilters.push({
+          layerId: this.layer.layerId,
+          filterId: control.filterConfig.filterId,
+          filterCodes: control.filterCodes,
+          filterText: control.filterText
+        });
+    });
+    this.mapService.createLayerFilter(newActiveFilters);
   }
 
   onFilterCleared() {
