@@ -34,13 +34,11 @@ namespace MapConfig.Controllers
         public async Task<ActionResult<Gazetteer>> GetGazetteer(string name)
         {
             List<Gazetteer> gazetteer;
-            if(name.Length<3) {
-                gazetteer = new List<Gazetteer>();
-            } else {
-                gazetteer = await _context.Gazetteer
-                    .Where(m => m.Name.ToUpper().Contains(name.ToUpper()))
-                    .ToListAsync();
-            }  
+            gazetteer = await _context.Gazetteer
+                .Where(g => g.Name.ToUpper().Contains(name.ToUpper()))
+                .OrderBy(g => g.Name.ToUpper().IndexOf(name.ToUpper()))
+                .ToListAsync();
+ 
 
             int gazcount = gazetteer.Count();
             for(var i=0;i<gazcount;i++) {
