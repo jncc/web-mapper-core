@@ -50,7 +50,7 @@ namespace MapConfig.Controllers
             //if we decoded the url we want proxying, then remove that param and build a new param list
             if (urlToProxy.Length > 0) {
                 items.RemoveAll(x => x.Key == "url");
-                //extract any params the to proxy url may have had
+                //extract any params the 'to proxy' url may have had
                 var uri = new Uri(urlToProxy);
                 baseUri = uri.GetComponents(UriComponents.Scheme | UriComponents.Host | UriComponents.Port | UriComponents.Path, UriFormat.UriEscaped);
                 queryDictionary = QueryHelpers.ParseQuery(uri.Query);
@@ -118,7 +118,7 @@ namespace MapConfig.Controllers
             }
 
             ObjectResult ReturnError() {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error has occured processing the Ogc request, please review the logs.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error has occured processing the OGC request.");
             }
 
             bool HasServiceException(string responseText) {
