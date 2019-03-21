@@ -9,11 +9,14 @@
             </h2>
         </div>
     </div>
-  <div *ngFor="let featureInfo of featureInfos$ | async">
-    <div [innerHTML]="featureInfo"></div>
-    <hr>
-  </div>
-  <!-- <div class="panel-title primary">
+    <div class="feature-info-body">
+        <div *ngFor="let featureInfo of featureInfos$ | async">
+            <div [innerHTML]="featureInfo"></div>
+            <hr>
+        </div>
+    </div>
+
+    <!-- <div class="panel-title primary">
       <h2>{{ legend.name }}</h2>
   </div>
   <div class="legend-body">
