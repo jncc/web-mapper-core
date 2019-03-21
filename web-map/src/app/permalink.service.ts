@@ -61,7 +61,8 @@ export class PermalinkService {
 
   hasRequiredProperties(queryDict: any): boolean {
     return queryDict.hasOwnProperty('zoom') && queryDict.hasOwnProperty('center') &&
-      queryDict.hasOwnProperty('layerIds') && queryDict.hasOwnProperty('baseLayerId');
+      queryDict.hasOwnProperty('layerIds') && queryDict.hasOwnProperty('baseLayerId') &&
+      queryDict.hasOwnProperty('activeFilters');
   }
 
   validateZoom(value: string): boolean {
