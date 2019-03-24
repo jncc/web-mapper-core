@@ -5,7 +5,6 @@ import { ILookup } from '../models/lookup.model';
 import { FilterControlComponent } from './filter-control/filter-control.component';
 import { IActiveFilter } from '../models/active-filter.model';
 
-
 @Component({
   selector: 'app-filter-controls',
   templateUrl: './filter-controls.component.html',
@@ -29,11 +28,16 @@ export class FilterControlsComponent implements OnInit {
   }
 
   onFilterApplied() {
-    if (this.isComplexFilter()) {
-      this.applySqlViewFilter();
-    } else {
-      this.applyCqlFilter();
-    }
+    const activeFilters: IActiveFilter[] = [];
+    this.filterControls.forEach(control => {
+        activeFilters.push({
+          layerId: this.layer.layerId,
+          filterId: control.filterConfig.filterId,
+          filterLookupIds: control.filterLookupIds,
+          filterText: control.filterText
+        });
+    });
+    this.mapService.createLayerFilter(this.layer.layerId, activeFilters);
   }
 
   onFilterCleared() {
@@ -65,71 +69,4 @@ export class FilterControlsComponent implements OnInit {
     return this.layer.filters.every(filter => filter.isComplex);
   }
 
-  // In Geoserver SQL Views, semicolons or commas must be escaped with a backslash (e.g. \, and \;)
-  private escapeSpecialCharacters(value: string): string {
-    return value.replace(/,/g, '\\,').replace(/;/g, '\\;');
-  }
-
-  private applyCqlFilter() {
-    const paramName = 'CQL_FILTER';
-    let filterString = '';
-    const newActiveFilters: IActiveFilter[] = [];
-    this.filterControls.forEach(control => {
-      if (control.filterConfig.type === 'lookup' && control.filterCodes.length > 0) {
-        if (filterString.length > 0) {
-          // there is already at least one filter in the string so use AND
-          filterString += ' AND ';
-        }
-        filterString += control.filterConfig.attribute + ' IN (' + control.filterCodes.map(code => `'${code}'`).join() + ')';
-        newActiveFilters.push({
-          layerId: this.layer.layerId,
-          filterId: control.filterConfig.filterId,
-          filterCodes: control.filterCodes,
-          filterText: control.filterText
-        });
-      }
-    });
-    this.mapService.filterLayer(this.layer.layerId, paramName, filterString, newActiveFilters);
-  }
-
-  private applySqlViewFilter() {
-    const paramName = 'viewParams';
-    let filterString = '';
-    const newActiveFilters: IActiveFilter[] = [];
-    this.filterControls.forEach(control => {
-      if (control.filterConfig.type === 'lookup' && control.filterCodes.length > 0) {
-        // filterString += control.filterAttribute + ':' + control.filterCodes.map(code => `'${
-        //   code.replace(/,/g, '\\,').replace(/:/g, '\\,')}'`).join('\\,') + ';';
-        filterString += control.filterConfig.attribute + ':';
-        control.filterCodes.forEach((filterCode, index) => {
-          const code = '\'' + this.escapeSpecialCharacters(filterCode) + '\'';
-          filterString += code;
-          if (index < control.filterCodes.length - 1) {
-            filterString += '\\,';
-          }
-        });
-        filterString += ';';
-
-        newActiveFilters.push({
-          layerId: this.layer.layerId,
-          filterId: control.filterConfig.filterId,
-          filterCodes: control.filterCodes,
-          filterText: control.filterText
-        });
-      }
-      if (control.filterConfig.type === 'text' && control.filterText.length > 0) {
-        filterString += control.filterConfig.attribute + ':';
-        filterString += this.escapeSpecialCharacters(control.filterText);
-        filterString += ';';
-
-        newActiveFilters.push({
-          layerId: this.layer.layerId,
-          filterId: control.filterConfig.filterId,
-          filterCodes: control.filterCodes,
-          filterText: control.filterText
-        });
-      }
-    });
-    this.mapService.filterLayer(this.layer.layerId, paramName, filterString, newActiveFilters);
-  }
 }

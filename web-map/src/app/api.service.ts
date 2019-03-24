@@ -32,8 +32,9 @@ export class ApiService {
   getFeatureInfoForUrls(urls: string[]): Observable<any[]> {
     const responses = [];
     urls.forEach(
-      url => responses.push(this.http.get(url, {responseType: 'text'}).pipe(
-        map(response => this.processGetFeatureInfo(response)))
+      url => responses.push(
+        this.http.get(url, { responseType: 'text' }).pipe(
+          map(response => this.processGetFeatureInfo(response)))
       )
     );
     return forkJoin(responses);
@@ -46,12 +47,20 @@ export class ApiService {
   }
 
   getCapabilities(url: string): Observable<any> {
-    return this.http.get(url, {responseType: 'text'});
+    return this.http.get(url, { responseType: 'text' });
   }
 
   getLookup(category: string): Observable<ILookup[]> {
     const lookupUrl = this.apiUrl + '/lookup/' + category;
     return this.http.get<ILookup[]>(lookupUrl);
+  }
+
+  getLookups(categories: string[]): Observable<ILookup[][]> {
+    const responses = [];
+    categories.forEach(
+      category => responses.push(this.getLookup(category))
+    );
+    return forkJoin(responses);
   }
 
   getGazetteerResults(searchTerm: string) {
