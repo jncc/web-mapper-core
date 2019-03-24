@@ -55,15 +55,10 @@ export class ApiService {
     return this.http.get<ILookup[]>(lookupUrl);
   }
 
-  getLookups(categories: string[]): Observable<any> {
+  getLookups(categories: string[]): Observable<ILookup[][]> {
     const responses = [];
-    // const filterLookups: { [lookupCategory: string]: ILookup[]; } = {};
     categories.forEach(
-      category => responses.push(this.getLookup(category).
-        pipe(
-          map(response => ({ lookupCategory: category, lookup: response }))
-        )
-      )
+      category => responses.push(this.getLookup(category))
     );
     return forkJoin(responses);
   }

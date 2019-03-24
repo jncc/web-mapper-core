@@ -123,7 +123,6 @@ export class MapService implements OnDestroy {
       this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
       this.createFilterLookups();
-      this.applyPermalink();
     }, error => console.log('Could not load map instance config.'));
   }
 
@@ -180,22 +179,19 @@ export class MapService implements OnDestroy {
 
   private createFilterLookups() {
     const filterLookups = this.dataStore.filterLookups;
-    const lookupCategories = this.dataStore.layerLookup.
-      map(layerConfig => layerConfig.filters.map(filterConfig => filterConfig.lookupCategory));
-    console.log(lookupCategories);
-    // this.apiService.getLookups(categories);
-    // this.dataStore.layerLookup.forEach(layerConfig => {
-    //   layerConfig.filters.forEach(filterConfig => {
-    //     if (!Object.keys(filterLookups).includes(filterConfig.lookupCategory)) {
-    //       filterLookups[filterConfig.lookupCategory] = [];
-    //       this.apiService.getLookup(filterConfig.lookupCategory).subscribe((data: ILookup[]) => {
-    //         filterLookups[filterConfig.lookupCategory] = data;
-    //         this._filterLookups.next(filterLookups);
-    //       });
-    //     }
-    //   });
-    // });
-
+    const lookupCategories: string[] = [];
+    this.dataStore.layerLookup.forEach(layerConfig =>
+      layerConfig.filters.forEach(filterConfig => {
+        if (!lookupCategories.includes(filterConfig.lookupCategory) && filterConfig.lookupCategory) {
+          lookupCategories.push(filterConfig.lookupCategory);
+        }
+      }
+      ));
+    this.apiService.getLookups(lookupCategories).subscribe(lookups => {
+      lookups.forEach((lookup, index) => filterLookups[lookupCategories[index]] = lookup);
+      this._filterLookups.next(filterLookups);
+      this.applyPermalink();
+    });
   }
 
   applyActiveFilters(activeFilters: IActiveFilter[]) {
@@ -451,6 +447,7 @@ export class MapService implements OnDestroy {
   applyPermalink() {
     const permalink: IPermalink = this.permalinkService.readPermalink();
     if (permalink) {
+      console.log('applying permalink');
       this.zoomSubject.next({ center: permalink.center, zoom: permalink.zoom });
       this.setBaseLayer(permalink.baseLayerId);
       this.removeAllVisibleLayers();
