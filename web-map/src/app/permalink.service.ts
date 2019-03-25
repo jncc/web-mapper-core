@@ -55,7 +55,14 @@ export class PermalinkService {
       let activeFilters: IActiveFilter[] = [];
       const decodedActiveFiltersJSON = decompressFromEncodedURIComponent(decodeURIComponent(queryDict['activeFilters']));
       if (decodedActiveFiltersJSON) {
-        activeFilters = JSON.parse(decodedActiveFiltersJSON);
+        try {
+          activeFilters = JSON.parse(decodedActiveFiltersJSON);
+        } catch (error) {
+          console.log('invalid active filters - no filter applied');
+          activeFilters = [];
+        }
+      } else {
+        console.log('invalid active filters - no filter applied');
       }
       const permaLink: IPermalink = {
         center: center,
