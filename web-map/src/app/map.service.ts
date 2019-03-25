@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subject, BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { ApiService } from './api.service';
@@ -258,7 +258,6 @@ export class MapService implements OnDestroy {
           }
           filterString += filterConfig.attribute + ' IN (';
           const filterLookup = this.dataStore.filterLookups[filterConfig.lookupCategory];
-          console.log(filterLookup);
           activeFilter.filterLookupIds.forEach((lookupId, index) => {
             const filterCode = filterLookup.find(lookup => lookup.lookupId === lookupId).code;
             filterString += `'${filterCode}'`;
@@ -363,8 +362,9 @@ export class MapService implements OnDestroy {
     } else {
       this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
 
-      this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
-      this._activeFilters.next(this.dataStore.activeFilters);
+      // client requested to keep filter active when layer removed
+      // this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+      // this._activeFilters.next(this.dataStore.activeFilters);
     }
     this._visibleLayers.next(this.dataStore.visibleLayers);
     this._mapConfig.next(this.dataStore.mapConfig);
@@ -432,7 +432,7 @@ export class MapService implements OnDestroy {
     this.createLayersForLayerGroupConfig(layerGroupConfig);
     this.dataStore.mapConfig.mapInstance.layerGroups.push(layerGroupConfig);
     this._mapConfig.next(this.dataStore.mapConfig);
-    console.log(this.dataStore.mapConfig.mapInstance);
+    // console.log(this.dataStore.mapConfig.mapInstance);
   }
 
   createPermalink() {
@@ -447,7 +447,6 @@ export class MapService implements OnDestroy {
   applyPermalink() {
     const permalink: IPermalink = this.permalinkService.readPermalink();
     if (permalink) {
-      console.log('applying permalink');
       this.zoomSubject.next({ center: permalink.center, zoom: permalink.zoom });
       this.setBaseLayer(permalink.baseLayerId);
       this.removeAllVisibleLayers();
