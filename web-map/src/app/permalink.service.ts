@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { IPermalink } from './models/permalink.model';
+
 import proj from 'ol/proj';
-import { IFilterConfig } from './models/filter-config.model';
+import {compressToEncodedURIComponent, decompressFromEncodedURIComponent} from 'lz-string';
+
+import { IPermalink } from './models/permalink.model';
 import { IActiveFilter } from './models/active-filter.model';
 
 @Injectable({
@@ -14,12 +16,17 @@ export class PermalinkService {
 
   createPermalink(zoom: number, center: number[], layerIds: number[], baseLayerId: number, activeFilters: IActiveFilter[]) {
     const centerLonLat = proj.toLonLat([center[0], center[1]]);
+    let compressedActiveFilters = '';
+    if (activeFilters && activeFilters.length > 0) {
+      compressedActiveFilters = compressToEncodedURIComponent(JSON.stringify(activeFilters));
+    }
+
     const queryParams: Params = {
       zoom: zoom,
       center: centerLonLat.map(coord => coord.toFixed(3)).join(),
       layerIds: layerIds.join(),
       baseLayerId: baseLayerId,
-      activeFilters: JSON.stringify(activeFilters)
+      activeFilters: compressedActiveFilters
     };
     this.router.navigate(
       [],
@@ -44,8 +51,12 @@ export class PermalinkService {
       const center: number[] = queryDict['center'].split(',').map(coord => +coord);
       const layerIds: number[] = queryDict['layerIds'].split(',').filter(layerId => layerId !== '').map(layerId => +layerId);
       const baseLayerId: number = +queryDict['baseLayerId'];
-      const activeFilters: IActiveFilter[] = JSON.parse(decodeURIComponent(queryDict['activeFilters']));
 
+      let activeFilters: IActiveFilter[] = [];
+      const decodedActiveFiltersJSON = decompressFromEncodedURIComponent(decodeURIComponent(queryDict['activeFilters']));
+      if (decodedActiveFiltersJSON) {
+        activeFilters = JSON.parse(decodedActiveFiltersJSON);
+      }
       const permaLink: IPermalink = {
         center: center,
         zoom: zoom,
@@ -61,8 +72,7 @@ export class PermalinkService {
 
   hasRequiredProperties(queryDict: any): boolean {
     return queryDict.hasOwnProperty('zoom') && queryDict.hasOwnProperty('center') &&
-      queryDict.hasOwnProperty('layerIds') && queryDict.hasOwnProperty('baseLayerId') &&
-      queryDict.hasOwnProperty('activeFilters');
+      queryDict.hasOwnProperty('layerIds') && queryDict.hasOwnProperty('baseLayerId');
   }
 
   validateZoom(value: string): boolean {
