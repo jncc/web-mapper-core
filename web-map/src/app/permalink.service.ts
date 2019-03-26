@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { IPermalink } from './models/permalink.model';
+
 import proj from 'ol/proj';
+import {compressToEncodedURIComponent, decompressFromEncodedURIComponent} from 'lz-string';
+
+import { IPermalink } from './models/permalink.model';
+import { IActiveFilter } from './models/active-filter.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +14,19 @@ export class PermalinkService {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
 
-  createPermalink(zoom: number, center: number[], layerIds: number[], baseLayerId: number) {
+  createPermalink(zoom: number, center: number[], layerIds: number[], baseLayerId: number, activeFilters: IActiveFilter[]) {
     const centerLonLat = proj.toLonLat([center[0], center[1]]);
+    let compressedActiveFilters = '';
+    if (activeFilters && activeFilters.length > 0) {
+      compressedActiveFilters = compressToEncodedURIComponent(JSON.stringify(activeFilters));
+    }
+
     const queryParams: Params = {
       zoom: zoom,
       center: centerLonLat.map(coord => coord.toFixed(3)).join(),
       layerIds: layerIds.join(),
-      baseLayerId: baseLayerId
+      baseLayerId: baseLayerId,
+      activeFilters: compressedActiveFilters
     };
     this.router.navigate(
       [],
@@ -42,11 +52,24 @@ export class PermalinkService {
       const layerIds: number[] = queryDict['layerIds'].split(',').filter(layerId => layerId !== '').map(layerId => +layerId);
       const baseLayerId: number = +queryDict['baseLayerId'];
 
+      let activeFilters: IActiveFilter[] = [];
+      const decodedActiveFiltersJSON = decompressFromEncodedURIComponent(decodeURIComponent(queryDict['activeFilters']));
+      if (decodedActiveFiltersJSON) {
+        try {
+          activeFilters = JSON.parse(decodedActiveFiltersJSON);
+        } catch (error) {
+          console.log('invalid active filters - no filter applied');
+          activeFilters = [];
+        }
+      } else {
+        console.log('invalid active filters - no filter applied');
+      }
       const permaLink: IPermalink = {
         center: center,
         zoom: zoom,
         layerIds: layerIds,
-        baseLayerId: baseLayerId
+        baseLayerId: baseLayerId,
+        activeFilters: activeFilters
       };
       return permaLink;
     } else {

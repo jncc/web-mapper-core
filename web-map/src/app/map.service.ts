@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subject, BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { ApiService } from './api.service';
@@ -14,6 +14,7 @@ import { PermalinkService } from './permalink.service';
 import { IBaseLayerConfig } from './models/base-layer-config.model';
 import { IActiveFilter } from './models/active-filter.model';
 import { IPermalink } from './models/permalink.model';
+import { FilterService } from './filter.service';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +71,12 @@ export class MapService implements OnDestroy {
     return this._activeFilters.asObservable();
   }
 
-  constructor(private apiService: ApiService, private layerService: LayerService, private permalinkService: PermalinkService) {
+  constructor(
+    private apiService: ApiService,
+    private layerService: LayerService,
+    private permalinkService: PermalinkService,
+    private filterService: FilterService
+  ) {
     this.dataStore = {
       mapConfig: {
         mapInstances: [],
@@ -117,7 +123,6 @@ export class MapService implements OnDestroy {
       this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
       this.createFilterLookups();
-      this.applyPermalink();
     }, error => console.log('Could not load map instance config.'));
   }
 
@@ -130,18 +135,18 @@ export class MapService implements OnDestroy {
 
   private createSubLayerGroups(layerGroupConfig: ILayerGroupConfig) {
     const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
-        map((layer) => layer.subLayerGroup).
-        reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
-          if (!a.find((slg) => subLayerGroup === slg.name)) {
-            a.push({ name: subLayerGroup, layers: [], sublayerGroupId: index });
-          }
-          return a;
-        }, []);
-      layerGroupConfig.layers.forEach((layerConfig) => {
-        const subLayerGroup = subLayerGroups.find((slg) => slg.name === layerConfig.subLayerGroup);
-        subLayerGroup.layers.push(layerConfig);
-      });
-      layerGroupConfig.subLayerGroups = subLayerGroups;
+      map((layer) => layer.subLayerGroup).
+      reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
+        if (!a.find((slg) => subLayerGroup === slg.name)) {
+          a.push({ name: subLayerGroup, layers: [], sublayerGroupId: index });
+        }
+        return a;
+      }, []);
+    layerGroupConfig.layers.forEach((layerConfig) => {
+      const subLayerGroup = subLayerGroups.find((slg) => slg.name === layerConfig.subLayerGroup);
+      subLayerGroup.layers.push(layerConfig);
+    });
+    layerGroupConfig.subLayerGroups = subLayerGroups;
   }
 
   // TODO: move to another service
@@ -174,17 +179,102 @@ export class MapService implements OnDestroy {
 
   private createFilterLookups() {
     const filterLookups = this.dataStore.filterLookups;
-    this.dataStore.layerLookup.forEach(layerConfig => {
+    const lookupCategories: string[] = [];
+    this.dataStore.layerLookup.forEach(layerConfig =>
       layerConfig.filters.forEach(filterConfig => {
-        if (!Object.keys(filterLookups).includes(filterConfig.lookupCategory)) {
-          filterLookups[filterConfig.lookupCategory] = [];
-          this.apiService.getLookup(filterConfig.lookupCategory).subscribe( (data: ILookup[]) => {
-            filterLookups[filterConfig.lookupCategory] = data;
-            this._filterLookups.next(filterLookups);
-          });
+        if (!lookupCategories.includes(filterConfig.lookupCategory) && filterConfig.lookupCategory) {
+          lookupCategories.push(filterConfig.lookupCategory);
         }
-      });
+      }
+      ));
+    this.apiService.getLookups(lookupCategories).subscribe(lookups => {
+      lookups.forEach((lookup, index) => filterLookups[lookupCategories[index]] = lookup);
+      this._filterLookups.next(filterLookups);
+      this.applyPermalink();
     });
+  }
+
+  applyActiveFilters(activeFilters: IActiveFilter[]) {
+    const layerIds = Array.from(new Set(activeFilters.map(activeFilter => activeFilter.layerId)));
+    layerIds.forEach(layerId => {
+      const activeFiltersForLayer = activeFilters.filter(activeFilter => activeFilter.layerId === layerId);
+      this.createLayerFilter(layerId, activeFiltersForLayer);
+    });
+  }
+
+  createLayerFilter(layerId: number, activeFilters: IActiveFilter[]) {
+    if (activeFilters.length > 0) {
+      const layerConfig = this.getLayerConfig(layerId);
+      if (this.isComplexFilter(layerConfig)) {
+        this.applySqlViewFilter(activeFilters, layerConfig);
+      } else {
+        this.applyCqlFilter(activeFilters, layerConfig);
+      }
+    }
+  }
+
+  private isComplexFilter(layerConfig: ILayerConfig): boolean {
+    return layerConfig.filters.every(filter => filter.isComplex);
+  }
+
+  private applySqlViewFilter(activeFilters: IActiveFilter[], layerConfig: ILayerConfig) {
+    const paramName = 'viewParams';
+    let filterString = '';
+    activeFilters.forEach(activeFilter => {
+      const filterConfig = layerConfig.filters.find(f => f.filterId === activeFilter.filterId);
+      if (filterConfig) {
+        if (filterConfig.type === 'lookup' && activeFilter.filterLookupIds.length > 0) {
+          filterString += filterConfig.attribute + ':';
+          const filterLookup = this.dataStore.filterLookups[filterConfig.lookupCategory];
+          activeFilter.filterLookupIds.forEach((lookupId, index) => {
+            const filterCode = filterLookup.find(lookup => lookup.lookupId === lookupId).code;
+            const code = '\'' + this.escapeSpecialCharacters(filterCode) + '\'';
+            filterString += code;
+            if (index < activeFilter.filterLookupIds.length - 1) {
+              filterString += '\\,';
+            }
+          });
+          filterString += ';';
+        } else if (filterConfig.type === 'text' && activeFilter.filterText.length > 0) {
+          filterString += filterConfig.attribute + ':';
+          filterString += this.escapeSpecialCharacters(activeFilter.filterText);
+          filterString += ';';
+        }
+      }
+    });
+    this.filterLayer(layerConfig.layerId, paramName, filterString, activeFilters);
+  }
+
+  private applyCqlFilter(activeFilters: IActiveFilter[], layerConfig: ILayerConfig) {
+    const paramName = 'CQL_FILTER';
+    let filterString = '';
+    activeFilters.forEach(activeFilter => {
+      const filterConfig = layerConfig.filters.find(f => f.filterId === activeFilter.filterId);
+      if (filterConfig) {
+        if (filterConfig.type === 'lookup' && activeFilter.filterLookupIds.length > 0) {
+          if (filterString.length > 0) {
+            // there is already at least one filter in the string so use AND
+            filterString += ' AND ';
+          }
+          filterString += filterConfig.attribute + ' IN (';
+          const filterLookup = this.dataStore.filterLookups[filterConfig.lookupCategory];
+          activeFilter.filterLookupIds.forEach((lookupId, index) => {
+            const filterCode = filterLookup.find(lookup => lookup.lookupId === lookupId).code;
+            filterString += `'${filterCode}'`;
+            if (index < activeFilter.filterLookupIds.length - 1) {
+              filterString += ',';
+            }
+          });
+          filterString += ')';
+        }
+      }
+    });
+    this.filterLayer(layerConfig.layerId, paramName, filterString, activeFilters);
+  }
+
+  // In Geoserver SQL Views, semicolons or commas must be escaped with a backslash (e.g. \, and \;)
+  private escapeSpecialCharacters(value: string): string {
+    return value.replace(/,/g, '\\,').replace(/;/g, '\\;');
   }
 
   filterLayer(layerId: number, paramName: string, filterString: string, activeFilters: IActiveFilter[]) {
@@ -192,7 +282,6 @@ export class MapService implements OnDestroy {
     const source = layerConfig.layer.getSource();
     const params = layerConfig.layer.getSource().getParams();
     params[paramName] = filterString;
-    // console.log(paramName + ': ' + filterString);
     source.updateParams(params);
 
     this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
@@ -273,8 +362,9 @@ export class MapService implements OnDestroy {
     } else {
       this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
 
-      this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
-      this._activeFilters.next(this.dataStore.activeFilters);
+      // client requested to keep filter active when layer removed
+      // this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+      // this._activeFilters.next(this.dataStore.activeFilters);
     }
     this._visibleLayers.next(this.dataStore.visibleLayers);
     this._mapConfig.next(this.dataStore.mapConfig);
@@ -342,7 +432,7 @@ export class MapService implements OnDestroy {
     this.createLayersForLayerGroupConfig(layerGroupConfig);
     this.dataStore.mapConfig.mapInstance.layerGroups.push(layerGroupConfig);
     this._mapConfig.next(this.dataStore.mapConfig);
-    console.log(this.dataStore.mapConfig.mapInstance);
+    // console.log(this.dataStore.mapConfig.mapInstance);
   }
 
   createPermalink() {
@@ -350,7 +440,8 @@ export class MapService implements OnDestroy {
     const center = this.map.getView().getCenter();
     const layerIds = this.dataStore.visibleLayers.slice().reverse().map(layer => layer.layerId);
     const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
-    this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId);
+    const activeFilters = this.dataStore.activeFilters;
+    this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId, activeFilters);
   }
 
   applyPermalink() {
@@ -360,6 +451,9 @@ export class MapService implements OnDestroy {
       this.setBaseLayer(permalink.baseLayerId);
       this.removeAllVisibleLayers();
       permalink.layerIds.forEach(id => this.changeLayerVisibility(id, true));
+      if (permalink.activeFilters.length > 0) {
+        this.applyActiveFilters(permalink.activeFilters);
+      }
     } else {
       this.zoomToMapExtent();
     }

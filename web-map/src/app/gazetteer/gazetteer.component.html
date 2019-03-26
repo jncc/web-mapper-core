@@ -1,7 +1,7 @@
 <div id="gazetteer-container">
   <ng-select  [items]="results$ | async"
               bindLabel="name"
-              placeholder="Search ..."
+              placeholder="Search for marine regions ..."
               [(ngModel)]="selectedResult"
               (change)="onChange()"
               [typeahead]="searchInput$"

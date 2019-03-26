@@ -14,13 +14,15 @@ export class FilterControlComponent implements OnInit, OnChanges {
   @Input() activeFilters: IActiveFilter[];
 
 
- get filterCodes(): string[] {
-   return this.filterState.filter(state => state.checked).map(state => state.lookup.code);
+ get filterLookupIds(): number[] {
+   return this.filterState.filter(state => state.checked).map(state => state.lookup.lookupId);
+ }
+
+ get filterSummary(): string {
+   return this.filterState.filter(state => state.checked).map(state => state.lookup.code).join(' ');
  }
 
   filterText = '';
-
-  filterSummary = '';
 
   filterState: {lookup: ILookup, checked: boolean}[] = [];
 
@@ -39,7 +41,7 @@ export class FilterControlComponent implements OnInit, OnChanges {
       this.filterText = activeFilter.filterText;
       if (this.filterLookup) {
         this.filterLookup.forEach(lookup => {
-          const checked = activeFilter.filterCodes.indexOf(lookup.code) > -1;
+          const checked = activeFilter.filterLookupIds.indexOf(lookup.lookupId) > -1;
           this.filterState.push({lookup, checked});
         });
       }
@@ -49,13 +51,11 @@ export class FilterControlComponent implements OnInit, OnChanges {
         this.filterState.push({lookup: lookup, checked: false});
       });
     }
-    this.filterSummary = this.filterCodes.join(' ');
   }
 
   onCheckChanged(code: string, event: Event) {
     const checkbox = <HTMLInputElement>event.target;
     const state = this.filterState.find(s => s.lookup.code === code);
     state.checked = checkbox.checked;
-    this.filterSummary = this.filterCodes.join(' ');
   }
 }

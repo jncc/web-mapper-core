@@ -43,6 +43,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private baseLayerGroup: Group;
   private layerGroup: Group;
+  private overviewMap: OverviewMap;
 
   constructor(private mapService: MapService) {
   }
@@ -53,7 +54,17 @@ export class MapComponent implements OnInit, OnDestroy {
       layers => this.updateLayers(layers)
     );
     this.baseLayersSubscription = this.mapService.baseLayers.subscribe(
-      baseLayers => this.baseLayerGroup.setLayers(new Collection(baseLayers.map(layer => layer.layer)))
+      baseLayers => {
+        const baseLayerCollection = new Collection(baseLayers.map(layer => layer.layer));
+        this.baseLayerGroup.setLayers(baseLayerCollection);
+        this.overviewMap = new OverviewMap({
+          collapsed: false,
+          collapsible: false,
+          target: document.getElementById('overviewMap'),
+          layers: baseLayerCollection
+        });
+        this.map.addControl(this.overviewMap);
+      }
     );
   }
 
@@ -77,11 +88,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map = new Map({
       target: 'map',
       controls: [
-        new OverviewMap({
-          collapsed: false,
-          collapsible: false,
-          target: document.getElementById('overviewMap')
-        }),
         new MousePosition({
           projection: 'EPSG:4326',
           target: document.getElementById('mousePosition'),

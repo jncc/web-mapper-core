@@ -29,11 +29,6 @@ export class ActiveLayerComponent implements OnInit, OnDestroy {
     });
   }
 
-  onToggleFilter() {
-    this.filterActive = !this.filterActive;
-    alert('Filter status: ' + this.filterActive);
-  }
-
   onRemoveLayer() {
     this.mapService.changeLayerVisibility(this.layer.layerId, false);
   }

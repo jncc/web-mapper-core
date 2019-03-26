@@ -49,3 +49,9 @@
     border-radius: $container-border-radius;
     box-shadow: $container-shadow;
 }
+
+// TODO: agree behaviour of draggable active layers
+.controls-container-body {
+    max-height: 50vh;
+    overflow-y: auto;
+}

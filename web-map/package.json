@@ -24,6 +24,7 @@
     "@ng-select/ng-select": "^2.16.0",
     "@types/ol": "^4.6.4",
     "core-js": "^2.6.5",
+    "lz-string": "^1.4.4",
     "ng5-slider": "^1.1.13",
     "ol": "^4.6.5",
     "rxjs": "~6.3.3",
