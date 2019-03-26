@@ -24,6 +24,12 @@
             @Html.DisplayFor(model => model.MapInstance.Description)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MapInstance.Attribution)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MapInstance.Attribution)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.MapInstance.MapCentreLon)
         </dt>
         <dd class="col-sm-10">
@@ -40,6 +46,12 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.MapInstance.MapZoom)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MapInstance.MaxZoom)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MapInstance.MaxZoom)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.MapInstance.BaseLayerList)

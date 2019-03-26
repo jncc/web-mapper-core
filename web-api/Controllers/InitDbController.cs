@@ -31,44 +31,52 @@ namespace MapConfig.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MapInstance>>> InitDb()
         {
+
+            //Additional BaseLayers
+            var baselayer = _context.BaseLayer.Where(e =>e.Name.EndsWith("(Test)"));
+            _context.BaseLayer.RemoveRange(baselayer);
+
             var bl1 = new BaseLayer { 
-                Name = "OpenStreetMap",
-                MetadataUrl = "http://openstreetmap.org",
-                Type = "OSM",
-                Url = "//{a-f}.osm.esdm.co.uk/osm/900913/c/{z}/{x}/{y}.png"
+                Name = "World1 (Test)",
+                Attribution = "Data derived from OpenStreetMap",
+                AttributionUrl = "http://openstreetmap.org",
+                Url = _webapiconfig.Value.TestDataWMSUrl,
+                LayerName = "simplified_land_polygons"
             };
             var bl2 = new BaseLayer { 
-                Name = "OpenTopoMap",
-                MetadataUrl = "http://opentopomap.org",
-                Type = "OSM",
-                Url = "//{a-f}.osm.esdm.co.uk/osm/900913/tc/{z}/{x}/{y}.png"
+                Name = "World2 (Test)",
+                Attribution = "Data derived from OpenStreetMap",
+                AttributionUrl = "http://openstreetmap.org",
+                Url = _webapiconfig.Value.TestDataWMSUrl,
+                LayerName = "simplified_land_polygons_alt"
             };
 
-            if (_context.BaseLayer.Count() == 0)
-            {   // Create a new BaseLayer if collection is empty                
-                _context.BaseLayer.Add(bl1);
-                _context.SaveChanges();
-                _context.BaseLayer.Add(bl2);
-                _context.SaveChanges();
-            }
+            _context.BaseLayer.Add(bl1);
+            _context.SaveChanges();
+            _context.BaseLayer.Add(bl2);
+            _context.SaveChanges();
 
             var map1 = new MapInstance { 
                 Name = "EMODnet",
+                Attribution = "Map Provided by JNCC",
                 Description = "<p>Configurable <strong>EMODnet</strong> description.</p><p><a href=\"http://www.emodnet.eu/\" target=\"_blank\">EMODnet</a></p>",
                 MapCentreLon = -3.507729,
                 MapCentreLat = 52.304535,
                 MapZoom = 6,
-                BaseLayerList = "OpenStreetMap,OpenTopoMap",
-                VisibleBaseLayer = "OpenStreetMap"
+                MaxZoom = 18,
+                BaseLayerList = "World1 (Test),World2 (Test)",
+                VisibleBaseLayer = "World2 (Test)"
              };
             var map2 = new MapInstance { 
-                Name = "OSPAR", 
+                Name = "OSPAR",
+                Attribution = "Map Provided by JNCC",
                 Description = "<p>Configurable <strong>OSPAR</strong> description.</p><p><a href=\"https://www.ospar.org/\" target=\"_blank\">OSPAR</a></p>",
                 MapCentreLon = -3.507729,
                 MapCentreLat = 52.304535,
                 MapZoom = 6,
-                BaseLayerList = "OpenStreetMap,OpenTopoMap",
-                VisibleBaseLayer = "OpenTopoMap"               
+                MaxZoom = 18,
+                BaseLayerList = "World1 (Test),World2 (Test)",
+                VisibleBaseLayer = "World2 (Test)"              
             };           
 
             if (_context.MapInstance.Count() == 0)
@@ -171,7 +179,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/02a444c8-bd2d-4e15-8e69-806059103760",
                 MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified in EUNIS classification system, except where translation is not possible.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",
-                Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 10,
                 LayerVisible = true,
@@ -188,7 +195,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/d23d0516-6ff4-4fb8-bf78-c11991cef78b",
                 MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified into Marine Strategy Framework Directive Benthic Broad Habitat Types.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
-                Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 11,
                 LayerVisible = false,
@@ -207,7 +213,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/ad20fbc7-37d4-40b5-a246-8cdb321e4654",
                 MetadataDescription = "Classified biological zones for all European waters. One of several habitat descriptors used to determine the final habitat type.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
-                Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 12,
                 LayerVisible = false,
@@ -225,7 +230,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/15adae05-99f0-4275-88c3-26d7908b9f0e",
                 MetadataDescription = "Classified seabed substrate types for all European waters. One of several habitat descriptors used to determine the final habitat type. Based on the EMODnet Geology seabed substrate product.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
-                Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 13,
                 LayerVisible = false,
@@ -244,7 +248,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "",
                 MetadataDescription = "Case-study in the use of the \"EUSeaMap\" model to drive a higher resolution three arc-second broad-scale habitat map for the UK shelf where sufficient data are available.",
                 DownloadURL = "",               
-                Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 21,
                 LayerVisible = false,
@@ -263,7 +266,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "#",
                 MetadataDescription = "Description",
                 DownloadURL = "#",               
-                Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 21,
                 LayerVisible = false,
@@ -281,7 +283,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/02a444c8-bd2d-4e15-8e69-806059103760",
                 MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified in EUNIS classification system, except where translation is not possible.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
-                Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 22,
                 LayerVisible = false,
@@ -299,7 +300,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "http://gis.ices.dk/geonetwork/srv/eng/catalog.search#/metadata/02a444c8-bd2d-4e15-8e69-806059103760",
                 MetadataDescription = "Broad-scale seabed habitat map for all European waters. Classified in EUNIS classification system, except where translation is not possible.",
                 DownloadURL = "http://www.emodnet-seabedhabitats.eu/access-data/download-data/?linkid=1",               
-                Type = "WMS",
                 Url=_webapiconfig.Value.TestDataWMSUrl,
                 LayerOrder = 23,
                 LayerVisible = false,
@@ -318,7 +318,6 @@ namespace MapConfig.Controllers
                 MetadataUrl = "",
                 MetadataDescription = "",
                 DownloadURL = "",               
-                Type = "WMS",
                 Url = "http://geo.vliz.be/geoserver/wms?version=1.1.1",
                 LayerOrder = 1,
                 LayerVisible = false,

@@ -8,5 +8,6 @@ namespace Config.Options
         public string UseDBConnectionString { get; set; }
         public string TestDataWMSUrl { get; set; }
         public Boolean AllowCRUDPages { get; set; }
+        public int MaxGazetteerResults { get; set; }
     }
 }

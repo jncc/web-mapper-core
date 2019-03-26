@@ -20,6 +20,9 @@
                 @Html.DisplayNameFor(model => model.MapInstance[0].Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.MapInstance[0].Attribution)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.MapInstance[0].MapCentreLon)
             </th>
             <th>
@@ -27,6 +30,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MapInstance[0].MapZoom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MapInstance[0].MaxZoom)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MapInstance[0].BaseLayerList)
@@ -47,6 +53,9 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Attribution)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.MapCentreLon)
             </td>
             <td>
@@ -54,6 +63,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MapZoom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxZoom)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BaseLayerList)

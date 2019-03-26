@@ -12,16 +12,18 @@ namespace MapConfig.Models
         public long MapInstanceId { get; set; }     //Unique Map Instance ID
         public string Name { get; set; }            //Map name
         public string Description { get; set; }     //Map description (may contain HTML)
+        public string Attribution { get; set; }     //Map Attribution (may contain HTML)
         [JsonIgnore]
         public double MapCentreLon { get; set; }    //Initial Map Centre Longitude in EPSG:4326 (X)
         [JsonIgnore]
         public double MapCentreLat { get; set; }    //Initial Map Centre Latitude in EPSG:4326 (Y)
         [JsonIgnore]
         public int MapZoom { get; set; }            //Initial Map Zoom Level 1-22
+        public int MaxZoom { get; set; }            //Maximum Zoom Level for this Map
         [JsonIgnore]
-        public string BaseLayerList { get; set; }   //Comma separated list of (either BaseLayerIds or Names)
+        public string BaseLayerList { get; set; }   //Comma separated list of additional BaseLayers (either BaseLayerIds or Names)
         [JsonIgnore]
-        public string VisibleBaseLayer { get; set; }//which BaseLayer is initially visible? (either BaseLayerId or Name)
+        public string VisibleBaseLayer { get; set; }//which additional BaseLayer is initially visible? (either BaseLayerId or Name)
 
         [NotMapped]
         public double[] Center { get; set; } = new double[2];       //what's actually sent in the JSON response (an array)
@@ -40,9 +42,10 @@ namespace MapConfig.Models
         [Key]
         public long BaseLayerId { get; set; }   //Unique BaseLayer ID
         public string Name { get; set; }        //Unique BaseLayer Name
-        public string MetadataUrl { get; set; } //could be used for BaseLayer attribution?
-        public string Type { get; set; }        //the type of layer, e.g. OSM, Bing, Tile etc.
-        public string Url { get; set; }         //the source Url for the layer
+        public string Attribution { get; set; } //BaseLayer attribution text
+        public string AttributionUrl { get; set; } //BaseLayer attribution URL
+        public string Url { get; set; }         //the source WMS Url
+        public string LayerName { get; set; }   //the name of the WMS Layer 
         [NotMapped]
         public Boolean Visible { get; set; }    //set by the /api/MapInstance endpoint if this baselayer is the default visible
     }
@@ -84,7 +87,6 @@ namespace MapConfig.Models
         public string MetadataUrl { get; set; }   //(?) Icon after Layer Name to external page (link URL)
         public string DownloadURL {get; set; }    //Link to download the dataset
         public string SubLayerGroup { get; set; } //Optional sub group to be grouped in or NULL
-        public string Type { get; set; }          //Layer Source type e.g. WMS WMTS Tile etc.
         public string Url { get; set; }           //Base Url not including filter params
         public string LayerName { get; set; }     //WMS or WMTS layer name
         public string LegendLayerName { get; set; } //The name of a single layer that provides the map key       

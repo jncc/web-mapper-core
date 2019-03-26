@@ -64,27 +64,28 @@ namespace MapConfig.Controllers
             //look up each baseLayerName, first trying by Id then by Name
             if(baseLayersList.Count() > 0) {
                 foreach(string baseLayerName in baseLayersList) {
-                    BaseLayer baseLayer;
+                    BaseLayer baseLayer = new BaseLayer { BaseLayerId = 0 };
                     try { //try Ids
                         uint baseLayerId = Convert.ToUInt32(baseLayerName, 10);
                         baseLayer = await _context.BaseLayer
                             .SingleOrDefaultAsync(b => b.BaseLayerId == baseLayerId);
                     } catch { //or Names
                         baseLayer = await _context.BaseLayer
-                            .SingleOrDefaultAsync(b => b.Name == baseLayerName);
+                            .SingleOrDefaultAsync(b => b.Name.ToUpper() == baseLayerName.ToUpper());
                     }
-
-                    if(baseLayer.BaseLayerId > 0) { //we found the baselayer
-                        //check if the baselayer should be visible
-                        baseLayer.Visible=false;
-                        try { //is it marked visible by Id?
-                            uint visibleLayerId = Convert.ToUInt32(map.VisibleBaseLayer, 10);
-                            if(visibleLayerId == baseLayer.BaseLayerId) baseLayer.Visible=true;                  
-                        } catch { //or by Name?
-                            if(map.VisibleBaseLayer == baseLayer.Name) baseLayer.Visible=true;
+                    try {
+                        if(baseLayer.BaseLayerId > 0) { //we found the baselayer
+                            //check if the baselayer should be visible
+                            baseLayer.Visible=false;
+                            try { //is it marked visible by Id?
+                                uint visibleLayerId = Convert.ToUInt32(map.VisibleBaseLayer, 10);
+                                if(visibleLayerId == baseLayer.BaseLayerId) baseLayer.Visible=true;                  
+                            } catch { //or by Name?
+                                if(map.VisibleBaseLayer == baseLayer.Name) baseLayer.Visible=true;
+                            }
+                            baseLayers.Add(baseLayer);
                         }
-                        baseLayers.Add(baseLayer);
-                    }
+                    } catch {}
                 }
                 map.BaseLayers = baseLayers;
             }
