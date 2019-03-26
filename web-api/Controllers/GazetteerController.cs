@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+
+using Config.Options;
 using MapConfig.Models;
 
 namespace MapConfig.Controllers
@@ -14,10 +17,12 @@ namespace MapConfig.Controllers
     public class GazetteerController : Controller
     {
         private readonly MapConfigContext _context;
+        private readonly IOptions<WebApiConfig> _webapiconfig;
 
-        public GazetteerController(MapConfigContext context)
+        public GazetteerController(MapConfigContext context, IOptions<WebApiConfig> webapiconfig)
         {
             _context = context;
+            _webapiconfig = webapiconfig;
         }
 
         // GET: api/Gazetteer
@@ -33,12 +38,14 @@ namespace MapConfig.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<Gazetteer>> GetGazetteer(string name)
         {
+
+            int limit = _webapiconfig.Value.MaxGazetteerResults;
             List<Gazetteer> gazetteer;
             gazetteer = await _context.Gazetteer
                 .Where(g => g.Name.ToUpper().Contains(name.ToUpper()))
                 .OrderBy(g => g.Name.ToUpper().IndexOf(name.ToUpper()))
-                .ToListAsync();
- 
+                .Take(limit)
+                .ToListAsync(); 
 
             int gazcount = gazetteer.Count();
             for(var i=0;i<gazcount;i++) {
