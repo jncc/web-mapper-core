@@ -19,19 +19,24 @@
                 <span asp-validation-for="BaseLayer.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BaseLayer.MetadataUrl" class="control-label"></label>
-                <input asp-for="BaseLayer.MetadataUrl" class="form-control" />
-                <span asp-validation-for="BaseLayer.MetadataUrl" class="text-danger"></span>
+                <label asp-for="BaseLayer.Attribution" class="control-label"></label>
+                <input asp-for="BaseLayer.Attribution" class="form-control" />
+                <span asp-validation-for="BaseLayer.Attribution" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BaseLayer.Type" class="control-label"></label>
-                <input asp-for="BaseLayer.Type" class="form-control" />
-                <span asp-validation-for="BaseLayer.Type" class="text-danger"></span>
+                <label asp-for="BaseLayer.AttributionUrl" class="control-label"></label>
+                <input asp-for="BaseLayer.AttributionUrl" class="form-control" />
+                <span asp-validation-for="BaseLayer.AttributionUrl" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BaseLayer.Url" class="control-label"></label>
                 <input asp-for="BaseLayer.Url" class="form-control" />
                 <span asp-validation-for="BaseLayer.Url" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BaseLayer.LayerName" class="control-label"></label>
+                <input asp-for="BaseLayer.LayerName" class="form-control" />
+                <span asp-validation-for="BaseLayer.LayerName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

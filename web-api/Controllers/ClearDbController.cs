@@ -31,6 +31,9 @@ namespace MapConfig.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MapInstance>>> ClearDb()
         {
+            //Additional BaseLayers
+            var baselayer = _context.BaseLayer.Where(e =>e.Name.EndsWith("(Test)"));
+            _context.BaseLayer.RemoveRange(baselayer);
 
             //External WMS Sources
             var externalwms = _context.ExternalWmsUrl.Where(e =>e.Name.EndsWith("(Test)"));

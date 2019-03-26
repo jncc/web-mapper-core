@@ -17,13 +17,16 @@
                 @Html.DisplayNameFor(model => model.BaseLayer[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BaseLayer[0].MetadataUrl)
+                @Html.DisplayNameFor(model => model.BaseLayer[0].Attribution)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BaseLayer[0].Type)
+                @Html.DisplayNameFor(model => model.BaseLayer[0].AttributionUrl)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BaseLayer[0].Url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseLayer[0].LayerName)
             </th>
             <th></th>
         </tr>
@@ -35,13 +38,16 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MetadataUrl)
+                @Html.DisplayFor(modelItem => item.Attribution)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                @Html.DisplayFor(modelItem => item.AttributionUrl)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Url)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LayerName)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.BaseLayerId">Edit</a> |

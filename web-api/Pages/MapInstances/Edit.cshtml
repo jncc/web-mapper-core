@@ -25,6 +25,11 @@
                 <span asp-validation-for="MapInstance.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="MapInstance.Attribution" class="control-label"></label>
+                <input asp-for="MapInstance.Attribution" class="form-control" />
+                <span asp-validation-for="MapInstance.Attribution" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="MapInstance.MapCentreLon" class="control-label"></label>
                 <input asp-for="MapInstance.MapCentreLon" class="form-control" />
                 <span asp-validation-for="MapInstance.MapCentreLon" class="text-danger"></span>
@@ -38,6 +43,11 @@
                 <label asp-for="MapInstance.MapZoom" class="control-label"></label>
                 <input asp-for="MapInstance.MapZoom" class="form-control" />
                 <span asp-validation-for="MapInstance.MapZoom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MapInstance.MaxZoom" class="control-label"></label>
+                <input asp-for="MapInstance.MaxZoom" class="form-control" />
+                <span asp-validation-for="MapInstance.MaxZoom" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MapInstance.BaseLayerList" class="control-label"></label>
