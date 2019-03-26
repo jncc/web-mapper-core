@@ -1,7 +1,11 @@
 
 export interface IBaseLayerConfig {
     baseLayerId: number;
-    layer: any;
-    imageUrl?: string;
     name: string;
+    // attribution: string;
+    // attributionUrl: string;
+    // url: string;
+    // layerName: string;
+    // visible: boolean;
+    layer: any;
 }

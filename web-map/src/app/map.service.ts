@@ -81,12 +81,14 @@ export class MapService implements OnDestroy {
       mapConfig: {
         mapInstances: [],
         mapInstance: {
+          attribution: '',
           name: '',
           description: '',
           layerGroups: [],
           center: [],
           zoom: 0,
-          externalWmsUrls: []
+          externalWmsUrls: [],
+          maxZoom: 20
         }
       },
       layerLookup: [],
