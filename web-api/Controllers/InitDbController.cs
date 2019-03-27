@@ -318,7 +318,7 @@ namespace MapConfig.Controllers
                 MetadataUrl = "",
                 MetadataDescription = "",
                 DownloadURL = "",               
-                Url = "http://geo.vliz.be/geoserver/wms?version=1.1.1",
+                Url = "http://geo.vliz.be/geoserver/wms",
                 LayerOrder = 1,
                 LayerVisible = false,
                 LayerOpacity = 0.8f,
