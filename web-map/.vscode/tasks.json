@@ -27,11 +27,24 @@
             }
         },
         {
-            "label": "Deploy from Test to Live Server",
+            "label": "Deploy from Test to EMODnet Live Server",
             "type": "shell",
-            "command": ".vscode/deploy_to_live.sh",
+            "command": ".vscode/deploy_to_live_emodnet.sh",
             "windows": {
-                "command": ".vscode\\\\deploy_to_live.sh"
+                "command": ".vscode\\\\deploy_to_live_emodnet.sh"
+            },
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Deploy from Test to MPA Live Server",
+            "type": "shell",
+            "command": ".vscode/deploy_to_live_mpa.sh",
+            "windows": {
+                "command": ".vscode\\\\deploy_to_live_mpa.sh"
             },
             "group": "test",
             "presentation": {
