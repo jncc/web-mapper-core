@@ -114,6 +114,7 @@ export class LayerService {
       const layerConfigs: ILayerConfig[] = [];
       layers.forEach(layer => {
         this.layerId += 1;
+        console.log(layer.EX_GeographicBoundingBox);
         layerConfigs.push(
           {
             layerId: this.layerId,
@@ -126,6 +127,7 @@ export class LayerService {
             subLayerGroup: null,
             center: null,
             zoom: null,
+            extent: layer.EX_GeographicBoundingBox,
             metadataUrl: null,
             downloadURL: null,
             legendLayerName: null,

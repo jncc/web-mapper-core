@@ -11,6 +11,7 @@ export interface ILayerConfig {
     subLayerGroup: string;
     center: number[];
     zoom: number;
+    extent?: number[];
     metadataUrl: string;
     metadataDescription: string;
     downloadURL: string;

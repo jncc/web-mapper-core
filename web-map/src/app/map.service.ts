@@ -119,7 +119,7 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
-      // console.log(this.dataStore.mapConfig.mapInstance);
+      console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       this.createLayersForConfig();
       this.createBaseLayers();
@@ -322,7 +322,16 @@ export class MapService implements OnDestroy {
 
   zoomToLayerExtent(layerId: number) {
     const layerConfig = this.getLayerConfig(layerId);
-    this.zoomSubject.next({ center: layerConfig.center, zoom: layerConfig.zoom });
+    // check for null and undefined
+    if (layerConfig.extent != null) {
+      this.zoomToExtent(layerConfig.extent);
+    } else {
+      this.zoomToCenterZoom(layerConfig.center, layerConfig.zoom);
+    }
+  }
+
+  zoomToCenterZoom(center: number[], zoom: number) {
+    this.zoomSubject.next({ center: center, zoom: zoom });
   }
 
   zoomToExtent(extent: number[]) {
