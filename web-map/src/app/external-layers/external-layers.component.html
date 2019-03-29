@@ -25,13 +25,14 @@
             <div *ngIf="layerGroupConfig.layers.length; else noLayers" class="external-layers-container">
                 <ul>
                     <li *ngFor="let layerConfig of layerGroupConfig.layers">
-                        {{layerConfig.layerName}}
+                            <input type="checkbox" (change)="onCheckChanged(layerConfig, $event)">
+                        {{layerConfig.name}}
                     </li>
                 </ul>
 
             </div>
             <div>
-                <button (click)="onAddToMap(layerGroupConfig)">Add to Map</button>
+                <button (click)="onAddToMap(layerGroupConfig)">Add selected layers to the map</button>
             </div>
 
             <ng-template #noLayers>

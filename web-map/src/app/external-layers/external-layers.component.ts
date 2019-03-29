@@ -3,6 +3,7 @@ import { LayerService } from '../layer.service';
 import { ILayerGroupConfig } from '../models/layer-group-config';
 import { Observable } from 'rxjs';
 import { MapService } from '../map.service';
+import { ILayerConfig } from '../models/layer-config.model';
 
 @Component({
   selector: 'app-external-layers',
@@ -14,6 +15,7 @@ export class ExternalLayersComponent implements OnInit {
 
   layerGroupConfig$: Observable<ILayerGroupConfig>;
   url: string;
+  selectedLayers: ILayerConfig[] = [];
 
   constructor(private mapService: MapService, private layerService: LayerService) { }
 
@@ -29,8 +31,20 @@ export class ExternalLayersComponent implements OnInit {
   }
 
   onAddToMap(layerGroupConfig: ILayerGroupConfig) {
+    layerGroupConfig.layers = this.selectedLayers;
     this.mapService.addExternalLayerGroupConfig(layerGroupConfig);
     this.closeExternalLayers.emit();
+  }
+
+  onCheckChanged(layerConfig: ILayerConfig, event: Event) {
+    const checkbox = <HTMLInputElement>event.target;
+    if (checkbox.checked) {
+      if (this.selectedLayers.indexOf(layerConfig) === -1) {
+        this.selectedLayers.push(layerConfig);
+      }
+    } else {
+      this.selectedLayers = this.selectedLayers.filter(existingLayerConfig => existingLayerConfig !== layerConfig);
+    }
   }
 
 }
