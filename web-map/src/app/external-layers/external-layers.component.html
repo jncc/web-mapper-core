@@ -20,7 +20,7 @@
         <div class="external-service-text">
             <input type="text" [(ngModel)]="url">
         </div>
-        <button (click)="onGetExternalLayers()">Get layers</button>
+        <button (click)="onGetExternalLayers()" class="primary dialog-button">Get layers</button>
         <div *ngIf="layerGroupConfig$ | async as layerGroupConfig">
             <div *ngIf="layerGroupConfig.layers.length; else noLayers" class="external-layers-container">
                 <ul>
@@ -29,10 +29,9 @@
                         {{layerConfig.name}}
                     </li>
                 </ul>
-
             </div>
             <div>
-                <button (click)="onAddToMap(layerGroupConfig)" [disabled]="selectedLayers.length === 0">Add selected layers to the map</button>
+                <button (click)="onAddToMap(layerGroupConfig)" [disabled]="selectedLayers.length === 0" class="primary dialog-button">Add selected layers to the map</button>
             </div>
 
             <ng-template #noLayers>

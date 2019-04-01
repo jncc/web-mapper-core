@@ -12,8 +12,8 @@
             [filterConfig]="filter" [filterLookup]="filterLookup[filter.lookupCategory]" [activeFilters]="activeFilters">
         </app-filter-control>
         <div class="controls-container-footer">
-            <button (click)="onFilterApplied()">Apply</button>
-            <button (click)="onFilterCleared()">Clear</button>
+            <button (click)="onFilterApplied()" class="primary dialog-button">Apply</button>
+            <button (click)="onFilterCleared()" class="secondary dialog-button">Clear</button>
         </div>
     </div>
 </div>
