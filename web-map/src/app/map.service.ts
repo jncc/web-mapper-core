@@ -104,7 +104,7 @@ export class MapService implements OnDestroy {
     this._filterLookups = new BehaviorSubject({});
     this._baseLayers = new BehaviorSubject(this.dataStore.baseLayers);
     this._activeFilters = new BehaviorSubject(this.dataStore.activeFilters);
-    this.subscribeToConfig();
+    // this.subscribeToConfig();
     this.createBaseLayers();
     this.subscribeToMapInstanceConfig();
   }
@@ -119,7 +119,7 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
-      console.log(this.dataStore.mapConfig.mapInstance);
+      // console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       this.createLayersForConfig();
       this._mapConfig.next(this.dataStore.mapConfig);
