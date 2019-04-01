@@ -105,7 +105,7 @@ export class MapService implements OnDestroy {
     this._baseLayers = new BehaviorSubject(this.dataStore.baseLayers);
     this._activeFilters = new BehaviorSubject(this.dataStore.activeFilters);
     this.subscribeToConfig();
-
+    this.createBaseLayers();
     this.subscribeToMapInstanceConfig();
   }
 
@@ -113,7 +113,7 @@ export class MapService implements OnDestroy {
     this.apiService.getConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstances = data;
       this._mapConfig.next(this.dataStore.mapConfig);
-    }, error => console.log('Could not load map config.'));
+    }, error => console.log('Could not load map config from API.'));
   }
 
   private subscribeToMapInstanceConfig() {
@@ -122,10 +122,9 @@ export class MapService implements OnDestroy {
       console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       this.createLayersForConfig();
-      this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
       this.createFilterLookups();
-    }, error => console.log('Could not load map instance config.'));
+    }, error => console.log('Could not load map instance config from API.'));
   }
 
   // transform map instance config received from api into hierarchy of layergroups, sublayergroups, layers
@@ -151,7 +150,6 @@ export class MapService implements OnDestroy {
     layerGroupConfig.subLayerGroups = subLayerGroups;
   }
 
-  // TODO: move to another service
   private createLayersForConfig(): void {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach(layerGroupConfig => {
       this.createLayersForLayerGroupConfig(layerGroupConfig);
