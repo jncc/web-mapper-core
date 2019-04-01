@@ -114,7 +114,6 @@ export class LayerService {
       const layerConfigs: ILayerConfig[] = [];
       layers.forEach(layer => {
         this.layerId += 1;
-        console.log(layer.EX_GeographicBoundingBox);
         layerConfigs.push(
           {
             layerId: this.layerId,
