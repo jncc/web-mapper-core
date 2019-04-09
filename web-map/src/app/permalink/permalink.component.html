@@ -1,0 +1,14 @@
+<div class="controls-container" id="permalink">
+  <div class="controls-container-header primary">
+      <h6>
+          <span>Share map link</span>
+      </h6>
+      <div>
+          <i class="btn fa fa-close" (click)="onClosePermalink()"></i>
+      </div>
+  </div>
+  <div class="controls-container-body">
+    <input type="text" readonly [value]="permalink" #inputElement>
+    <button class="primary dialog-button" (click)="onCopyPermalink(inputElement)"> {{ copyText }} </button>
+  </div>
+</div>

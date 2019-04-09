@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import proj from 'ol/proj';
-import {compressToEncodedURIComponent, decompressFromEncodedURIComponent} from 'lz-string';
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 
 import { IPermalink } from './models/permalink.model';
 import { IActiveFilter } from './models/active-filter.model';
@@ -12,34 +11,41 @@ import { IActiveFilter } from './models/active-filter.model';
 })
 export class PermalinkService {
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
+  hostUrl: string;
 
-  createPermalink(zoom: number, center: number[], layerIds: number[], baseLayerId: number, activeFilters: IActiveFilter[]) {
+  constructor() { }
+
+  createPermalink(zoom: number, center: number[], layerIds: number[], baseLayerId: number, activeFilters: IActiveFilter[]): string {
     const centerLonLat = proj.toLonLat([center[0], center[1]]);
     let compressedActiveFilters = '';
     if (activeFilters && activeFilters.length > 0) {
       compressedActiveFilters = compressToEncodedURIComponent(JSON.stringify(activeFilters));
     }
 
-    const queryParams: Params = {
-      zoom: zoom,
-      center: centerLonLat.map(coord => coord.toFixed(3)).join(),
-      layerIds: layerIds.join(),
-      baseLayerId: baseLayerId,
-      activeFilters: compressedActiveFilters
-    };
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.activatedRoute,
-        queryParams: queryParams
-      });
+    // tslint:disable-next-line:max-line-length
+    const queryString = `zoom=${zoom}&center=${centerLonLat.map(coord => coord.toFixed(3)).join()}&layerIds=${layerIds.join()}&baseLayerId=${baseLayerId}&activeFilters=${compressedActiveFilters}`;
+
+    let permalink = '';
+    if (this.hostUrl) {
+      if (this.hostUrl.indexOf('?') !== -1) {
+        permalink = `${this.hostUrl}&${queryString}`;
+      } else {
+        permalink = `${this.hostUrl}?${queryString}`;
+      }
+    } else {
+      permalink = `${location.origin}/?${queryString}`;
+    }
+    return permalink;
   }
 
   readPermalink(): IPermalink {
     const queryDict = {};
     window.location.search.substr(1).split('&').
       forEach(item => queryDict[item.split('=')[0]] = item.split('=')[1]);
+
+    if (queryDict['ifp']) {
+      this.hostUrl = atob(decodeURIComponent(queryDict['ifp']));
+    }
 
     if (this.hasRequiredProperties(queryDict) &&
       this.validateZoom(queryDict['zoom']) &&

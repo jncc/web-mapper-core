@@ -444,13 +444,14 @@ export class MapService implements OnDestroy {
     // console.log(this.dataStore.mapConfig.mapInstance);
   }
 
-  createPermalink() {
+  createPermalink(): string {
     const zoom = this.map.getView().getZoom();
     const center = this.map.getView().getCenter();
     const layerIds = this.dataStore.visibleLayers.slice().reverse().map(layer => layer.layerId);
     const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
     const activeFilters = this.dataStore.activeFilters;
-    this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId, activeFilters);
+    const permalink = this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId, activeFilters);
+    return permalink;
   }
 
   applyPermalink() {
