@@ -8,7 +8,7 @@
       </div>
   </div>
   <div class="controls-container-body">
-    <input type="text" readonly [value]="permalink" #inputElement>
+    <textarea id="permalinkTextArea" readonly [value]="permalink" #inputElement></textarea>
     <button class="primary dialog-button" (click)="onCopyPermalink(inputElement)"> {{ copyText }} </button>
   </div>
 </div>

@@ -19,7 +19,6 @@ export class PermalinkComponent implements OnInit {
   onCopyPermalink(inputElement) {
     inputElement.select();
     document.execCommand('copy');
-    // inputElement.setSelectionRange(0, 0);
     this.copyText = 'Copied';
   }
 
