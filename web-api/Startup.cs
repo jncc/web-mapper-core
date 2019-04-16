@@ -19,7 +19,6 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Newtonsoft.Json;
 
 using Config.Options;
-using Test.Models;
 using MapConfig.Models;
 
 namespace JNCCMapConfigEditor
@@ -46,9 +45,6 @@ namespace JNCCMapConfigEditor
 
             //grab anything we need from the config section WebApiConfig
             services.Configure<WebApiConfig>(Configuration.GetSection("WebApiConfig"));
-
-            services.AddDbContext<TestContext>(opt =>
-                opt.UseInMemoryDatabase("Test"));
 
             services.AddEntityFrameworkNpgsql().AddDbContext<MapConfigContext>(config =>
                 config.UseNpgsql(Configuration.GetConnectionString("JNCCWebApiDatabase")));
