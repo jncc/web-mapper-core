@@ -126,6 +126,7 @@ export class LayerService {
             subLayerGroup: null,
             center: null,
             zoom: null,
+            extent: layer.EX_GeographicBoundingBox,
             metadataUrl: null,
             downloadURL: null,
             legendLayerName: null,

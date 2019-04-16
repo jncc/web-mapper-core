@@ -104,8 +104,8 @@ export class MapService implements OnDestroy {
     this._filterLookups = new BehaviorSubject({});
     this._baseLayers = new BehaviorSubject(this.dataStore.baseLayers);
     this._activeFilters = new BehaviorSubject(this.dataStore.activeFilters);
-    this.subscribeToConfig();
-
+    // this.subscribeToConfig();
+    this.createBaseLayers();
     this.subscribeToMapInstanceConfig();
   }
 
@@ -113,7 +113,7 @@ export class MapService implements OnDestroy {
     this.apiService.getConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstances = data;
       this._mapConfig.next(this.dataStore.mapConfig);
-    }, error => console.log('Could not load map config.'));
+    }, error => console.log('Could not load map config from API.'));
   }
 
   private subscribeToMapInstanceConfig() {
@@ -122,10 +122,9 @@ export class MapService implements OnDestroy {
       // console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       this.createLayersForConfig();
-      this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
       this.createFilterLookups();
-    }, error => console.log('Could not load map instance config.'));
+    }, error => console.log('Could not load map instance config from API.'));
   }
 
   // transform map instance config received from api into hierarchy of layergroups, sublayergroups, layers
@@ -151,7 +150,6 @@ export class MapService implements OnDestroy {
     layerGroupConfig.subLayerGroups = subLayerGroups;
   }
 
-  // TODO: move to another service
   private createLayersForConfig(): void {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach(layerGroupConfig => {
       this.createLayersForLayerGroupConfig(layerGroupConfig);
@@ -322,7 +320,16 @@ export class MapService implements OnDestroy {
 
   zoomToLayerExtent(layerId: number) {
     const layerConfig = this.getLayerConfig(layerId);
-    this.zoomSubject.next({ center: layerConfig.center, zoom: layerConfig.zoom });
+    // check for null and undefined
+    if (layerConfig.extent != null) {
+      this.zoomToExtent(layerConfig.extent);
+    } else {
+      this.zoomToCenterZoom(layerConfig.center, layerConfig.zoom);
+    }
+  }
+
+  zoomToCenterZoom(center: number[], zoom: number) {
+    this.zoomSubject.next({ center: center, zoom: zoom });
   }
 
   zoomToExtent(extent: number[]) {
@@ -437,13 +444,14 @@ export class MapService implements OnDestroy {
     // console.log(this.dataStore.mapConfig.mapInstance);
   }
 
-  createPermalink() {
+  createPermalink(): string {
     const zoom = this.map.getView().getZoom();
     const center = this.map.getView().getCenter();
     const layerIds = this.dataStore.visibleLayers.slice().reverse().map(layer => layer.layerId);
     const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
     const activeFilters = this.dataStore.activeFilters;
-    this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId, activeFilters);
+    const permalink = this.permalinkService.createPermalink(zoom, center, layerIds, baseLayerId, activeFilters);
+    return permalink;
   }
 
   applyPermalink() {

@@ -1,8 +1,8 @@
 <div class="controls-toolbar">
     <i tooltip="base maps" class="btn fa fa-lg fa-map-o" (click)="onShowBaseLayers($event)"></i>
-    <i tooltip="share map link" class="btn fa fa-fw fa-lg fa-share-alt" (click)="onCreatePermalink()"></i>
+    <i tooltip="share map link" class="btn fa fa-fw fa-lg fa-share-alt" (click)="onShowPermalink()"></i>
     <i tooltip="map information" class="btn fa fa-lg fa-fw fa-info-circle" (click)="onShowMapInfo()"></i>
-    <i class="btn fa fa-fw fa-lg"></i>
+    <div class="divider"></div>
     <i tooltip="zoom in" class="btn fa fa-fw fa-lg fa-plus" (click)="onZoomIn()"></i>
     <i tooltip="zoom out" class="btn fa fa-fw fa-lg fa-minus" (click)="onZoomOut()"></i>
     <i tooltip="zoom to map extent" class="btn fa fa-fw fa-lg fa-globe" (click)="onZoomToMapExtent()"></i>
@@ -28,4 +28,8 @@
 
 <ng-template #mapInfoOverlay>
     <app-map-info (closeMapInfo)="closeMapInfo()"></app-map-info>
+</ng-template>
+
+<ng-template #permalinkOverlay  let-permalink>
+    <app-permalink [permalink]="permalink" (closePermalink)="closePermalink()"></app-permalink>
 </ng-template>

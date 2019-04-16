@@ -20,6 +20,9 @@ export class ControlsToolbarComponent implements OnInit {
   @ViewChild('mapInfoOverlay') mapInfoOverlay: TemplateRef<any>;
   mapInfoOverlayRef: OverlayRef | null;
 
+  @ViewChild('permalinkOverlay') permalinkOverlay: TemplateRef<any>;
+  permalinkOverlayRef: OverlayRef | null;
+
   constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
@@ -45,22 +48,18 @@ export class ControlsToolbarComponent implements OnInit {
     this.mapService.dragZoomOut();
   }
 
-  onCreatePermalink() {
-    this.mapService.createPermalink();
-  }
-
-  onShowBaseLayers({x, y}) {
+  onShowBaseLayers({ x, y }) {
     this.closeBaseLayers();
     const positionStrategy = this.overlay.position()
-    .flexibleConnectedTo({ x, y })
-    .withPositions([
-      {
-        originX: 'end',
-        originY: 'bottom',
-        overlayX: 'end',
-        overlayY: 'bottom',
-      }
-    ]);
+      .flexibleConnectedTo({ x, y })
+      .withPositions([
+        {
+          originX: 'end',
+          originY: 'bottom',
+          overlayX: 'end',
+          overlayY: 'bottom',
+        }
+      ]);
     this.baseLayersOverlayRef = this.overlay.create({
       hasBackdrop: true,
       positionStrategy,
@@ -101,6 +100,38 @@ export class ControlsToolbarComponent implements OnInit {
     if (this.mapInfoOverlayRef) {
       this.mapInfoOverlayRef.dispose();
       this.mapInfoOverlayRef = null;
+    }
+    if (this.backdropSubscription) {
+      this.backdropSubscription.unsubscribe();
+    }
+  }
+
+  onShowPermalink() {
+    const permalink = this.mapService.createPermalink();
+    console.log(permalink);
+
+    this.closePermalink();
+    const positionStrategy = this.overlay.position()
+      .global()
+      .centerHorizontally()
+      .centerVertically();
+
+    this.permalinkOverlayRef = this.overlay.create({
+      hasBackdrop: true,
+      positionStrategy,
+    });
+
+    this.permalinkOverlayRef.attach(new TemplatePortal(this.permalinkOverlay, this.viewContainerRef, {
+      $implicit: permalink
+    }));
+
+    this.backdropSubscription = this.permalinkOverlayRef.backdropClick().subscribe(() => this.closePermalink());
+  }
+
+  closePermalink() {
+    if (this.permalinkOverlayRef) {
+      this.permalinkOverlayRef.dispose();
+      this.permalinkOverlayRef = null;
     }
     if (this.backdropSubscription) {
       this.backdropSubscription.unsubscribe();

@@ -25,7 +25,7 @@ export class ApiService {
   }
 
   getMapInstanceConfig(): Observable<IMapInstance> {
-    const mapInstanceConfigUrl = this.apiUrl + '/mapinstance/EMODnet';
+    const mapInstanceConfigUrl = this.apiUrl + '/mapinstance/' + AppConfigService.settings.mapInstance;
     return this.http.get<IMapInstance>(mapInstanceConfigUrl);
   }
 
