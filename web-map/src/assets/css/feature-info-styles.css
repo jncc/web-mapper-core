@@ -27,3 +27,39 @@ table.featureInfo caption {
     color: black;
     text-align: left;
 }
+
+/* Custom Styles */
+table .confTable{
+	text-align:center;
+	margin:0 auto;
+}
+
+.hiConf{
+	color: white;
+	background-color: green;
+}
+
+.modConf{
+	color: white;
+	background-color: orange;	
+}
+
+.lowConf{
+	color: white;
+	background-color: red;	
+}
+
+.naConf{
+	color: black;
+	background-color: white;
+}
+
+td .confCell{
+	width:90px;
+	border:1px solid black;
+	margin:0 auto;
+}
+
+.hidden{
+	display:none;
+}
