@@ -1,9 +1,12 @@
 .sub-layer-group-header {
     display: flex;
     cursor: pointer;
-    padding: 0.5rem;
-    padding-left: 0.75rem;
+    padding: 0.5rem 0.25rem 0.5rem 0.75rem;
     color: white;
+}
+
+.sub-layer-group-selector .btn {
+    padding-top: 0;
 }
 
 .sub-layer-group-title {
@@ -30,5 +33,5 @@ span.badge {
 }
 
 .visible-layers {
-    padding: 0.25rem;
+    padding: 0 0.25rem;
 }

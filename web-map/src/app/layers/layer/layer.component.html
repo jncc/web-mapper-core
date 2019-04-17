@@ -5,10 +5,12 @@
             <span class="slider round"></span>
         </label>
     </div>
-    <div class="layer-name">
+    <div class="layer-name" (click)="onToggleVisibility()">
         {{layer.name}}
     </div>
     <div>
-        <i *ngIf="layer.metadataDescription" [tooltip]="layer.metadataDescription" hideDelay="10000" class="fa fa-fw fa-lg fa-question-circle"></i>
+        <span class="badge" [tooltip]="layer.metadataDescription" hideDelay="10000">
+            ?
+        </span>
     </div>
 </div>
