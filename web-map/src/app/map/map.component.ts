@@ -15,9 +15,11 @@ import DragZoom from 'ol/interaction/dragzoom';
 import MapBrowserEvent from 'ol/mapbrowserevent';
 import MousePosition from 'ol/control/mouseposition';
 import Collection from 'ol/collection';
+import Attribution from 'ol/control/attribution';
 
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
+
 
 @Component({
   selector: 'app-map',
@@ -98,6 +100,11 @@ export class MapComponent implements OnInit, OnDestroy {
         new ScaleLine({
           // target: document.getElementById('scaleLine'),
           // className: 'custom-scale-line'
+        }),
+        new Attribution({
+          collapsible: false,
+          className: 'andyb-test',
+          target: document.getElementById('attribution')
         })
       ],
       layers: [

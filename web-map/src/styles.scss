@@ -48,7 +48,6 @@ ol, ul {
 }
   
 img {
-  // max-width: 100%;
   height: auto;
 }
 
@@ -67,29 +66,7 @@ img {
   background-color: aliceblue;
 }
 
-.ol-scale-line {
-  position: absolute;
-  bottom: 1rem;
-  right: 12rem;
-  left: auto;
-  background: rgba(0,60,136,0.7);
-}
 
-div#mousePosition {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  width: 10rem;
-  background-color: white;
-  padding: $container-padding;
-  pointer-events: none;
-  box-shadow: $container-shadow;
-
-}
-
-div.custom-mouse-position {
-  min-height: 1rem;
-}
 
 // CDK BACKDROP
 
@@ -97,6 +74,7 @@ div.custom-mouse-position {
   background-color: transparent;
 }
 
+// CONTROLS CONTAINER
 .controls-container {
   user-select: none;
   border-radius: $container-border-radius;
@@ -142,3 +120,51 @@ div.custom-mouse-position {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
+// OPENLAYERS CONTROLS AND CONTAINERS
+
+.ol-scale-line {
+  position: absolute;
+  bottom: 1rem;
+  right: 12rem;
+  left: auto;
+  background: rgba(0,60,136,0.7);
+}
+
+div#mousePosition {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  width: 10rem;
+  background-color: white;
+  padding: $container-padding;
+  pointer-events: none;
+  box-shadow: $container-shadow;
+
+}
+
+div.custom-mouse-position {
+  min-height: 1rem;
+}
+
+#attribution {
+  position: absolute;
+  bottom: 10rem;
+  right: 1rem;
+  box-shadow: $container-shadow;
+}
+
+.ol-attribution.ol-uncollapsible {
+  position: relative;
+  height: auto;
+  pointer-events: auto;
+  max-width: none;
+  border-radius: 5px;
+}
+
+.andyb-test {
+  position: relative;
+  height: auto;
+  pointer-events: auto;
+  max-width: none;
+  border-radius: 5px;
+}
