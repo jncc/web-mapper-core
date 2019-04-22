@@ -61,8 +61,8 @@
 }
 
 #controlsToolbar {
-    position: fixed;
-    bottom: 3.5rem;
+    position: absolute;
+    bottom: 5.5rem;
     right: 1rem;
     box-shadow: $container-shadow;
     pointer-events: auto;

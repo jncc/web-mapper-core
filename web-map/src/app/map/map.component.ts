@@ -103,7 +103,7 @@ export class MapComponent implements OnInit, OnDestroy {
         }),
         new Attribution({
           collapsible: false,
-          className: 'andyb-test',
+          // className: 'custom-attribution',
           target: document.getElementById('attribution')
         })
       ],

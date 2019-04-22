@@ -3,8 +3,6 @@ import { MapService } from '../map.service';
 import { Subscription } from 'rxjs';
 import { OverlayRef, Overlay } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { IMapConfig } from '../models/map-config.model';
-import { IMapInstance } from '../models/map-instance.model';
 
 @Component({
   selector: 'app-controls-toolbar',
@@ -88,6 +86,7 @@ export class ControlsToolbarComponent implements OnInit {
 
     this.mapInfoOverlayRef = this.overlay.create({
       hasBackdrop: true,
+      panelClass: 'map-info-overlay',
       positionStrategy,
     });
 

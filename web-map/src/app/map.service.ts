@@ -15,6 +15,7 @@ import { IBaseLayerConfig } from './models/base-layer-config.model';
 import { IActiveFilter } from './models/active-filter.model';
 import { IPermalink } from './models/permalink.model';
 import { FilterService } from './filter.service';
+import { IBaseLayer } from './models/base-layer.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class MapService implements OnDestroy {
     mapConfig: IMapConfig;
     layerLookup: ILayerConfig[];
     visibleLayers: ILayerConfig[];
-    baseLayers: IBaseLayerConfig[];
+    baseLayers: IBaseLayer[];
     featureInfos: any[];
     filterLookups: { [lookupCategory: string]: ILookup[]; };
     activeFilters: IActiveFilter[];
@@ -61,7 +62,7 @@ export class MapService implements OnDestroy {
     return this._filterLookups.asObservable();
   }
 
-  private _baseLayers: BehaviorSubject<IBaseLayerConfig[]>;
+  private _baseLayers: BehaviorSubject<IBaseLayer[]>;
   get baseLayers() {
     return this._baseLayers.asObservable();
   }
@@ -82,6 +83,7 @@ export class MapService implements OnDestroy {
         mapInstances: [],
         mapInstance: {
           attribution: '',
+          baseLayers: [],
           name: '',
           description: '',
           layerGroups: [],
@@ -122,6 +124,7 @@ export class MapService implements OnDestroy {
       // console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       this.createLayersForConfig();
+      this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
       this.createFilterLookups();
     }, error => console.log('Could not load map instance config from API.'));
@@ -173,7 +176,7 @@ export class MapService implements OnDestroy {
   }
 
   private createBaseLayers(): void {
-    this.dataStore.baseLayers = this.layerService.createBaseLayers();
+    this.dataStore.baseLayers = this.layerService.createBaseLayers(this.dataStore.mapConfig.mapInstance.baseLayers);
     this._baseLayers.next(this.dataStore.baseLayers);
   }
 

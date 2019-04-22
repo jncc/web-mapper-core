@@ -6,6 +6,7 @@ export interface IMapInstance {
         attribution: string;
         maxZoom: number;
         layerGroups: ILayerGroupConfig[];
+        baseLayers: [];
         center: number[];
         zoom: number;
         externalWmsUrls: IExternalWmsConfig[];

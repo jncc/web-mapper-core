@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MapService } from '../map.service';
 import { Observable } from 'rxjs';
 
-import Tile from 'ol/layer/tile';
-import { IBaseLayerConfig } from '../models/base-layer-config.model';
+import { IBaseLayer } from '../models/base-layer.model';
 
 @Component({
   selector: 'app-base-layers',
@@ -12,7 +11,7 @@ import { IBaseLayerConfig } from '../models/base-layer-config.model';
 })
 export class BaseLayersComponent implements OnInit {
 
-  baseLayers$: Observable<IBaseLayerConfig[]>;
+  baseLayers$: Observable<IBaseLayer[]>;
 
   constructor(private mapService: MapService) { }
 

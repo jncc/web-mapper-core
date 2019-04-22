@@ -14,6 +14,7 @@ import { ApiService } from './api.service';
 import { ILayerGroupConfig } from './models/layer-group-config';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { IBaseLayer } from './models/base-layer.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,34 +42,35 @@ export class LayerService {
     return layer;
   }
 
-  createBaseLayers(): IBaseLayerConfig[] {
-    const baseLayers: IBaseLayerConfig[] = [];
+  createBaseLayers(baseLayerConfigs?: IBaseLayerConfig[]): IBaseLayer[] {
+    const baseLayers: IBaseLayer[] = [];
 
     // OpenStreetMap
     let layer = new Tile({
+      visible: false,
       source: new OSM()
     });
-    let baseLayerConfig: IBaseLayerConfig = {
-      baseLayerId: 1,
+    let baseLayer: IBaseLayer = {
+      baseLayerId: -3,
       name: 'OpenStreetMap',
       layer: layer
     };
-    baseLayers.push(baseLayerConfig);
+    baseLayers.push(baseLayer);
 
     // Bing Maps
     layer = new Tile({
-      visible: false,
+      visible: true,
       source: new BingMaps({
         key: AppConfigService.settings.bingMapsApiKey,
         imagerySet: 'Aerial'
       })
     });
-    baseLayerConfig = {
-      baseLayerId: 2,
+    baseLayer = {
+      baseLayerId: -2,
       name: 'Bing Maps',
       layer: layer
     };
-    baseLayers.push(baseLayerConfig);
+    baseLayers.push(baseLayer);
 
     // OpenTopoMap
     layer = new Tile({
@@ -77,14 +79,53 @@ export class LayerService {
         url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
       })
     });
-    baseLayerConfig = {
-      baseLayerId: 3,
+    baseLayer = {
+      baseLayerId: -1,
       name: 'OpenTopoMap',
       layer: layer
     };
-    baseLayers.push(baseLayerConfig);
+    baseLayers.push(baseLayer);
+
+    if (baseLayerConfigs) {
+      baseLayerConfigs.forEach(baseLayerConfig => {
+        layer = this.createBaseLayer(baseLayerConfig);
+
+        if (baseLayerConfig.visible === true) {
+          layer.setVisible(true);
+          baseLayers.forEach(bl => bl.layer.setVisible(false));
+        }
+        baseLayer = {
+          baseLayerId: baseLayerConfig.baseLayerId,
+          name: baseLayerConfig.name,
+          layer: layer
+        };
+        baseLayers.push(baseLayer);
+      });
+    }
 
     return baseLayers;
+  }
+
+  createBaseLayer(baseLayerConfig: IBaseLayerConfig): Tile {
+    let attribution = baseLayerConfig.attribution;
+    if (baseLayerConfig.attributionUrl) {
+      attribution = `<a href="${baseLayerConfig.attributionUrl}" target="_blank">${baseLayerConfig.attribution}</a>`;
+    }
+    const source = new TileWMS({
+      url: baseLayerConfig.url,
+      attributions: [attribution],
+      params: {
+        'LAYERS': baseLayerConfig.layerName,
+        'TILED': 'TRUE',
+        'FORMAT': 'image/png8',
+      },
+      crossOrigin: 'anonymous'
+    });
+    const layer = new Tile({
+      visible: false,
+      source: source
+    });
+    return layer;
   }
 
   getExternalLayers(url: string): Observable<ILayerGroupConfig> {

@@ -124,7 +124,7 @@ img {
 
 .ol-scale-line {
   position: absolute;
-  bottom: 1rem;
+  bottom: 3rem;
   right: 12rem;
   left: auto;
   background: rgba(0,60,136,0.7);
@@ -133,7 +133,7 @@ img {
 div#mousePosition {
   position: absolute;
   right: 1rem;
-  bottom: 1rem;
+  bottom: 3rem;
   width: 10rem;
   background-color: white;
   padding: $container-padding;
@@ -148,7 +148,7 @@ div.custom-mouse-position {
 
 #attribution {
   position: absolute;
-  bottom: 10rem;
+  bottom: 1rem;
   right: 1rem;
   box-shadow: $container-shadow;
 }
@@ -161,10 +161,12 @@ div.custom-mouse-position {
   border-radius: 5px;
 }
 
-.andyb-test {
-  position: relative;
-  height: auto;
-  pointer-events: auto;
-  max-width: none;
-  border-radius: 5px;
+// hide openlayers link and icon on attribution control
+.ol-attribution a[href="https://openlayers.org/"] {
+  display: none;
+}
+
+.map-info-overlay {
+ min-width: 500px;
+ max-width: 60%;
 }
