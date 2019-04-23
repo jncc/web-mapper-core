@@ -124,22 +124,27 @@ img {
 
 .ol-scale-line {
   position: absolute;
-  bottom: 3rem;
-  right: 12rem;
+  bottom: 2.3rem;
+  right: 14.5rem;
   left: auto;
-  background: rgba(0,60,136,0.7);
+  background: transparent;
+}
+
+.ol-scale-line-inner {
+  color: $text-color;
+  border-color: $text-color;
 }
 
 div#mousePosition {
   position: absolute;
   right: 1rem;
-  bottom: 3rem;
-  width: 10rem;
+  bottom: 0.75rem;
+  height: 1.25rem;
+  width: 13rem;
   background-color: white;
-  padding: $container-padding;
+  padding-left: 5px;
   pointer-events: none;
   box-shadow: $container-shadow;
-
 }
 
 div.custom-mouse-position {
@@ -148,9 +153,10 @@ div.custom-mouse-position {
 
 #attribution {
   position: absolute;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: 0.75rem;
+  right: 14.5rem;
   box-shadow: $container-shadow;
+  background-color: white;
 }
 
 .ol-attribution.ol-uncollapsible {
@@ -158,7 +164,7 @@ div.custom-mouse-position {
   height: auto;
   pointer-events: auto;
   max-width: none;
-  border-radius: 5px;
+  border-radius: 0;
 }
 
 // hide openlayers link and icon on attribution control
