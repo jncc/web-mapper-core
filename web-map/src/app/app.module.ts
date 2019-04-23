@@ -39,6 +39,7 @@ import { RouterModule } from '@angular/router';
 import { ExternalLayersComponent } from './external-layers/external-layers.component';
 import { MapInfoComponent } from './map-info/map-info.component';
 import { PermalinkComponent } from './permalink/permalink.component';
+import { MapCreditComponent } from './map-credit/map-credit.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -71,7 +72,8 @@ export function initializeApp(appConfig: AppConfigService) {
     BaseLayerComponent,
     ExternalLayersComponent,
     MapInfoComponent,
-    PermalinkComponent
+    PermalinkComponent,
+    MapCreditComponent
   ],
   imports: [
     BrowserModule,
