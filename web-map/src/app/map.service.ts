@@ -115,7 +115,7 @@ export class MapService implements OnDestroy {
     this.apiService.getConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstances = data;
       this._mapConfig.next(this.dataStore.mapConfig);
-    }, error => console.log('Could not load map config from API.'));
+    }, error => console.error('Could not load map config from API.'));
   }
 
   private subscribeToMapInstanceConfig() {
@@ -127,7 +127,7 @@ export class MapService implements OnDestroy {
       this.createBaseLayers();
       this._mapConfig.next(this.dataStore.mapConfig);
       this.createFilterLookups();
-    }, error => console.log('Could not load map instance config from API.'));
+    }, error => console.error('Could not load map instance config from API.'));
   }
 
   // transform map instance config received from api into hierarchy of layergroups, sublayergroups, layers
@@ -215,7 +215,7 @@ export class MapService implements OnDestroy {
           this.applyCqlFilter(activeFilters, layerConfig);
         }
       } else {
-        console.log('error in createLayerFilter: layer with id ' + layerId + ' not found');
+        console.error('error in createLayerFilter: layer with id ' + layerId + ' not found');
       }
     }
   }
@@ -386,7 +386,7 @@ export class MapService implements OnDestroy {
       this._visibleLayers.next(this.dataStore.visibleLayers);
       this._mapConfig.next(this.dataStore.mapConfig);
     } else {
-      console.log('error in changeLayerVisibility: layer with id ' + layerId + ' not found');
+      console.error('error in changeLayerVisibility: layer with id ' + layerId + ' not found');
     }
   }
 
@@ -459,7 +459,6 @@ export class MapService implements OnDestroy {
     this.createLayersForLayerGroupConfig(layerGroupConfig);
     this.dataStore.mapConfig.mapInstance.layerGroups.push(layerGroupConfig);
     this._mapConfig.next(this.dataStore.mapConfig);
-    // console.log(this.dataStore.mapConfig.mapInstance);
   }
 
   createPermalink(): string {
