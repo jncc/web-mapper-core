@@ -114,16 +114,34 @@ export class MapComponent implements OnInit, OnDestroy {
       view: view
     });
 
-    this.map.addInteraction(new DragZoom());
-
     this.mapService.mapReady(this.map);
 
+    this.setupGetFeatureInfo();
+    this.setupZoomSubscriptions(view);
+
+    this.map.on('moveend', () => this.mapService.onMapMoveEnd(view.getZoom(), view.getCenter()));
+
+    // this.map.on('pointermove', (event: MapBrowserEvent) => {
+    //   console.log(proj.toLonLat(event.coordinate));
+    // });
+  }
+
+  /**
+   * Provides the URLs to the map service for getting feature info
+   * Layers in the baseLayerGroup are excluded
+   * forEachLayerAtPixel is provided with:
+   *  the callback function, which gets the featureInfoUrl from the source
+   *  this (not used),
+   *  the layer filter (tile layer that isn't in baseLayerGroup)
+   */
+  setupGetFeatureInfo() {
     this.map.on('click', (event: MapBrowserEvent) => {
       const viewResolution = this.map.getView().getResolution();
       const pixel = this.map.getEventPixel(event.originalEvent);
       const urls = [];
-      this.map.forEachLayerAtPixel(pixel, layer => {
-        if (layer instanceof Tile) {
+      const baseLayerArray = this.baseLayerGroup.getLayers().getArray();
+      this.map.forEachLayerAtPixel(pixel,
+        layer => {
           const source = (<Tile>layer).getSource();
           if (source instanceof TileWMS) {
             const url = source.getGetFeatureInfoUrl(
@@ -134,18 +152,21 @@ export class MapComponent implements OnInit, OnDestroy {
             );
             urls.push(url);
           }
-        }
-      });
+        },
+        this,
+        layer => layer instanceof Tile && baseLayerArray.indexOf(layer) === -1
+      );
       this.mapService.showFeatureInfo(urls);
     });
+  }
 
-    this.map.on('moveend', () => this.mapService.onMapMoveEnd(view.getZoom(), view.getCenter()));
-
-    // this.map.on('pointermove', (event: MapBrowserEvent) => {
-    //   console.log(proj.toLonLat(event.coordinate));
-    // });
-
-
+  /**
+   * There are drag zooms in and out and zoom to centre and zoom level
+   * Sets up the interactions and subscriptions to these Subjects in the map service
+   *
+   * @param view the map view
+   */
+  setupZoomSubscriptions(view: View) {
     // TODO: why can't ol.condition.always be used here as EventsConditionType?
     const dragZoomIn = new DragZoom({
       condition: () => true,
@@ -169,10 +190,6 @@ export class MapComponent implements OnInit, OnDestroy {
       dragZoomOut.on('boxend', () => dragZoomOut.setActive(false));
     });
 
-    // this.map.on('pointerdrag', event => {
-    //   document.body.style.cursor = 'grabbing';
-    // });
-
     this.zoomSubscription = this.mapService.zoomSubject.subscribe(data => {
       if (data.center && data.center.length === 2 && data.zoom) {
         const center = proj.fromLonLat([data.center[0], data.center[1]]);
@@ -186,6 +203,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const extent = proj.transformExtent([data[0], data[1], data[2], data[3]], 'EPSG:4326', 'EPSG:3857');
       view.fit(extent, { duration: 1000 });
     });
+
   }
 
   zoomToMapExtent() {
