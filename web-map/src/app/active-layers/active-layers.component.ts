@@ -94,6 +94,7 @@ export class ActiveLayersComponent implements OnInit {
 
     this.filterOverlayRef = this.overlay.create({
       hasBackdrop: true,
+      panelClass: 'filter-overlay',
       positionStrategy,
     });
 
@@ -102,12 +103,17 @@ export class ActiveLayersComponent implements OnInit {
       $implicit: activeLayer
     }));
 
+    this.backdropSubscription = this.filterOverlayRef.backdropClick().subscribe(() => this.closeFilter());
+
   }
 
   closeFilter() {
     if (this.filterOverlayRef) {
       this.filterOverlayRef.dispose();
       this.filterOverlayRef = null;
+    }
+    if (this.backdropSubscription) {
+      this.backdropSubscription.unsubscribe();
     }
   }
 

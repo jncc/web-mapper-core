@@ -90,7 +90,6 @@ export class ControlsToolbarComponent implements OnInit {
       positionStrategy,
     });
 
-
     this.mapInfoOverlayRef.attach(new TemplatePortal(this.mapInfoOverlay, this.viewContainerRef));
     this.backdropSubscription = this.mapInfoOverlayRef.backdropClick().subscribe(() => this.closeMapInfo());
   }
@@ -107,7 +106,6 @@ export class ControlsToolbarComponent implements OnInit {
 
   onShowPermalink() {
     const permalink = this.mapService.createPermalink();
-    console.log(permalink);
 
     this.closePermalink();
     const positionStrategy = this.overlay.position()

@@ -173,7 +173,15 @@ div.custom-mouse-position {
   display: none;
 }
 
+/* Overlay panel classes */
+
 .map-info-overlay {
  min-width: 500px;
  max-width: 60%;
+}
+
+.filter-overlay {
+  min-width: 500px;
+  max-width: 60%;
+  max-height: 80vh;
 }
