@@ -208,10 +208,14 @@ export class MapService implements OnDestroy {
   createLayerFilter(layerId: number, activeFilters: IActiveFilter[]) {
     if (activeFilters.length > 0) {
       const layerConfig = this.getLayerConfig(layerId);
-      if (this.isComplexFilter(layerConfig)) {
-        this.applySqlViewFilter(activeFilters, layerConfig);
+      if (layerConfig) {
+        if (this.isComplexFilter(layerConfig)) {
+          this.applySqlViewFilter(activeFilters, layerConfig);
+        } else {
+          this.applyCqlFilter(activeFilters, layerConfig);
+        }
       } else {
-        this.applyCqlFilter(activeFilters, layerConfig);
+        console.log('error in createLayerFilter: layer with id ' + layerId + ' not found');
       }
     }
   }
@@ -364,22 +368,26 @@ export class MapService implements OnDestroy {
 
   changeLayerVisibility(layerId: number, visible: boolean) {
     const layerConfig = this.getLayerConfig(layerId);
-    layerConfig.layer.setVisible(visible);
-    layerConfig.visible = visible;
+    if (layerConfig) {
+      layerConfig.layer.setVisible(visible);
+      layerConfig.visible = visible;
 
-    if (visible) {
-      if (!this.dataStore.visibleLayers.some(visibleLayerConfig => visibleLayerConfig.layerId === layerId)) {
-        this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+      if (visible) {
+        if (!this.dataStore.visibleLayers.some(visibleLayerConfig => visibleLayerConfig.layerId === layerId)) {
+          this.dataStore.visibleLayers = [layerConfig, ...this.dataStore.visibleLayers];
+        }
+      } else {
+        this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
+
+        // client requested to keep filter active when layer removed
+        // this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+        // this._activeFilters.next(this.dataStore.activeFilters);
       }
+      this._visibleLayers.next(this.dataStore.visibleLayers);
+      this._mapConfig.next(this.dataStore.mapConfig);
     } else {
-      this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
-
-      // client requested to keep filter active when layer removed
-      // this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
-      // this._activeFilters.next(this.dataStore.activeFilters);
+      console.log('error in changeLayerVisibility: layer with id ' + layerId + ' not found');
     }
-    this._visibleLayers.next(this.dataStore.visibleLayers);
-    this._mapConfig.next(this.dataStore.mapConfig);
   }
 
   removeAllVisibleLayers() {
@@ -423,14 +431,21 @@ export class MapService implements OnDestroy {
     return this.dataStore.layerLookup.find((layerConfig) => layerConfig.layerId === layerId);
   }
 
+  /**
+   * Only set the baseLayer if the baseLayerId exists
+   *
+   * @param baseLayerId the id provided for the visible baselayer
+   */
   setBaseLayer(baseLayerId: number) {
-    this.dataStore.baseLayers.forEach(baseLayer => {
-      if (baseLayer.baseLayerId === baseLayerId) {
-        baseLayer.layer.setVisible(true);
-      } else {
-        baseLayer.layer.setVisible(false);
-      }
-    });
+    if (this.dataStore.baseLayers.find(baseLayer => baseLayer.baseLayerId === baseLayerId)) {
+      this.dataStore.baseLayers.forEach(baseLayer => {
+        if (baseLayer.baseLayerId === baseLayerId) {
+          baseLayer.layer.setVisible(true);
+        } else {
+          baseLayer.layer.setVisible(false);
+        }
+      });
+    }
   }
 
   onMapMoveEnd(zoom: number, center: number[]) {
