@@ -124,10 +124,11 @@ img {
 
 .ol-scale-line {
   position: absolute;
-  bottom: 2.3rem;
+  bottom: 2.5rem;
   right: 14.5rem;
   left: auto;
-  background: transparent;
+  background: white;
+  border-radius: 0;
 }
 
 .ol-scale-line-inner {
