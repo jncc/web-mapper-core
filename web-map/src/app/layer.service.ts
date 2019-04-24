@@ -62,7 +62,7 @@ export class LayerService {
       visible: true,
       source: new BingMaps({
         key: AppConfigService.settings.bingMapsApiKey,
-        imagerySet: 'Aerial'
+        imagerySet: 'AerialWithLabels'
       })
     });
     baseLayer = {
@@ -131,14 +131,14 @@ export class LayerService {
   getExternalLayers(url: string): Observable<ILayerGroupConfig> {
     const capabilitiesUrl = url + '?SERVICE=wms&REQUEST=GetCapabilities&VERSION=1.3.0';
     return this.apiService.getCapabilities(capabilitiesUrl).pipe(
-      catchError(error => { console.log('getexternallayers error'); return of(null); }),
+      catchError(error => { console.error('error returned from this address'); return of(null); }),
       map(data => this.parseCapabilities(url, data))
     );
   }
 
   private parseCapabilities(url: string, data: any): ILayerGroupConfig {
     if (data === null) {
-      console.log('there was an error');
+      console.error('no data returned from wms capabilities from this address');
       // an 'empty' layer group
       return {
         layerGroupId: null,

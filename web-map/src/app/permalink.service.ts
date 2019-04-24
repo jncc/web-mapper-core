@@ -59,16 +59,18 @@ export class PermalinkService {
       const baseLayerId: number = +queryDict['baseLayerId'];
 
       let activeFilters: IActiveFilter[] = [];
-      const decodedActiveFiltersJSON = decompressFromEncodedURIComponent(decodeURIComponent(queryDict['activeFilters']));
-      if (decodedActiveFiltersJSON) {
-        try {
-          activeFilters = JSON.parse(decodedActiveFiltersJSON);
-        } catch (error) {
-          console.log('invalid active filters - no filter applied');
-          activeFilters = [];
+      if (queryDict['activeFilters']) {
+        const decodedActiveFiltersJSON = decompressFromEncodedURIComponent(decodeURIComponent(queryDict['activeFilters']));
+        if (decodedActiveFiltersJSON) {
+          try {
+            activeFilters = JSON.parse(decodedActiveFiltersJSON);
+          } catch (error) {
+            console.error('invalid active filters - no filter applied');
+            activeFilters = [];
+          }
+        } else {
+          console.error('invalid active filters - no filter applied');
         }
-      } else {
-        console.log('invalid active filters - no filter applied');
       }
       const permaLink: IPermalink = {
         center: center,
@@ -122,7 +124,7 @@ export class PermalinkService {
 
   validateBaseLayerId(value: string): boolean {
     let valid = true;
-    valid = this.isNumber(value) && +value > 0;
+    valid = this.isNumber(value);
     return valid;
   }
 
