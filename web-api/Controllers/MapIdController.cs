@@ -54,43 +54,44 @@ namespace MapConfig.Controllers
             //now add the baselayers which are defined as a CSV list
             List<BaseLayer> baseLayers = new List<BaseLayer>();
 
-            //split the list of BaseLayer Names or Ids into an array and remove leading and trailing spaces            
-            var baseLayersList = map.BaseLayerList
-                .Split(",")
-                .Select(e => e.Trim())
-                .Distinct();
+            if(map.BaseLayerList != null) {
+                //split the list of BaseLayer Names or Ids into an array and remove leading and trailing spaces            
+                var baseLayersList = map.BaseLayerList
+                    .Split(",")
+                    .Select(e => e.Trim())
+                    .Distinct();
 
-            //look up each baseLayerName, first trying by Id then by Name
-            if(baseLayersList.Count() > 0) {
-                foreach(string baseLayerName in baseLayersList) {
-                    BaseLayer baseLayer = new BaseLayer { BaseLayerId = 0 };
-                    try { //try Ids
-                        uint baseLayerId = Convert.ToUInt32(baseLayerName, 10);
-                        baseLayer = await _context.BaseLayer
-                            .SingleOrDefaultAsync(b => b.BaseLayerId == baseLayerId);
-                    } catch { //or Names
-                        baseLayer = await _context.BaseLayer
-                            .SingleOrDefaultAsync(b => b.Name == baseLayerName);
-                    }
-                    try {
-                        if(baseLayer.BaseLayerId > 0) { //we found the baselayer
-                            //check if the baselayer should be visible
-                            baseLayer.Visible=false;
-                            try { //is it marked visible by Id?
-                                uint visibleLayerId = Convert.ToUInt32(map.VisibleBaseLayer, 10);
-                                if(visibleLayerId == baseLayer.BaseLayerId) baseLayer.Visible=true;                  
-                            } catch { //or by Name?
-                                if(map.VisibleBaseLayer == baseLayer.Name) baseLayer.Visible=true;
-                            }
-                            baseLayers.Add(baseLayer);
+                //look up each baseLayerName, first trying by Id then by Name
+                if(baseLayersList.Count() > 0) {
+                    foreach(string baseLayerName in baseLayersList) {
+                        BaseLayer baseLayer = new BaseLayer { BaseLayerId = 0 };
+                        try { //try Ids
+                            uint baseLayerId = Convert.ToUInt32(baseLayerName, 10);
+                            baseLayer = await _context.BaseLayer
+                                .SingleOrDefaultAsync(b => b.BaseLayerId == baseLayerId);
+                        } catch { //or Names
+                            baseLayer = await _context.BaseLayer
+                                .SingleOrDefaultAsync(b => b.Name == baseLayerName);
                         }
-                    } catch {}
+                        try {
+                            if(baseLayer.BaseLayerId > 0) { //we found the baselayer
+                                //check if the baselayer should be visible
+                                baseLayer.Visible=false;
+                                try { //is it marked visible by Id?
+                                    uint visibleLayerId = Convert.ToUInt32(map.VisibleBaseLayer, 10);
+                                    if(visibleLayerId == baseLayer.BaseLayerId) baseLayer.Visible=true;                  
+                                } catch { //or by Name?
+                                    if(map.VisibleBaseLayer == baseLayer.Name) baseLayer.Visible=true;
+                                }
+                                baseLayers.Add(baseLayer);
+                            }
+                        } catch {}
+                    }
+                    map.BaseLayers = baseLayers;
                 }
-                map.BaseLayers = baseLayers;
             }
 
             //convert any <Layer>LayerCentre values into a JSON 'center' array attribute for the Layer, and also re-map other fields
-            
             List<LayerGroup> layerGroups = new List<LayerGroup>();
             foreach (LayerGroup layerGroup in map.LayerGroups) {
                 List<Layer> layers = new List<Layer>();
