@@ -62,7 +62,7 @@ export class LayerService {
       visible: true,
       source: new BingMaps({
         key: AppConfigService.settings.bingMapsApiKey,
-        imagerySet: 'AerialWithLabels'
+        imagerySet: 'Aerial'
       })
     });
     baseLayer = {
