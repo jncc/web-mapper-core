@@ -1,9 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { LayerService } from '../layer.service';
 import { ILayerGroupConfig } from '../models/layer-group-config';
 import { Observable } from 'rxjs';
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
+import { IExternalWmsConfig } from '../models/external-wms-config.model';
 
 @Component({
   selector: 'app-external-layers',
@@ -11,6 +12,7 @@ import { ILayerConfig } from '../models/layer-config.model';
   styleUrls: ['./external-layers.component.scss']
 })
 export class ExternalLayersComponent implements OnInit {
+  @Input() externalWmsUrls: IExternalWmsConfig[];
   @Output() closeExternalLayers = new EventEmitter<void>();
 
   layerGroupConfig$: Observable<ILayerGroupConfig>;
@@ -45,6 +47,10 @@ export class ExternalLayersComponent implements OnInit {
     } else {
       this.selectedLayers = this.selectedLayers.filter(existingLayerConfig => existingLayerConfig !== layerConfig);
     }
+  }
+
+  onSelectChanged(url: string) {
+      this.url = url;
   }
 
 }
