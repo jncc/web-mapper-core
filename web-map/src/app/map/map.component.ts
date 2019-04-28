@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-// TODO: remove unneeded imports
 import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
@@ -20,7 +19,6 @@ import Attribution from 'ol/control/attribution';
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
 
-
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -35,6 +33,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private zoomToExtentSubscription: Subscription;
   private layersSubscription: Subscription;
   private baseLayersSubscription: Subscription;
+  private mapConfigSubscription: Subscription;
 
   // Map defaults
   defaultCenter = [-2, 55];
@@ -66,6 +65,14 @@ export class MapComponent implements OnInit, OnDestroy {
           layers: baseLayerCollection
         });
         this.map.addControl(this.overviewMap);
+      }
+    );
+    this.mapConfigSubscription = this.mapService.mapConfig.subscribe(
+      mapConfig => {
+        const maxZoom = mapConfig.mapInstance.maxZoom;
+        if (maxZoom > 0) {
+          this.map.getView().setMaxZoom(maxZoom);
+        }
       }
     );
   }
@@ -229,6 +236,9 @@ export class MapComponent implements OnInit, OnDestroy {
     }
     if (this.baseLayersSubscription) {
       this.baseLayersSubscription.unsubscribe();
+    }
+    if (this.mapConfigSubscription) {
+      this.mapConfigSubscription.unsubscribe();
     }
   }
 }
