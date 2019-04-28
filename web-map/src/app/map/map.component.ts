@@ -105,7 +105,7 @@ export class MapComponent implements OnInit, OnDestroy {
           coordinateFormat: coordinate => 'lon: ' + coordinate[0].toFixed(3) + ' lat: ' + coordinate[1].toFixed(3)
         }),
         new ScaleLine({
-          // target: document.getElementById('scaleLine'),
+          target: document.getElementById('scaleLine'),
           // className: 'custom-scale-line'
         }),
         new Attribution({

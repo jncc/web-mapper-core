@@ -62,17 +62,14 @@
 
 #controlsToolbar {
     position: absolute;
-    bottom: 2.5rem;
+    bottom: 4.25rem;
     right: 1rem;
     box-shadow: $container-shadow;
     pointer-events: auto;
     width: 13rem;
 }
 
-
 #mapCredit {
-    position: absolute;
-    bottom: 5.25rem;
-    right: 1rem;
+    padding: 2px 5px;
 }
 

@@ -66,8 +66,6 @@ img {
   background-color: aliceblue;
 }
 
-
-
 // CDK BACKDROP
 
 .cdk-overlay-dark-backdrop {
@@ -122,13 +120,19 @@ img {
 
 // OPENLAYERS CONTROLS AND CONTAINERS
 
-.ol-scale-line {
+#scalePositionContainer {
   position: absolute;
+  right: 1rem;
   bottom: 2.5rem;
-  right: 14.5rem;
-  left: auto;
-  background: white;
+  background-color: white;
+  display: flex;
+}
+
+.ol-scale-line {
+  position: static;
+  background-color: white;
   border-radius: 0;
+  margin-right: 1rem;
 }
 
 .ol-scale-line-inner {
@@ -137,13 +141,8 @@ img {
 }
 
 div#mousePosition {
-  position: absolute;
-  right: 1rem;
-  bottom: 0.75rem;
-  height: 1.25rem;
-  width: 13rem;
+  padding: 2px 5px;
   background-color: white;
-  padding-left: 5px;
   pointer-events: none;
   box-shadow: $container-shadow;
 }
@@ -152,12 +151,13 @@ div.custom-mouse-position {
   min-height: 1rem;
 }
 
-#attribution {
+#attribution-container {
   position: absolute;
   bottom: 0.75rem;
-  right: 14.5rem;
+  right: 1rem;
   box-shadow: $container-shadow;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
 }
 
 .ol-attribution.ol-uncollapsible {
@@ -166,6 +166,10 @@ div.custom-mouse-position {
   pointer-events: auto;
   max-width: none;
   border-radius: 0;
+}
+
+.ol-attribution:not(.ol-collapsed) {
+  background-color: transparent;
 }
 
 // hide openlayers link and icon on attribution control

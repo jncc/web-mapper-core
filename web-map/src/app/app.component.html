@@ -28,10 +28,18 @@
         <app-legend id="legend"></app-legend>
         <app-feature-infos id="featureInfos"></app-feature-infos>
 
-        <app-map-credit id="mapCredit"></app-map-credit>
+
         <app-controls-toolbar id="controlsToolbar"></app-controls-toolbar>
-        <div id="mousePosition"></div>
-        <div id="attribution"></div>
+        <div id="scalePositionContainer">
+            <div id="scaleLine"></div>
+            <div id="mousePosition"></div>
+        </div>
+        
+        <div id="attribution-container">
+            <app-map-credit id="mapCredit"></app-map-credit>
+            <div id="attribution"></div>
+        </div>
+
     </div>
     <!-- <app-map-instances></app-map-instances> -->
     <!-- <app-map-info></app-map-info> -->
