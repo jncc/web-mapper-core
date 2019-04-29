@@ -23,8 +23,11 @@ export class LayerService {
 
   layerId = 999;
   layerGroupId = 999;
+  defaultBaseLayer = 'Bing';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {
+    this.defaultBaseLayer = AppConfigService.settings.defaultBaseLayer;
+   }
 
   createLayer(layerConfig: ILayerConfig): Tile {
     const source = new TileWMS({
@@ -46,20 +49,20 @@ export class LayerService {
     const baseLayers: IBaseLayer[] = [];
 
     // OpenStreetMap
-    let layer = new Tile({
+    const osmLayer = new Tile({
       visible: false,
       source: new OSM()
     });
     let baseLayer: IBaseLayer = {
       baseLayerId: -3,
       name: 'OpenStreetMap',
-      layer: layer
+      layer: osmLayer
     };
     baseLayers.push(baseLayer);
 
     // Bing Maps
-    layer = new Tile({
-      visible: true,
+    const bingLayer = new Tile({
+      visible: false,
       source: new BingMaps({
         key: AppConfigService.settings.bingMapsApiKey,
         imagerySet: 'Aerial'
@@ -68,9 +71,15 @@ export class LayerService {
     baseLayer = {
       baseLayerId: -2,
       name: 'Bing Maps',
-      layer: layer
+      layer: bingLayer
     };
     baseLayers.push(baseLayer);
+
+    if (this.defaultBaseLayer === 'OSM') {
+      osmLayer.setVisible(true);
+    } else {
+      bingLayer.setVisible(true);
+    }
 
     // OpenTopoMap
     /*
@@ -90,7 +99,7 @@ export class LayerService {
 
     if (baseLayerConfigs) {
       baseLayerConfigs.forEach(baseLayerConfig => {
-        layer = this.createBaseLayer(baseLayerConfig);
+        const layer = this.createBaseLayer(baseLayerConfig);
 
         if (baseLayerConfig.visible === true) {
           layer.setVisible(true);
