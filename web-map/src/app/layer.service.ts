@@ -73,6 +73,7 @@ export class LayerService {
     baseLayers.push(baseLayer);
 
     // OpenTopoMap
+    /*
     layer = new Tile({
       visible: false,
       source: new XYZ({
@@ -85,6 +86,7 @@ export class LayerService {
       layer: layer
     };
     baseLayers.push(baseLayer);
+    */
 
     if (baseLayerConfigs) {
       baseLayerConfigs.forEach(baseLayerConfig => {
