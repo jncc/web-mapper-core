@@ -11,7 +11,6 @@ import { ISubLayerGroupConfig } from './models/sub-layer-group-config';
 import { ILookup } from './models/lookup.model';
 import { LayerService } from './layer.service';
 import { PermalinkService } from './permalink.service';
-import { IBaseLayerConfig } from './models/base-layer-config.model';
 import { IActiveFilter } from './models/active-filter.model';
 import { IPermalink } from './models/permalink.model';
 import { FilterService } from './filter.service';
@@ -132,6 +131,8 @@ export class MapService implements OnDestroy {
 
   // transform map instance config received from api into hierarchy of layergroups, sublayergroups, layers
   private createMapInstanceConfig() {
+    // sort layer groups by config values
+    this.dataStore.mapConfig.mapInstance.layerGroups.sort((a, b) => a.order - b.order);
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig: ILayerGroupConfig) => {
       this.createSubLayerGroups(layerGroupConfig);
     });
@@ -414,13 +415,19 @@ export class MapService implements OnDestroy {
 
   showLegend(layerId: number) {
     const layerConfig = this.getLayerConfig(layerId);
-    const legendLayerName = layerConfig.legendLayerName ? layerConfig.legendLayerName : layerConfig.layerName;
-    const url = layerConfig.url +
-      '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20' +
-      '&LEGEND_OPTIONS=fontAntiAliasing:true;fontColor:0x5A5A5A' +
-      '&LAYER=' + legendLayerName;
+    if (layerConfig) {
+      this.clearFeatureInfo();
+      const legendLayerName = layerConfig.legendLayerName ? layerConfig.legendLayerName : layerConfig.layerName;
+      const url = layerConfig.url +
+        '?REQUEST=GetLegendGraphic&VERSION=1.3.0&FORMAT=image/png&WIDTH=20&HEIGHT=20' +
+        '&LEGEND_OPTIONS=fontAntiAliasing:true;fontColor:0x5A5A5A' +
+        '&LAYER=' + legendLayerName;
 
-    this.showLegendSubject.next({ name: layerConfig.name, legendUrl: url });
+      this.showLegendSubject.next({ name: layerConfig.name, legendUrl: url });
+    } else {
+      console.error('showLegend: No layer found for layerId: ' + layerId);
+    }
+
   }
 
   hideLegend() {
@@ -457,6 +464,9 @@ export class MapService implements OnDestroy {
   addExternalLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
     this.createSubLayerGroups(layerGroupConfig);
     this.createLayersForLayerGroupConfig(layerGroupConfig);
+    const maxOrder = Math.max(...this.dataStore.mapConfig.mapInstance.layerGroups.map(layerGroup => layerGroup.order), 0);
+    layerGroupConfig.order = maxOrder + 1;
+    console.log(maxOrder);
     this.dataStore.mapConfig.mapInstance.layerGroups.push(layerGroupConfig);
     this._mapConfig.next(this.dataStore.mapConfig);
   }

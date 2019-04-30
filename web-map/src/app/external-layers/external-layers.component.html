@@ -8,19 +8,18 @@
         </div>
     </div>
     <div class="controls-container-body">
-        <!-- <app-filter-control *ngFor="let filter of layer.filters"
-          [filterConfig]="filter" [filterLookup]="filterLookup[filter.lookupCategory]" [activeFilters]="activeFilters">
-      </app-filter-control>
-      <div class="controls-container-footer">
-          <button (click)="onFilterApplied()">Apply</button>
-          <button (click)="onFilterCleared()">Clear</button>
-      </div> -->
-        <div>Enter a WMS URL to add layers from an external source</div>
-        <div>http://jnccdev-geo.esdm.co.uk/geoserver/emodnet/wms</div>
+        <div>Select or enter a WMS URL to add layers from an external service</div>
+        <div *ngIf="externalWmsUrls"  class="external-services">
+            <select (change)="onSelectChanged($event.target.value)">
+                <option value="">Select a service ...</option>
+                <option *ngFor="let externalWmsUrl of externalWmsUrls" [value]="externalWmsUrl.url">{{ externalWmsUrl.name }}</option>
+            </select>
+        </div>
         <div class="external-service-text">
             <input type="text" [(ngModel)]="url">
         </div>
-        <button (click)="onGetExternalLayers()" class="primary dialog-button">Get layers</button>
+        <div>(Or enter a WMS URL in the format: https://jnccdev-geo.esdm.co.uk/geoserver/emodnet/wms)</div>
+        <button (click)="onGetExternalLayers()" class="primary dialog-button" [disabled]="!url">Get layers</button>
         <div *ngIf="layerGroupConfig$ | async as layerGroupConfig">
             <div *ngIf="layerGroupConfig.layers.length; else noLayers" class="external-layers-container">
                 <ul>

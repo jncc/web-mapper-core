@@ -3,9 +3,10 @@ import { MapService } from '../map.service';
 import { ILayerGroupConfig } from '../models/layer-group-config';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { OverlayRef, Overlay } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { IExternalWmsConfig } from '../models/external-wms-config.model';
 
 @Component({
   selector: 'app-layers',
@@ -15,6 +16,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 export class LayersComponent implements OnInit {
 
   layerGroups$: Observable<ILayerGroupConfig[]>;
+  externalWmsUrls: IExternalWmsConfig[];
 
   @ViewChild('externalLayersOverlay') externalLayersOverlay: TemplateRef<any>;
   externalLayersOverlayRef: OverlayRef | null;
@@ -23,6 +25,7 @@ export class LayersComponent implements OnInit {
 
   ngOnInit() {
     this.layerGroups$ = this.mapService.mapConfig.pipe(
+      tap(mapConfig => this.externalWmsUrls = mapConfig.mapInstance.externalWmsUrls),
       map(mapConfig => mapConfig.mapInstance.layerGroups)
     );
   }
@@ -43,7 +46,9 @@ export class LayersComponent implements OnInit {
         positionStrategy,
       });
 
-      this.externalLayersOverlayRef.attach(new TemplatePortal(this.externalLayersOverlay, this.viewContainerRef));
+      this.externalLayersOverlayRef.attach(new TemplatePortal(this.externalLayersOverlay, this.viewContainerRef, {
+        $implicit: this.externalWmsUrls
+      }));
   }
 
   closeExternalLayers() {

@@ -5,4 +5,5 @@ export interface IAppConfig {
     mapInstanceConfigUrl: string;
     mapInstance: string;
     bingMapsApiKey: string;
+    defaultBaseLayer: string;
 }

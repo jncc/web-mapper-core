@@ -16,6 +16,6 @@
   </div>
 </div>
 
-<ng-template #externalLayersOverlay>
-  <app-external-layers (closeExternalLayers)="closeExternalLayers()"></app-external-layers>
+<ng-template #externalLayersOverlay let-externalWmsUrls>
+  <app-external-layers [externalWmsUrls]="externalWmsUrls" (closeExternalLayers)="closeExternalLayers()"></app-external-layers>
 </ng-template>
