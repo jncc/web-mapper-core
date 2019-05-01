@@ -151,7 +151,13 @@ export class MapService implements OnDestroy {
       const subLayerGroup = subLayerGroups.find((slg) => slg.name === layerConfig.subLayerGroup);
       subLayerGroup.layers.push(layerConfig);
     });
-    layerGroupConfig.subLayerGroups = subLayerGroups;
+    layerGroupConfig.subLayerGroups = subLayerGroups.sort((a, b) => {
+      const minA: number = a.layers.
+        reduce((min: number, layerConfig: ILayerConfig) => layerConfig.order < min ? layerConfig.order : min, a.layers[0].order);
+      const minB: number = b.layers.
+        reduce((min: number, layerConfig: ILayerConfig) => layerConfig.order < min ? layerConfig.order : min, b.layers[0].order);
+      return minA - minB;
+    });
   }
 
   private createLayersForConfig(): void {

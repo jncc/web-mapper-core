@@ -1,6 +1,6 @@
 <div *ngIf="subLayerGroup.name === null || subLayerGroup.name == ''">
   <ul>
-    <li *ngFor="let layer of subLayerGroup.layers">
+    <li *ngFor="let layer of subLayerGroup.layers | layerSort">
       <app-layer [layer]="layer" (visibilityChanged)="onLayerVisibilityChanged(layer, $event)"></app-layer>
     </li>
   </ul>
@@ -24,7 +24,7 @@
   
   <div [ngClass]="{'closed': !show}" class="sub-layer-group-body">
     <ul>
-      <li *ngFor="let layer of subLayerGroup.layers">
+      <li *ngFor="let layer of subLayerGroup.layers | layerSort">
         <app-layer [layer]="layer" (visibilityChanged)="onLayerVisibilityChanged(layer, $event)"></app-layer>
       </li>
     </ul>

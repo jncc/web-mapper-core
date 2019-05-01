@@ -40,6 +40,7 @@ import { ExternalLayersComponent } from './external-layers/external-layers.compo
 import { MapInfoComponent } from './map-info/map-info.component';
 import { PermalinkComponent } from './permalink/permalink.component';
 import { MapCreditComponent } from './map-credit/map-credit.component';
+import { LayerSortPipe } from './layer-sort.pipe';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -73,7 +74,8 @@ export function initializeApp(appConfig: AppConfigService) {
     ExternalLayersComponent,
     MapInfoComponent,
     PermalinkComponent,
-    MapCreditComponent
+    MapCreditComponent,
+    LayerSortPipe
   ],
   imports: [
     BrowserModule,

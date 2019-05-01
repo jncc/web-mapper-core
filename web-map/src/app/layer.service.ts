@@ -172,6 +172,7 @@ export class LayerService {
             layerName: layer.Name,
             name: layer.Title,
             url: url,
+            order: this.layerId,
             visible: false,
             opacity: 1,
             layer: null,

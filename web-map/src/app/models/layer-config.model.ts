@@ -5,6 +5,7 @@ export interface ILayerConfig {
     layerName: string;
     name: string;
     url: string;
+    order: number;
     visible: boolean;
     opacity: number;
     layer: any;
