@@ -29,13 +29,13 @@ export class LayerService {
     this.defaultBaseLayer = AppConfigService.settings.defaultBaseLayer;
    }
 
-  createLayer(layerConfig: ILayerConfig): Tile {
+  createLayer(layerConfig: ILayerConfig, format = 'image/png8'): Tile {
     const source = new TileWMS({
       url: layerConfig.url,
       params: {
         'LAYERS': layerConfig.layerName,
         'TILED': 'TRUE',
-        'FORMAT': 'image/png8',
+        'FORMAT': format,
       },
       crossOrigin: 'anonymous'
     });

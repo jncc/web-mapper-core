@@ -171,10 +171,10 @@ export class MapService implements OnDestroy {
     this._visibleLayers.next(this.dataStore.visibleLayers);
   }
 
-  private createLayersForLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
+  private createLayersForLayerGroupConfig(layerGroupConfig: ILayerGroupConfig, format = 'image/png8') {
     if (layerGroupConfig.layers.length) {
       layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
-        layerConfig.layer = this.layerService.createLayer(layerConfig);
+        layerConfig.layer = this.layerService.createLayer(layerConfig, format);
         layerConfig.layer.setOpacity(layerConfig.opacity);
         layerConfig.layer.setVisible(layerConfig.visible);
 
@@ -472,8 +472,9 @@ export class MapService implements OnDestroy {
   }
 
   addExternalLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
+    const format = 'image/png';
     this.createSubLayerGroups(layerGroupConfig);
-    this.createLayersForLayerGroupConfig(layerGroupConfig);
+    this.createLayersForLayerGroupConfig(layerGroupConfig, format);
     const maxOrder = Math.max(...this.dataStore.mapConfig.mapInstance.layerGroups.map(layerGroup => layerGroup.order), 0);
     layerGroupConfig.order = maxOrder + 1;
     console.log(maxOrder);
