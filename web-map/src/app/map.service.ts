@@ -154,6 +154,7 @@ export class MapService implements OnDestroy {
       subLayerGroup.layers.push(layerConfig);
     });
     // sort the sub layer groups by the minimum value of their layer orders
+    // note the layers within sub layer groups are ordered by a pipe in the sub-layer-group component template
     layerGroupConfig.subLayerGroups = subLayerGroups.sort((a, b) => {
       const minA: number = a.layers.
         reduce((min: number, layerConfig: ILayerConfig) => layerConfig.order < min ? layerConfig.order : min, a.layers[0].order);
