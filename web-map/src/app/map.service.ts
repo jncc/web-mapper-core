@@ -139,6 +139,7 @@ export class MapService implements OnDestroy {
   }
 
   private createSubLayerGroups(layerGroupConfig: ILayerGroupConfig) {
+    // get all sublayergroups in the layer group config
     const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
       map((layer) => layer.subLayerGroup).
       reduce((a: ISubLayerGroupConfig[], subLayerGroup, index) => {
@@ -147,10 +148,12 @@ export class MapService implements OnDestroy {
         }
         return a;
       }, []);
+    // add the layers to the sub layer groups
     layerGroupConfig.layers.forEach((layerConfig) => {
       const subLayerGroup = subLayerGroups.find((slg) => slg.name === layerConfig.subLayerGroup);
       subLayerGroup.layers.push(layerConfig);
     });
+    // sort the sub layer groups by the minimum value of their layer orders
     layerGroupConfig.subLayerGroups = subLayerGroups.sort((a, b) => {
       const minA: number = a.layers.
         reduce((min: number, layerConfig: ILayerConfig) => layerConfig.order < min ? layerConfig.order : min, a.layers[0].order);
