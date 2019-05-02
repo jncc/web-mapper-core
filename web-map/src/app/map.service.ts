@@ -71,6 +71,17 @@ export class MapService implements OnDestroy {
     return this._activeFilters.asObservable();
   }
 
+  get maxLayerId(): number {
+    return  this.dataStore.layerLookup.
+    reduce((max: number, layerConfig: ILayerConfig) => layerConfig.layerId > max ? layerConfig.layerId : max, 0);
+  }
+
+  get maxLayerGroupId(): number {
+    return this.dataStore.mapConfig.mapInstance.layerGroups.
+      // tslint:disable-next-line:max-line-length
+      reduce((max: number, layerGroupConfig: ILayerGroupConfig) => layerGroupConfig.layerGroupId > max ? layerGroupConfig.layerGroupId : max, 0);
+  }
+
   constructor(
     private apiService: ApiService,
     private layerService: LayerService,
@@ -477,7 +488,6 @@ export class MapService implements OnDestroy {
     this.createLayersForLayerGroupConfig(layerGroupConfig, format);
     const maxOrder = Math.max(...this.dataStore.mapConfig.mapInstance.layerGroups.map(layerGroup => layerGroup.order), 0);
     layerGroupConfig.order = maxOrder + 1;
-    console.log(maxOrder);
     this.dataStore.mapConfig.mapInstance.layerGroups.push(layerGroupConfig);
     this._mapConfig.next(this.dataStore.mapConfig);
   }

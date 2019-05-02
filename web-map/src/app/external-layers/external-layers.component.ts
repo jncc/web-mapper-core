@@ -29,7 +29,9 @@ export class ExternalLayersComponent implements OnInit {
   }
 
   onGetExternalLayers() {
-    this.layerGroupConfig$ = this.layerService.getExternalLayers(this.url);
+    const maxLayerId = this.mapService.maxLayerId;
+    const maxLayerGroupId = this.mapService.maxLayerGroupId;
+    this.layerGroupConfig$ = this.layerService.getExternalLayers(this.url, maxLayerId, maxLayerGroupId);
   }
 
   onAddToMap(layerGroupConfig: ILayerGroupConfig) {

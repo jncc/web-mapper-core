@@ -21,8 +21,8 @@ import { IBaseLayer } from './models/base-layer.model';
 })
 export class LayerService {
 
-  layerId = 999;
-  layerGroupId = 999;
+  layerId: number;
+  layerGroupId: number;
   defaultBaseLayer = 'Bing';
 
   constructor(private apiService: ApiService) {
@@ -139,7 +139,9 @@ export class LayerService {
     return layer;
   }
 
-  getExternalLayers(url: string): Observable<ILayerGroupConfig> {
+  getExternalLayers(url: string, maxLayerId: number, maxLayerGroupId: number): Observable<ILayerGroupConfig> {
+    this.layerId = maxLayerId;
+    this.layerGroupId = maxLayerGroupId;
     const capabilitiesUrl = url + '?SERVICE=wms&REQUEST=GetCapabilities&VERSION=1.3.0';
     return this.apiService.getCapabilities(capabilitiesUrl).pipe(
       catchError(error => { console.error('error returned from this address'); return of(null); }),
