@@ -20,10 +20,10 @@ export class ActiveLayersComponent implements OnInit {
   visibleLayers$: Observable<ILayerConfig[]>;
 
   backdropSubscription: Subscription;
-  @ViewChild('opacityOverlay') opacityOverlay: TemplateRef<any>;
+  @ViewChild('opacityOverlay', { static: true }) opacityOverlay: TemplateRef<any>;
   opacityOverlayRef: OverlayRef | null;
 
-  @ViewChild('filterOverlay') filterOverlay: TemplateRef<any>;
+  @ViewChild('filterOverlay', { static: true }) filterOverlay: TemplateRef<any>;
   filterOverlayRef: OverlayRef | null;
 
   constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) {

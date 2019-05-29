@@ -12,13 +12,13 @@ import { TemplatePortal } from '@angular/cdk/portal';
 export class ControlsToolbarComponent implements OnInit {
 
   backdropSubscription: Subscription;
-  @ViewChild('baseLayersOverlay') baseLayersOverlay: TemplateRef<any>;
+  @ViewChild('baseLayersOverlay', { static: true }) baseLayersOverlay: TemplateRef<any>;
   baseLayersOverlayRef: OverlayRef | null;
 
-  @ViewChild('mapInfoOverlay') mapInfoOverlay: TemplateRef<any>;
+  @ViewChild('mapInfoOverlay', { static: true }) mapInfoOverlay: TemplateRef<any>;
   mapInfoOverlayRef: OverlayRef | null;
 
-  @ViewChild('permalinkOverlay') permalinkOverlay: TemplateRef<any>;
+  @ViewChild('permalinkOverlay', { static: true }) permalinkOverlay: TemplateRef<any>;
   permalinkOverlayRef: OverlayRef | null;
 
   constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) { }

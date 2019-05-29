@@ -55,7 +55,7 @@ export class ApiService {
     return this.http.get<ILookup[]>(lookupUrl);
   }
 
-  getLookups(categories: string[]): Observable<ILookup[][]> {
+  getLookups(categories: string[]): Observable<{}[]> {
     const responses = [];
     categories.forEach(
       category => responses.push(this.getLookup(category))

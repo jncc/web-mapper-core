@@ -18,7 +18,7 @@ export class LayersComponent implements OnInit {
   layerGroups$: Observable<ILayerGroupConfig[]>;
   externalWmsUrls: IExternalWmsConfig[];
 
-  @ViewChild('externalLayersOverlay') externalLayersOverlay: TemplateRef<any>;
+  @ViewChild('externalLayersOverlay', { static: true }) externalLayersOverlay: TemplateRef<any>;
   externalLayersOverlayRef: OverlayRef | null;
 
   constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) { }

@@ -212,7 +212,7 @@ export class MapService implements OnDestroy {
         }
       }
       ));
-    this.apiService.getLookups(lookupCategories).subscribe(lookups => {
+    this.apiService.getLookups(lookupCategories).subscribe((lookups: ILookup[][]) => {
       lookups.forEach((lookup, index) => filterLookups[lookupCategories[index]] = lookup);
       this._filterLookups.next(filterLookups);
       this.applyPermalink();
