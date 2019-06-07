@@ -15,6 +15,7 @@ import MapBrowserEvent from 'ol/mapbrowserevent';
 import MousePosition from 'ol/control/mouseposition';
 import Collection from 'ol/collection';
 import Attribution from 'ol/control/attribution';
+import condition from 'ol/events/condition';
 
 import { MapService } from '../map.service';
 import { ILayerConfig } from '../models/layer-config.model';
@@ -174,9 +175,8 @@ export class MapComponent implements OnInit, OnDestroy {
    * @param view the map view
    */
   setupZoomSubscriptions(view: View) {
-    // TODO: why can't ol.condition.always be used here as EventsConditionType?
     const dragZoomIn = new DragZoom({
-      condition: () => true,
+      condition: condition.always,
       out: false
     });
     this.map.addInteraction(dragZoomIn);
@@ -187,7 +187,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     const dragZoomOut = new DragZoom({
-      condition: () => true,
+      condition: condition.always,
       out: true
     });
     this.map.addInteraction(dragZoomOut);
