@@ -23,6 +23,8 @@ export class MapService implements OnDestroy {
 
   map: any;
 
+  zoomInSubject = new Subject<void>();
+  zoomOutSubject = new Subject<void>();
   dragZoomInSubject = new Subject<void>();
   dragZoomOutSubject = new Subject<void>();
   zoomSubject = new Subject<{ center: number[], zoom: number }>();
@@ -334,11 +336,11 @@ export class MapService implements OnDestroy {
   }
 
   zoomIn() {
-    this.map.getView().setZoom(this.map.getView().getZoom() + 1);
+    this.zoomInSubject.next();
   }
 
   zoomOut() {
-    this.map.getView().setZoom(this.map.getView().getZoom() - 1);
+    this.zoomOutSubject.next();
   }
 
   zoomToMapExtent() {

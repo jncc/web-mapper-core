@@ -28,6 +28,8 @@ import { ILayerConfig } from '../models/layer-config.model';
 export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
+  private zoomInSubscription: Subscription;
+  private zoomOutSubscription: Subscription;
   private dragZoomInSubscription: Subscription;
   private dragZoomOutSubscription: Subscription;
   private zoomSubscription: Subscription;
@@ -175,6 +177,8 @@ export class MapComponent implements OnInit, OnDestroy {
    * @param view the map view
    */
   setupZoomSubscriptions(view: View) {
+    this.zoomInSubscription = this.mapService.zoomInSubject.subscribe(() => this.map.getView().setZoom(this.map.getView().getZoom() + 1));
+    this.zoomOutSubscription = this.mapService.zoomOutSubject.subscribe(() => this.map.getView().setZoom(this.map.getView().getZoom() - 1));
     const dragZoomIn = new DragZoom({
       condition: condition.always,
       out: false
@@ -219,6 +223,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.zoomInSubscription) {
+      this.zoomInSubscription.unsubscribe();
+    }
+    if (this.zoomOutSubscription) {
+      this.zoomOutSubscription.unsubscribe();
+    }
     if (this.dragZoomInSubscription) {
       this.dragZoomInSubscription.unsubscribe();
     }
