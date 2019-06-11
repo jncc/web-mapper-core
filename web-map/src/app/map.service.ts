@@ -230,104 +230,39 @@ export class MapService implements OnDestroy {
   }
 
   createLayerFilter(layerId: number, activeFilters: IActiveFilter[]) {
-    if (activeFilters.length > 0) {
-      const layerConfig = this.getLayerConfig(layerId);
-      if (layerConfig) {
-        if (this.isComplexFilter(layerConfig)) {
-          this.applySqlViewFilter(activeFilters, layerConfig);
-        } else {
-          this.applyCqlFilter(activeFilters, layerConfig);
-        }
-      } else {
-        console.error('error in createLayerFilter: layer with id ' + layerId + ' not found');
-      }
+    const layerConfig = this.getLayerConfig(layerId);
+    if (layerConfig) {
+      const filterParameters = this.filterService.createFilterParametersForLayer(layerConfig, activeFilters, this.dataStore.filterLookups);
+      this.filterLayer(layerConfig, filterParameters, activeFilters);
+    } else {
+      console.error('error in createLayerFilter: layer with id ' + layerId + ' not found');
     }
   }
 
-  private isComplexFilter(layerConfig: ILayerConfig): boolean {
-    return layerConfig.filters.every(filter => filter.isComplex);
-  }
-
-  private applySqlViewFilter(activeFilters: IActiveFilter[], layerConfig: ILayerConfig) {
-    const paramName = 'viewParams';
-    let filterString = '';
-    activeFilters.forEach(activeFilter => {
-      const filterConfig = layerConfig.filters.find(f => f.filterId === activeFilter.filterId);
-      if (filterConfig) {
-        if (filterConfig.type === 'lookup' && activeFilter.filterLookupIds.length > 0) {
-          filterString += filterConfig.attribute + ':';
-          const filterLookup = this.dataStore.filterLookups[filterConfig.lookupCategory];
-          activeFilter.filterLookupIds.forEach((lookupId, index) => {
-            const filterCode = filterLookup.find(lookup => lookup.lookupId === lookupId).code;
-            const code = '\'' + this.escapeSpecialCharacters(filterCode) + '\'';
-            filterString += code;
-            if (index < activeFilter.filterLookupIds.length - 1) {
-              filterString += '\\,';
-            }
-          });
-          filterString += ';';
-        } else if (filterConfig.type === 'text' && activeFilter.filterText.length > 0) {
-          filterString += filterConfig.attribute + ':';
-          filterString += this.escapeSpecialCharacters(activeFilter.filterText);
-          filterString += ';';
-        }
-      }
-    });
-    this.filterLayer(layerConfig.layerId, paramName, filterString, activeFilters);
-  }
-
-  private applyCqlFilter(activeFilters: IActiveFilter[], layerConfig: ILayerConfig) {
-    const paramName = 'CQL_FILTER';
-    let filterString = '';
-    activeFilters.forEach(activeFilter => {
-      const filterConfig = layerConfig.filters.find(f => f.filterId === activeFilter.filterId);
-      if (filterConfig) {
-        if (filterConfig.type === 'lookup' && activeFilter.filterLookupIds.length > 0) {
-          if (filterString.length > 0) {
-            // there is already at least one filter in the string so use AND
-            filterString += ' AND ';
-          }
-          filterString += filterConfig.attribute + ' IN (';
-          const filterLookup = this.dataStore.filterLookups[filterConfig.lookupCategory];
-          activeFilter.filterLookupIds.forEach((lookupId, index) => {
-            const filterCode = filterLookup.find(lookup => lookup.lookupId === lookupId).code;
-            filterString += `'${filterCode}'`;
-            if (index < activeFilter.filterLookupIds.length - 1) {
-              filterString += ',';
-            }
-          });
-          filterString += ')';
-        }
-      }
-    });
-    this.filterLayer(layerConfig.layerId, paramName, filterString, activeFilters);
-  }
-
-  // In Geoserver SQL Views, semicolons or commas must be escaped with a backslash (e.g. \, and \;)
-  private escapeSpecialCharacters(value: string): string {
-    return value.replace(/,/g, '\\,').replace(/;/g, '\\;');
-  }
-
-  filterLayer(layerId: number, paramName: string, filterString: string, activeFilters: IActiveFilter[]) {
-    const layerConfig = this.getLayerConfig(layerId);
+  filterLayer(layerConfig: ILayerConfig, filterParameters: IDictionary<string>, activeFilters: IActiveFilter[]) {
     const source = layerConfig.layer.getSource();
-    const params = layerConfig.layer.getSource().getParams();
-    params[paramName] = filterString;
+    const params = source.getParams();
+    Object.keys(filterParameters).forEach(key => delete params[key]);
+    Object.keys(filterParameters).forEach(key => {
+      if (filterParameters[key].length > 0) {
+        params[key] = filterParameters[key];
+      }
+    });
     source.updateParams(params);
 
-    this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+    this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerConfig.layerId);
     this.dataStore.activeFilters = [...this.dataStore.activeFilters, ...activeFilters];
     this._activeFilters.next(this.dataStore.activeFilters);
   }
 
-  clearFilterLayer(layerId: number, paramName: string) {
-    const layerConfig = this.getLayerConfig(layerId);
+  clearFilterLayer(layerConfig: ILayerConfig) {
     const source = layerConfig.layer.getSource();
-    const params = layerConfig.layer.getSource().getParams();
-    delete params[paramName];
+    const params = source.getParams();
+    delete params['viewParams'];
+    delete params['CQL_FILTER'];
     source.updateParams(params);
 
-    this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
+    this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerConfig.layerId);
     this._activeFilters.next(this.dataStore.activeFilters);
   }
 
@@ -450,7 +385,6 @@ export class MapService implements OnDestroy {
     } else {
       console.error('showLegend: No layer found for layerId: ' + layerId);
     }
-
   }
 
   hideLegend() {
@@ -476,12 +410,6 @@ export class MapService implements OnDestroy {
         }
       });
     }
-  }
-
-  onMapMoveEnd(zoom: number, center: number[]) {
-    // const layerIds = this.dataStore.visibleLayers.map(layer => layer.layerId);
-    // const baseLayerId = this.dataStore.baseLayers.find(baseLayer => baseLayer.layer.getVisible()).baseLayerId;
-    // this.permalinkService.updateUrl(zoom, center, layerIds, baseLayerId);
   }
 
   addExternalLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {

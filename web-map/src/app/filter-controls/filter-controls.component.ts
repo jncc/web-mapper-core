@@ -41,14 +41,18 @@ export class FilterControlsComponent implements OnInit {
   }
 
   onFilterCleared() {
-    let paramName = '';
-    if (this.isComplexFilter()) {
-      paramName = 'viewParams';
-    } else {
-      paramName = 'CQL_FILTER';
-    }
-    this.mapService.clearFilterLayer(this.layer.layerId, paramName);
+    this.mapService.clearFilterLayer(this.layer);
   }
+
+  // onFilterCleared() {
+  //   let paramName = '';
+  //   if (this.isComplexFilter()) {
+  //     paramName = 'viewParams';
+  //   } else {
+  //     paramName = 'CQL_FILTER';
+  //   }
+  //   this.mapService.clearFilterLayer(this.layer.layerId, paramName);
+  // }
 
   onCloseFilter() {
     this.closeFilter.emit();

@@ -128,12 +128,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.setupGetFeatureInfo();
     this.setupZoomSubscriptions(view);
-
-    this.map.on('moveend', () => this.mapService.onMapMoveEnd(view.getZoom(), view.getCenter()));
-
-    // this.map.on('pointermove', (event: MapBrowserEvent) => {
-    //   console.log(proj.toLonLat(event.coordinate));
-    // });
   }
 
   /**
