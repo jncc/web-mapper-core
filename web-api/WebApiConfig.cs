@@ -9,5 +9,6 @@ namespace Config.Options
         public string TestDataWMSUrl { get; set; }
         public Boolean AllowCRUDPages { get; set; }
         public int MaxGazetteerResults { get; set; }
+        public string AllowedReferrers { get; set; }
     }
 }

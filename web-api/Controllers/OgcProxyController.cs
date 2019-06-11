@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using MapConfig.Models;
+using Config.Options;
 
 namespace MapConfig.Controllers
 {
@@ -21,21 +22,38 @@ namespace MapConfig.Controllers
     public class OgcProxyController : Controller
     {
         private readonly MapConfigContext _context;
+        private readonly IOptions<WebApiConfig> _webapiconfig;
 
-        public OgcProxyController(MapConfigContext context)
+        public OgcProxyController(MapConfigContext context, IOptions<WebApiConfig> webapiconfig)
         {
             _context = context;
+            _webapiconfig = webapiconfig;
         }
 
         // GET: api/ogcproxy/
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            //check the referrer against what is set in the config
+            string myReferrer = Request.Headers["Referer"].ToString();
+            //Console.WriteLine($"Referrer: {myReferrer}");
+
+            string allowedReferrers = _webapiconfig.Value.AllowedReferrers;
+
+            bool allowed = false;
+            if (allowedReferrers != null) {
+                var refList = allowedReferrers.Split(",");
+                foreach(var test in refList) {
+                    if(myReferrer==test || myReferrer.EndsWith(test)) allowed = true;
+                }
+            } else allowed = true;
+            if(! allowed) return ReturnError();
+
             //extract just the query string into a list of items
             var query = Request.QueryString.Value;
             var queryDictionary = QueryHelpers.ParseQuery(query);
             var items = queryDictionary.SelectMany(x => x.Value, (col, value) => new KeyValuePair<string, string>(col.Key, value)).ToList();
-            //find the url= parameter which is base64 encoded
+            //find the url= parameter which might be base64 encoded
             string url = items.Where(x => x.Key == "url").FirstOrDefault().Value;
             string urlToProxy;
             //try and decode it
@@ -43,8 +61,9 @@ namespace MapConfig.Controllers
                 byte[] base64EncodedBytes = Convert.FromBase64String(url);
                 urlToProxy = Encoding.UTF8.GetString(base64EncodedBytes);
             } catch {
-                urlToProxy = "";
+                urlToProxy = url;
             }
+            //Console.WriteLine(urlToProxy);
             var fullUri = "";
             var baseUri = "";
             //if we decoded the url we want proxying, then remove that param and build a new param list
@@ -118,7 +137,7 @@ namespace MapConfig.Controllers
             }
 
             ObjectResult ReturnError() {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error has occured processing the Ogc request, please review the logs.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error has occured processing the OGC request");
             }
 
             bool HasServiceException(string responseText) {
