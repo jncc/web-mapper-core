@@ -209,7 +209,7 @@ export class MapService implements OnDestroy {
     const lookupCategories: string[] = [];
     this.dataStore.layerLookup.forEach(layerConfig =>
       layerConfig.filters.forEach(filterConfig => {
-        if (!lookupCategories.includes(filterConfig.lookupCategory) && filterConfig.lookupCategory) {
+        if ((lookupCategories.indexOf(filterConfig.lookupCategory) === -1) && filterConfig.lookupCategory) {
           lookupCategories.push(filterConfig.lookupCategory);
         }
       }
@@ -243,15 +243,19 @@ export class MapService implements OnDestroy {
     const source = layerConfig.layer.getSource();
     const params = source.getParams();
     Object.keys(filterParameters).forEach(key => delete params[key]);
+    let filterPresent = false;
     Object.keys(filterParameters).forEach(key => {
       if (filterParameters[key].length > 0) {
         params[key] = filterParameters[key];
+        filterPresent = true;
       }
     });
     source.updateParams(params);
 
     this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerConfig.layerId);
-    this.dataStore.activeFilters = [...this.dataStore.activeFilters, ...activeFilters];
+    if (filterPresent) {
+      this.dataStore.activeFilters = [...this.dataStore.activeFilters, ...activeFilters];
+    }
     this._activeFilters.next(this.dataStore.activeFilters);
   }
 
