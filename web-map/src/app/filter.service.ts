@@ -4,6 +4,8 @@ import { ILayerConfig } from './models/layer-config.model';
 import { ILookup } from './models/lookup.model';
 import { IFilterConfig } from './models/filter-config.model';
 
+import { IDictionary } from './models/dictionary.model';
+
 @Injectable({
   providedIn: 'root'
 })
