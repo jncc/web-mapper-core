@@ -16,6 +16,8 @@ import { IPermalink } from './models/permalink.model';
 import { FilterService } from './filter.service';
 import { IBaseLayer } from './models/base-layer.model';
 
+import { IDictionary } from './models/dictionary.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -299,6 +301,12 @@ export class MapService implements OnDestroy {
   }
 
   zoomToCenterZoom(center: number[], zoom: number) {
+    this.zoomSubject.next({ center: center, zoom: zoom });
+  }
+
+  panToLonLat(lon: number, lat: number) {
+    const zoom = this.map.getView().getZoom();
+    const center  = [lon, lat];
     this.zoomSubject.next({ center: center, zoom: zoom });
   }
 

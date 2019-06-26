@@ -41,6 +41,7 @@ import { MapInfoComponent } from './map-info/map-info.component';
 import { PermalinkComponent } from './permalink/permalink.component';
 import { MapCreditComponent } from './map-credit/map-credit.component';
 import { LayerSortPipe } from './layer-sort.pipe';
+import { GotoXyComponent } from './goto-xy/goto-xy.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -75,7 +76,8 @@ export function initializeApp(appConfig: AppConfigService) {
     MapInfoComponent,
     PermalinkComponent,
     MapCreditComponent,
-    LayerSortPipe
+    LayerSortPipe,
+    GotoXyComponent
   ],
   imports: [
     BrowserModule,

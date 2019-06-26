@@ -66,10 +66,18 @@
     right: 1rem;
     box-shadow: $container-shadow;
     pointer-events: auto;
-    width: 13rem;
+    width: 14rem;
 }
 
 #mapCredit {
     padding: 2px 5px;
 }
 
+#gotoXY {
+    position: absolute;
+    top: 5rem;
+    right: 1rem;
+    box-shadow: $container-shadow;
+    pointer-events: auto;
+    width: 18rem;
+}

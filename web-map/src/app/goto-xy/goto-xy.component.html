@@ -1,0 +1,23 @@
+<div class="controls-container" cdkDrag>
+  <div class="controls-container-header primary" cdkDragHandle>
+    Go to Lon/Lat
+    <div>
+      <i class="btn fa fa-close" (click)="onCloseGotoXY()"></i>
+  </div>
+  </div>
+  <div class="controls-container-body">
+    <div class="goto-xy">
+        <span>Lon:</span>
+        <input type="text" maxlength="10" (keyup.enter)="onGotoXY(x.value, y.value)" #x>
+        <span>Lat:</span>
+        <input type="text" maxlength="10" (keyup.enter)="onGotoXY(x.value, y.value)" #y>
+        <button type="button" class="dialog-button primary" (click)="onGotoXY(x.value, y.value)">go</button>
+    </div>
+    <div *ngIf="!xValid" class="error">
+      {{ xErrorMessage }}
+    </div>
+    <div *ngIf="!yValid" class="error">
+      {{ yErrorMessage }}
+    </div>
+  </div>
+</div>

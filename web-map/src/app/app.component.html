@@ -20,6 +20,7 @@
                 <i *ngIf="!showLayers" class="btn fa fa-fw fa-2x fa-bars"></i>
             </div>
             <app-active-layers></app-active-layers>
+            <app-goto-xy *ngIf="showGotoXY" id="gotoXY" (closeGotoXY)="onCloseGotoXY()"></app-goto-xy>
             <app-gazetteer id="gazetteer"></app-gazetteer>
             <div id="overviewMap"></div>
 
@@ -29,7 +30,7 @@
         <app-feature-infos id="featureInfos"></app-feature-infos>
 
 
-        <app-controls-toolbar id="controlsToolbar"></app-controls-toolbar>
+        <app-controls-toolbar id="controlsToolbar" (showGotoXY)="onShowGotoXY()"></app-controls-toolbar>
         <div id="scalePositionContainer">
             <div id="scaleLine"></div>
             <div id="mousePosition"></div>

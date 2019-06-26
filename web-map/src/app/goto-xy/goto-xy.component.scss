@@ -1,0 +1,20 @@
+input {
+    width: 4rem;
+    margin: 0.25rem;
+}
+
+div.goto-xy {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+div.error {
+    color: red;
+}
+
+.controls-container-header {
+    justify-content: space-between;
+    cursor: auto;
+}

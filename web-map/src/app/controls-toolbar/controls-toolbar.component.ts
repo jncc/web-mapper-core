@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef, Output, EventEmitter } from '@angular/core';
 import { MapService } from '../map.service';
 import { Subscription } from 'rxjs';
 import { OverlayRef, Overlay } from '@angular/cdk/overlay';
@@ -10,6 +10,8 @@ import { TemplatePortal } from '@angular/cdk/portal';
   styleUrls: ['./controls-toolbar.component.scss']
 })
 export class ControlsToolbarComponent implements OnInit {
+
+  @Output() showGotoXY = new EventEmitter<void>();
 
   backdropSubscription: Subscription;
   @ViewChild('baseLayersOverlay', { static: true }) baseLayersOverlay: TemplateRef<any>;
@@ -133,6 +135,10 @@ export class ControlsToolbarComponent implements OnInit {
     if (this.backdropSubscription) {
       this.backdropSubscription.unsubscribe();
     }
+  }
+
+  onShowGotoXY() {
+    this.showGotoXY.emit();
   }
 
 }
