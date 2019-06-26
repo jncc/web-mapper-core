@@ -1,13 +1,14 @@
 <div class="controls-container" cdkDrag>
   <div class="controls-container-header primary" cdkDragHandle>
-    Go to Lon/Lat
+    Go to Longitude/Latitude
     <div>
       <i class="btn fa fa-close" (click)="onCloseGotoXY()"></i>
   </div>
   </div>
   <div class="controls-container-body">
+    <div>Enter coordinates in decimal degrees</div>
     <div class="goto-xy">
-        <span>Lon:</span>
+        <span>Long:</span>
         <input type="text" maxlength="10" (keyup.enter)="onGotoXY(x.value, y.value)" #x>
         <span>Lat:</span>
         <input type="text" maxlength="10" (keyup.enter)="onGotoXY(x.value, y.value)" #y>
