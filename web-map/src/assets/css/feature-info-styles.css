@@ -29,6 +29,16 @@ table.featureInfo caption {
 }
 
 /* Custom Styles */
+a.blue:link, a.blue:visited{
+	color: blue;
+	}
+	
+a.boldblue:link, a.boldblue:visited{
+color: blue;
+font-weight:bolder;
+font-size:13px;
+}
+
 table .confTable{
 	text-align:center;
 	margin:0 auto;
