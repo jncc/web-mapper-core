@@ -30,3 +30,9 @@
     padding: 0.5rem;
     color: rgb(90, 90, 90);
 }
+
+.center-y {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}

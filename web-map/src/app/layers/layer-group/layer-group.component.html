@@ -3,8 +3,8 @@
         [ngClass]="{'highlight': layerGroup.isExternal, 'primary': !layerGroup.isExternal }">
 
         <div class="layer-group-selector" (click)="onToggleShow()">
-            <i *ngIf="show" class="btn fa fa-fw fa-caret-down"></i>
-            <i *ngIf="!show" class="btn fa fa-fw fa-caret-right"></i>
+            <img class="control" *ngIf="show" src="../../../assets/icons/chevron-down.svg">
+            <img class="control" *ngIf="!show" src="../../../assets/icons/chevron-right.svg">
         </div>
         <div class="layer-group-title" (click)="onToggleShow()">
             {{ layerGroup.name }}

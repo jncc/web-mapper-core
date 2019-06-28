@@ -23,3 +23,9 @@
 .feature-info-body {
     padding: 1rem;
 }
+
+.center-y {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}

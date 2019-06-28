@@ -1,16 +1,15 @@
 <div class="controls-container" id="active-layers" cdkDrag cdkDragBoundary="#viewportPanel">
 
     <div class="controls-container-header primary">
-        <div class="drag-handle">
-            <i tooltip="move panel" class="material-icons drag" cdkDragHandle>drag_indicator</i>
+        <div class="drag-handle" cdkDragHandle>
+            <img tooltip="move panel" src="../../assets/icons/drag-white.svg">
         </div>
         <div class="active-layers-title" (click)="toggleShow()">
             <h6>
                 <span>ACTIVE LAYERS</span>
-                
             </h6>
-            <i *ngIf="show" class="btn fa fa-caret-down"></i>
-                <i *ngIf="!show" class="btn fa fa-caret-left"></i>
+            <img *ngIf="show" src="../../assets/icons/chevron-down.svg">
+            <img *ngIf="!show" src="../../assets/icons/chevron-left.svg">
         </div>
 
     </div>

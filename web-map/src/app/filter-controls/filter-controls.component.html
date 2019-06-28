@@ -3,13 +3,13 @@
         <h6>
             <span>FILTER LAYER {{ layer.name }}</span>
         </h6>
-        <div>
-            <i class="btn fa fa-close" (click)="onCloseFilter()"></i>
+        <div class="btn">
+            <img src="../../assets/icons/close-white.svg" class="close" (click)="onCloseFilter()">
         </div>
     </div>
     <div class="controls-container-body">
-        <app-filter-control *ngFor="let filter of layer.filters"
-            [filterConfig]="filter" [filterLookup]="filterLookup[filter.lookupCategory]" [activeFilters]="activeFilters">
+        <app-filter-control *ngFor="let filter of layer.filters" [filterConfig]="filter"
+            [filterLookup]="filterLookup[filter.lookupCategory]" [activeFilters]="activeFilters">
         </app-filter-control>
         <div class="controls-container-footer">
             <button (click)="onFilterApplied()" class="primary dialog-button">Apply</button>

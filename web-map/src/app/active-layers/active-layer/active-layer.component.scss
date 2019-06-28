@@ -1,8 +1,4 @@
 
-.material-icons.drag {
-    cursor: pointer;
-}
-
 .active-layer {
     background-color: white;
     display: flex;
@@ -38,12 +34,11 @@
 .drag-handle {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
-.filter-active {
-    color: red;
-}
-
-.no-download {
-    color: lightgrey;
+.active-layer-control {
+    width: 20px;
+    margin-left: 2px;
+    margin-right: 2px;
 }

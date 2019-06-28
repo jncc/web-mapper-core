@@ -4,20 +4,20 @@
 
         <div id="layersPanel" class="secondary" [ngClass]="{ 'open': showLayers }">
             <div class="panel-title title">
-                <div>
+                <div class="center-y">
                     <h2>
                         ALL LAYERS
                     </h2>
                 </div>
-                <div>
-                    <i class="btn fa fa-lg fa-close" (click)="onToggleShowLayers()"></i>
+                <div class="btn" (click)="onToggleShowLayers()">
+                    <img src="../assets/icons/close-white.svg">
                 </div>
             </div>
             <app-layers></app-layers>
         </div>
         <div id="viewportPanel">
-            <div id="toggleLayers" class="primary" (click)="onToggleShowLayers()">
-                <i *ngIf="!showLayers" class="btn fa fa-fw fa-2x fa-bars"></i>
+            <div id="toggleLayers" class="btn primary" (click)="onToggleShowLayers()">
+                <img *ngIf="!showLayers" src="../assets/icons/menu.svg">
             </div>
             <app-active-layers></app-active-layers>
             <app-goto-xy *ngIf="showGotoXY" id="gotoXY" (closeGotoXY)="onCloseGotoXY()"></app-goto-xy>

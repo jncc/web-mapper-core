@@ -1,14 +1,14 @@
 <div class="controls-toolbar">
-    <i tooltip="base maps" class="btn fa fa-lg fa-map-o" (click)="onShowBaseLayers($event)"></i>
-    <i tooltip="share map link" class="btn fa fa-fw fa-lg fa-share-alt" (click)="onShowPermalink()"></i>
-    <i tooltip="map information" class="btn fa fa-lg fa-fw fa-info-circle" (click)="onShowMapInfo()"></i>
+    <img class="control-icon" tooltip="base maps" src="../../assets/icons/map-outline.svg" (click)="onShowBaseLayers($event)">
+    <img class="control-icon" tooltip="share map link" src="../../assets/icons/share-variant.svg" (click)="onShowPermalink()">
+    <img class="control-icon" tooltip="map information" src="../../assets/icons/information-outline.svg" (click)="onShowMapInfo()">
     <div class="divider"></div>
-    <i tooltip="zoom in" class="btn fa fa-fw fa-lg fa-plus" (click)="onZoomIn()"></i>
-    <i tooltip="zoom out" class="btn fa fa-fw fa-lg fa-minus" (click)="onZoomOut()"></i>
-    <i tooltip="zoom to map extent" class="btn fa fa-fw fa-lg fa-globe" (click)="onZoomToMapExtent()"></i>
-    <i tooltip="drag zoom in" class="btn fa fa-fw fa-lg fa-search-plus" (click)="onZoomInToExtent()"></i>
-    <i tooltip="drag zoom out" class="btn fa fa-fw fa-lg fa-search-minus" (click)="onZoomOutToExtent()"></i>
-    <i tooltip="go to long/lat" class="btn fa fa-fw fa-lg fa-crosshairs" (click)="onShowGotoXY()"></i>
+    <img class="control-icon" tooltip="zoom in" src="../../assets/icons/plus.svg" (click)="onZoomIn()">
+    <img class="control-icon" tooltip="zoom out" src="../../assets/icons/minus.svg" (click)="onZoomOut()">
+    <img class="control-icon" tooltip="zoom to map extent" src="../../assets/icons/earth.svg" (click)="onZoomToMapExtent()">
+    <img class="control-icon" tooltip="drag zoom in" src="../../assets/icons/magnify-plus-outline.svg" (click)="onZoomInToExtent()">
+    <img class="control-icon" tooltip="drag zoom out" src="../../assets/icons/magnify-minus-outline.svg" (click)="onZoomOutToExtent()">
+    <img class="control-icon" tooltip="go to long/lat" src="../../assets/icons/crosshairs.svg" (click)="onShowGotoXY()">
 </div>
 
 <ng-template #baseLayersOverlay>
@@ -17,8 +17,8 @@
             <h6>
                 BASE MAPPING
             </h6>
-            <div>
-                <i class="btn fa fa-close" (click)="closeBaseLayers()"></i>
+            <div (click)="closeBaseLayers()">
+                <img src="../../assets/icons/close-white.svg" class="close">
             </div>
         </div>
         <div class="controls-container-body">

@@ -4,15 +4,16 @@
             <span>ADD EXTERNAL LAYERS</span>
         </h6>
         <div>
-            <i class="btn fa fa-close" (click)="onCloseExternalLayers()"></i>
+            <img src="../../assets/icons/close-white.svg" class="close" (click)="onCloseExternalLayers()">
         </div>
     </div>
     <div class="controls-container-body">
         <div>Select or enter a WMS URL to add layers from an external service</div>
-        <div *ngIf="externalWmsUrls"  class="external-services">
+        <div *ngIf="externalWmsUrls" class="external-services">
             <select (change)="onSelectChanged($event.target.value)">
                 <option value="">Select a service ...</option>
-                <option *ngFor="let externalWmsUrl of externalWmsUrls" [value]="externalWmsUrl.url">{{ externalWmsUrl.name }}</option>
+                <option *ngFor="let externalWmsUrl of externalWmsUrls" [value]="externalWmsUrl.url">
+                    {{ externalWmsUrl.name }}</option>
             </select>
         </div>
         <div class="external-service-text">
@@ -24,13 +25,14 @@
             <div *ngIf="layerGroupConfig.layers.length; else noLayers" class="external-layers-container">
                 <ul>
                     <li *ngFor="let layerConfig of layerGroupConfig.layers">
-                            <input type="checkbox" (change)="onCheckChanged(layerConfig, $event)">
+                        <input type="checkbox" (change)="onCheckChanged(layerConfig, $event)">
                         {{layerConfig.name}}
                     </li>
                 </ul>
             </div>
             <div>
-                <button (click)="onAddToMap(layerGroupConfig)" [disabled]="selectedLayers.length === 0" class="primary dialog-button">Add selected layers to the map</button>
+                <button (click)="onAddToMap(layerGroupConfig)" [disabled]="selectedLayers.length === 0"
+                    class="primary dialog-button">Add selected layers to the map</button>
             </div>
 
             <ng-template #noLayers>

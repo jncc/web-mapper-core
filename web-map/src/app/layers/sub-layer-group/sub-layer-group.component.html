@@ -9,8 +9,8 @@
 <div *ngIf="subLayerGroup.name !== null && subLayerGroup.name !== ''" class="sub-layer-group secondary">
   <div class="sub-layer-group-header">
     <div class="sub-layer-group-selector" (click)="toggleShow()">
-      <i *ngIf="show" class="btn fa fa-fw fa-caret-down"></i>
-      <i *ngIf="!show" class="btn fa fa-fw fa-caret-right"></i>
+        <img class="control" *ngIf="show" src="../../../assets/icons/chevron-down.svg">
+        <img class="control" *ngIf="!show" src="../../../assets/icons/chevron-right.svg">
     </div>
     <div class="sub-layer-group-title" (click)="toggleShow()">
       {{ subLayerGroup.name }}

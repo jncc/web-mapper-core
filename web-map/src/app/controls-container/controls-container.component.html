@@ -1,8 +1,8 @@
 <div class="controls-container">
     <div class="controls-container-header bg-menu" (click)="toggleShow()">
       <h6>
-        <i *ngIf="show" class="btn fa fa-caret-down"></i>
-        <i *ngIf="!show" class="btn fa fa-caret-right"></i>
+        <img *ngIf="show" src="../../assets/icons/chevron-down.svg">
+        <img *ngIf="show" src="../../assets/icons/chevron-right.svg">
         <ng-content select="[header]"></ng-content>
       </h6>
     </div>

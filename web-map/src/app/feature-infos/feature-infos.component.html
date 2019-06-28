@@ -1,9 +1,9 @@
 <div id="featureInfoPane" [ngClass]="{ 'show': (featureInfos$ | async).length }">
     <div class="panel-title title">
-        <div>
-            <i class="btn fa fa-lg fa-close" (click)="clearFeatureInfo()"></i>
+        <div class="btn">
+            <img src="../../assets/icons/close-white.svg" (click)="clearFeatureInfo()">
         </div>
-        <div>
+        <div class="center-y">
             <h2>
                 FEATURE INFO
             </h2>

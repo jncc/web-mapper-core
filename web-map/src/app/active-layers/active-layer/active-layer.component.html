@@ -1,47 +1,45 @@
 <div class="active-layer">
-    <div class="drag-handle">
-        <i tooltip="move layer" class="material-icons drag" cdkDragHandle>drag_indicator</i>
+    <div class="drag-handle" tooltip="move layer" cdkDragHandle>
+        <img src="../../../assets/icons/drag.svg" tooltip="move layer">
     </div>
     <div class="active-layer-content">
         <div class="active-layer-name">
             {{layer.name}}
         </div>
         <div class="active-layer-body">
-            <div [tooltip]="'opacity ' + layer.opacity">
-                <i class="btn fa fa-lg fa-adjust" (click)="onShowOpacity($event)"></i>
+            <div (click)="onShowOpacity($event)">
+                <img src="../../../assets/icons/contrast-circle.svg"  [tooltip]="'opacity ' + layer.opacity" class="active-layer-control">
             </div>
-            <div tooltip="show legend">
-                <i class="btn fa fa-lg fa-list-ul" (click)="onShowLegend()"></i>
+            <div (click)="onShowLegend()">
+                <img tooltip="show legend" class="active-layer-control" src="../../../assets/icons/format-list-bulleted-square.svg">
             </div>
-            <div tooltip="zoom to layer extent">
-                <i class="btn fa fa-lg fa-globe" (click)="onZoomToLayerExtent()"></i>
+            <div (click)="onZoomToLayerExtent()">
+                    <img tooltip="zoom to layer extent" class="active-layer-control" src="../../../assets/icons/earth.svg">
             </div>
-            <div tooltip="download data" *ngIf="layer.downloadURL">
+            <div *ngIf="layer.downloadURL">
                 <a [href]="layer.downloadURL" target="_blank">
-                    <i class="btn fa fa-lg fa-download"></i>
+                        <img tooltip="download data" class="active-layer-control" src="../../../assets/icons/download.svg">
                 </a>
             </div>
-            <div tooltip="not currently downloadable" *ngIf="!layer.downloadURL">
-                <i class="btn fa fa-lg fa-download no-download"></i>
+            <div *ngIf="!layer.downloadURL">
+                    <img tooltip="not currently downloadable" class="active-layer-control" src="../../../assets/icons/no-download.svg">
             </div>
-            <div tooltip="view metadata" *ngIf="layer.metadataUrl">
+            <div *ngIf="layer.metadataUrl">
                 <a [href]="layer.metadataUrl" target="_blank">
-                    <i class="btn fa fa-lg fa-info-circle"></i>
+                        <img class="active-layer-control" tooltip="view metadata" src="../../../assets/icons/information-outline.svg">
                 </a>
             </div>
             <div *ngIf="layer.filters && layer.filters.length">
-                <div tooltip="filter layer" *ngIf="!filterActive">
-                    <i class="btn fa fa-lg fa-filter"
-                        (click)="onOpenFilter()"></i>
+                <div tooltip="filter layer" *ngIf="!filterActive" (click)="onOpenFilter()">
+                        <img class="active-layer-control" tooltip="filter layer" src="../../../assets/icons/filter.svg">
                 </div>
-                <div tooltip="layer currently filtered" *ngIf="filterActive">
-                    <i class="btn fa fa-lg fa-filter filter-active"
-                        (click)="onOpenFilter()"></i>
+                <div tooltip="layer currently filtered" *ngIf="filterActive" (click)="onOpenFilter()">
+                        <img class="active-layer-control" tooltip="filter active" src="../../../assets/icons/filter-active.svg">
                 </div>
             </div>
         </div>
     </div>
-    <div class="active-layer-close">
-        <i tooltip="remove layer" class="btn fa fa-lg fa-close" (click)="onRemoveLayer()"></i>
+    <div class="active-layer-close" (click)="onRemoveLayer()">
+        <img tooltip="remove layer" class="active-layer-control"  src="../../../assets/icons/close.svg" alt="">
     </div>
 </div>
