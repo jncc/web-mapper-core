@@ -15,7 +15,7 @@
             <h2>{{ legend.name }}</h2>
         </div>
         <div class="legend-body">
-            <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+            <img *ngIf="loading" src="../../assets/icons/loading.gif" style="width: 200px;">
             <img #legendImage [hidden]="loading" [src]="legend.legendUrl" (load)="onLegendImageLoaded()" alt="legend">
         </div>
     </div>
