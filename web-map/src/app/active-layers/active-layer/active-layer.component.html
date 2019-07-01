@@ -22,7 +22,7 @@
                 </a>
             </div>
             <div *ngIf="!layer.downloadURL">
-                    <img tooltip="not currently downloadable" class="active-layer-control" src="../../../assets/icons/no-download.svg">
+                    <img tooltip="not currently downloadable" class="active-layer-control unavailable" src="../../../assets/icons/download-grey.svg">
             </div>
             <div *ngIf="layer.metadataUrl">
                 <a [href]="layer.metadataUrl" target="_blank">
