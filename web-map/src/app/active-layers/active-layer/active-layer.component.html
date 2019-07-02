@@ -1,45 +1,69 @@
 <div class="active-layer">
-    <div class="drag-handle" tooltip="move layer" cdkDragHandle>
-        <img src="../../../assets/icons/drag.svg" tooltip="move layer">
-    </div>
-    <div class="active-layer-content">
-        <div class="active-layer-name">
-            {{layer.name}}
+    <div class="active-layer-main">
+        <div class="drag-handle" tooltip="move layer" cdkDragHandle>
+            <img src="../../../assets/icons/drag.svg" tooltip="move layer">
         </div>
-        <div class="active-layer-body">
-            <div (click)="onShowOpacity($event)">
-                <img src="../../../assets/icons/contrast-circle.svg"  [tooltip]="'opacity ' + layer.opacity" class="active-layer-control">
+        <div class="active-layer-content">
+            <div class="active-layer-name">
+                {{layer.name}}
             </div>
-            <div (click)="onShowLegend()">
-                <img tooltip="show legend" class="active-layer-control" src="../../../assets/icons/format-list-bulleted-square.svg">
-            </div>
-            <div (click)="onZoomToLayerExtent()">
-                    <img tooltip="zoom to layer extent" class="active-layer-control" src="../../../assets/icons/earth.svg">
-            </div>
-            <div *ngIf="layer.downloadURL">
-                <a [href]="layer.downloadURL" target="_blank">
-                        <img tooltip="download data" class="active-layer-control" src="../../../assets/icons/download.svg">
-                </a>
-            </div>
-            <div *ngIf="!layer.downloadURL">
-                    <img tooltip="not currently downloadable" class="active-layer-control unavailable" src="../../../assets/icons/download-grey.svg">
-            </div>
-            <div *ngIf="layer.metadataUrl">
-                <a [href]="layer.metadataUrl" target="_blank">
-                        <img class="active-layer-control" tooltip="view metadata" src="../../../assets/icons/information-outline.svg">
-                </a>
-            </div>
-            <div *ngIf="layer.filters && layer.filters.length">
-                <div tooltip="filter layer" *ngIf="!filterActive" (click)="onOpenFilter()">
+            <div class="active-layer-body">
+                <div (click)="onShowOpacity($event)">
+                    <img src="../../../assets/icons/contrast-circle.svg" [tooltip]="'opacity ' + layer.opacity"
+                        class="active-layer-control">
+                </div>
+                <div (click)="onShowLegend()">
+                    <img tooltip="show legend" class="active-layer-control"
+                        src="../../../assets/icons/format-list-bulleted-square.svg">
+                </div>
+                <div (click)="onZoomToLayerExtent()">
+                    <img tooltip="zoom to layer extent" class="active-layer-control"
+                        src="../../../assets/icons/earth.svg">
+                </div>
+                <div *ngIf="layer.downloadURL">
+                    <a [href]="layer.downloadURL" target="_blank">
+                        <img tooltip="download data" class="active-layer-control"
+                            src="../../../assets/icons/download.svg">
+                    </a>
+                </div>
+                <div *ngIf="!layer.downloadURL">
+                    <img tooltip="not currently downloadable" class="active-layer-control unavailable"
+                        src="../../../assets/icons/download-grey.svg">
+                </div>
+                <div *ngIf="layer.metadataUrl">
+                    <a [href]="layer.metadataUrl" target="_blank">
+                        <img class="active-layer-control" tooltip="view metadata"
+                            src="../../../assets/icons/information-outline.svg">
+                    </a>
+                </div>
+                <div *ngIf="layer.filters && layer.filters.length">
+                    <div tooltip="filter layer" *ngIf="!filterActive" (click)="onOpenFilter()">
                         <img class="active-layer-control" tooltip="filter layer" src="../../../assets/icons/filter.svg">
-                </div>
-                <div tooltip="layer currently filtered" *ngIf="filterActive" (click)="onOpenFilter()">
-                        <img class="active-layer-control" tooltip="filter active" src="../../../assets/icons/filter-active.svg">
+                    </div>
+                    <div tooltip="layer currently filtered" *ngIf="filterActive" (click)="onOpenFilter()">
+                        <img class="active-layer-control" tooltip="filter active"
+                            src="../../../assets/icons/filter-active.svg">
+                    </div>
                 </div>
             </div>
+
         </div>
+        <div class="active-layer-close" (click)="onRemoveLayer()">
+            <img tooltip="remove layer" class="active-layer-control" src="../../../assets/icons/close.svg" alt="">
+        </div>
+
     </div>
-    <div class="active-layer-close" (click)="onRemoveLayer()">
-        <img tooltip="remove layer" class="active-layer-control"  src="../../../assets/icons/close.svg" alt="">
+    <div *ngIf="showOpacity" class="active-layer-opacity">
+        <div class="opacity-label">
+            Opacity:
+        </div>
+        <div class="opacity-slider">
+            <app-slider-control [value]="layer.opacity" (valueChanged)="onOpacityChanged($event, layer)">
+            </app-slider-control>
+        </div>
+
+        <div class="opacity-value">
+            {{ layer.opacity }}
+        </div>
     </div>
 </div>

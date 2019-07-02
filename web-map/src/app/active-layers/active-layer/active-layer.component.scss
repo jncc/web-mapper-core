@@ -2,10 +2,15 @@
 .active-layer {
     background-color: white;
     display: flex;
+    flex-direction: column;
     border: 1px solid lightgrey;
     border-radius: 2px; 
     box-shadow: 0 0 10px -4px;
     margin-bottom: 0.25rem;
+}
+
+.active-layer-main {
+    display: flex;
 }
 
 .active-layer-header {
@@ -46,4 +51,26 @@
 
 .unavailable {
     cursor: auto;
+}
+
+.active-layer-opacity {
+    border-top: 1px solid lightgray;
+    display: flex;
+    padding: 0.25rem;
+}
+
+.opacity-label {
+    padding-top: 0.5rem;
+}
+
+.opacity-slider {
+    flex-grow: 1;
+    padding-top: 0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.opacity-value {
+    padding-top: 0.5rem;
+    width: 2rem;
 }

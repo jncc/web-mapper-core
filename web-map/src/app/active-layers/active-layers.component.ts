@@ -20,8 +20,6 @@ export class ActiveLayersComponent implements OnInit {
   visibleLayers$: Observable<ILayerConfig[]>;
 
   backdropSubscription: Subscription;
-  @ViewChild('opacityOverlay', { static: true }) opacityOverlay: TemplateRef<any>;
-  opacityOverlayRef: OverlayRef | null;
 
   @ViewChild('filterOverlay', { static: true }) filterOverlay: TemplateRef<any>;
   filterOverlayRef: OverlayRef | null;
@@ -39,49 +37,6 @@ export class ActiveLayersComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     this.mapService.reorderVisibleLayers(event.previousIndex, event.currentIndex);
-  }
-
-  openOpacity({ x, y }, activeLayer) {
-    // console.log(x + ' ' + y + ' ' + activeLayer.layerName);
-    this.closeOpacity();
-    const positionStrategy = this.overlay.position()
-      .flexibleConnectedTo({ x, y })
-      .withPositions([
-        {
-          originX: 'end',
-          originY: 'bottom',
-          overlayX: 'start',
-          overlayY: 'top',
-        }
-      ]);
-
-    this.opacityOverlayRef = this.overlay.create({
-      hasBackdrop: true,
-      positionStrategy,
-      scrollStrategy: this.overlay.scrollStrategies.close()
-    });
-
-
-    this.opacityOverlayRef.attach(new TemplatePortal(this.opacityOverlay, this.viewContainerRef, {
-      $implicit: activeLayer
-    }));
-
-    this.backdropSubscription = this.opacityOverlayRef.backdropClick().subscribe(() => this.closeOpacity());
-
-  }
-
-  closeOpacity() {
-    if (this.opacityOverlayRef) {
-      this.opacityOverlayRef.dispose();
-      this.opacityOverlayRef = null;
-    }
-    if (this.backdropSubscription) {
-      this.backdropSubscription.unsubscribe();
-    }
-  }
-
-  onOpacityChanged(opacity: number, activeLayer) {
-    this.mapService.changeLayerOpacity(activeLayer.layerId, opacity);
   }
 
   // Filter

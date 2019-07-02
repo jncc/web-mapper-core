@@ -11,11 +11,13 @@ import { Subscription } from 'rxjs';
 })
 export class ActiveLayerComponent implements OnInit, OnDestroy {
   @Input() layer: ILayerConfig;
-  @Output() showOpacity: EventEmitter<{x: number, y: number}> = new EventEmitter();
+  // @Output() showOpacity: EventEmitter<{x: number, y: number}> = new EventEmitter();
   @Output() openFilter: EventEmitter<any> = new EventEmitter();
 
   filterActive = false;
   activeFiltersSubscription: Subscription;
+
+  showOpacity = false;
 
   constructor(private mapService: MapService) { }
 
@@ -37,16 +39,16 @@ export class ActiveLayerComponent implements OnInit, OnDestroy {
     this.mapService.zoomToLayerExtent(this.layer.layerId);
   }
 
-  onOpacityChanged(opacity: number) {
-    this.mapService.changeLayerOpacity(this.layer.layerId, opacity);
-  }
-
   onShowLegend() {
     this.mapService.showLegend(this.layer.layerId);
   }
 
   onShowOpacity(event: MouseEvent) {
-    this.showOpacity.emit({x: event.x, y: event.y});
+    this.showOpacity = !this.showOpacity;
+  }
+
+  onOpacityChanged(opacity: number, activeLayer) {
+    this.mapService.changeLayerOpacity(activeLayer.layerId, opacity);
   }
 
   onOpenFilter() {
