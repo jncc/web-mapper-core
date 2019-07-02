@@ -6,4 +6,5 @@ export interface IAppConfig {
     mapInstance: string;
     bingMapsApiKey: string;
     defaultBaseLayer: string;
+    gazetteerPlaceholder: string;
 }

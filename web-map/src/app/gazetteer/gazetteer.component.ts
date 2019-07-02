@@ -4,6 +4,7 @@ import { IGazetteerResult } from '../models/gazetteer-result.model';
 import { Observable, Subject, of, concat } from 'rxjs';
 import { MapService } from '../map.service';
 import { debounceTime, distinctUntilChanged, catchError, tap, switchMap } from 'rxjs/operators';
+import { AppConfigService } from '../app-config.service';
 
 @Component({
   selector: 'app-gazetteer',
@@ -12,13 +13,19 @@ import { debounceTime, distinctUntilChanged, catchError, tap, switchMap } from '
 })
 export class GazetteerComponent implements OnInit {
 
+  placeholder = 'Search for marine regions ...';
+
   results$: Observable<IGazetteerResult[]>;
   searchInput$ = new Subject<string>();
   resultsLoading = false;
 
   selectedResult: IGazetteerResult;
 
-  constructor(private apiService: ApiService, private mapService: MapService) { }
+  constructor(private apiService: ApiService, private mapService: MapService) {
+    if (AppConfigService.settings.gazetteerPlaceholder) {
+      this.placeholder = AppConfigService.settings.gazetteerPlaceholder;
+    }
+   }
 
   ngOnInit() {
     this.loadResults();

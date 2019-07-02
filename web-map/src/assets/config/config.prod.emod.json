@@ -4,5 +4,6 @@
     "apiUrl": "//api.emodnet-seabedhabitats.eu/api",
     "mapInstance": "EMODnet",
     "bingMapsApiKey": "Aga4e1A89vNBHNtP4nBTmHkKEECEgu5zxqVOjdpJ9LMSVoakhoOAOnLs4iNDrSOY",
-    "defaultBaseLayer": "OSM"
+    "defaultBaseLayer": "OSM",
+    "gazetteerPlaceholder": "Search for marine regions ..."
 }
