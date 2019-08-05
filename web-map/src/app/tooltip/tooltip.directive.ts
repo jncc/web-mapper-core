@@ -3,6 +3,7 @@ import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overla
 import { ComponentPortal } from '@angular/cdk/portal';
 
 import { TooltipComponent } from './tooltip.component';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 
 // https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 
@@ -50,6 +51,7 @@ export class TooltipDirective implements OnInit {
   }
 
   @HostListener('mouseout')
+  @HostListener('mousedown')
   hide() {
     if (this.showTimeoutId) {
       clearTimeout(this.showTimeoutId);
