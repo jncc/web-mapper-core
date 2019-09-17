@@ -1,12 +1,13 @@
 <div class="layer tertiary">
-    <div class="layer-toggle">
-        <label class="switch">
-            <input type="checkbox" [checked]="layer.visible" (change)="onChange($event)">
-            <span class="slider round"></span>
-        </label>
-    </div>
-    <div class="layer-name" (click)="onToggleVisibility()">
-        {{layer.name}}
+    <div [id]="layer.layerName" class="layer-toggle" (click)="onToggleVisibility()">
+        <div>
+            <label class="switch">
+                <span class="slider round" [class.on]="layer.visible"></span>
+            </label>
+        </div>
+        <div class="layer-name">
+            {{layer.name}}
+        </div>
     </div>
     <div>
         <span class="badge" [tooltip]="layer.metadataDescription" hideDelay="10000">

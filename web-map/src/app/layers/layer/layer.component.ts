@@ -9,7 +9,6 @@ import { ILayerConfig } from '../../models/layer-config.model';
 export class LayerComponent implements OnInit {
 
   @Input() layer: ILayerConfig;
-  @Input() isSubLayer: boolean;
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor() { }
@@ -17,13 +16,7 @@ export class LayerComponent implements OnInit {
   ngOnInit() {
   }
 
-  onChange(event) {
-    const visible = event.target.checked;
-    this.visibilityChanged.emit(visible);
-  }
-
   onToggleVisibility() {
     this.visibilityChanged.emit(!this.layer.visible);
   }
-
 }
