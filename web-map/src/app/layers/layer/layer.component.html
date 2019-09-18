@@ -1,8 +1,8 @@
 <div class="layer tertiary">
-    <div class="layer-toggle" (click)="onToggleVisibility()">
+    <div class="layer-toggle" (click)="onToggleVisibility()" [ngClass]="layer.layerName">
         <div>
             <label class="switch" [ngClass]="layer.layerName">
-                <span class="slider round" [class.on]="layer.visible"></span>
+                <span class="slider round" [ngClass]="layer.layerName" [class.on]="layer.visible"></span>
             </label>
         </div>
         <div class="layer-name" [ngClass]="layer.layerName">
