@@ -1,11 +1,11 @@
 <div class="layer tertiary">
-    <div [id]="layer.layerName" class="layer-toggle" (click)="onToggleVisibility()">
+    <div class="layer-toggle" (click)="onToggleVisibility()">
         <div>
-            <label class="switch">
+            <label class="switch" [ngClass]="layer.layerName">
                 <span class="slider round" [class.on]="layer.visible"></span>
             </label>
         </div>
-        <div class="layer-name">
+        <div class="layer-name" [ngClass]="layer.layerName">
             {{layer.name}}
         </div>
     </div>
