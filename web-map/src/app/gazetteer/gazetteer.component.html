@@ -1,5 +1,7 @@
 <div id="gazetteer-container">
-  <ng-select  [items]="results$ | async"
+  <ng-select #gazetteer
+              (focus)="onFocus()"
+              [items]="results$ | async"
               bindLabel="name"
               [placeholder]="placeholder"
               [(ngModel)]="selectedResult"
