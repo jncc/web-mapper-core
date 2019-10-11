@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import { IGazetteerResult } from '../models/gazetteer-result.model';
 import { Observable, Subject, of, concat } from 'rxjs';
 import { MapService } from '../map.service';
 import { debounceTime, distinctUntilChanged, catchError, tap, switchMap } from 'rxjs/operators';
 import { AppConfigService } from '../app-config.service';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-gazetteer',
@@ -12,6 +13,7 @@ import { AppConfigService } from '../app-config.service';
   styleUrls: ['./gazetteer.component.scss']
 })
 export class GazetteerComponent implements OnInit {
+  @ViewChild('gazetteer', { static: true }) gazetteer: NgSelectComponent;
 
   placeholder = 'Search for marine regions ...';
 
@@ -34,7 +36,12 @@ export class GazetteerComponent implements OnInit {
   onChange() {
     if (this.selectedResult) {
       this.mapService.zoomToExtent(this.selectedResult.extent);
+      this.gazetteer.blur();
     }
+  }
+
+  onFocus() {
+    this.selectedResult = null;
   }
 
   // https://github.com/ng-select/ng-select/blob/master/demo/app/examples/search.component.ts
