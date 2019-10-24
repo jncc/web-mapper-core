@@ -56,6 +56,9 @@
                 @Html.DisplayNameFor(model => model.Layer[0].LayerZoom)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Layer[0].LayerDefaultOrder)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Layer[0].LayerGroup)
             </th>
             <th></th>
@@ -105,6 +108,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LayerZoom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LayerDefaultOrder)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LayerGroup.LayerGroupId)
