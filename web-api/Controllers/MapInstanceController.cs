@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MapConfig.Models;
@@ -105,6 +103,7 @@ namespace MapConfig.Controllers
                     layer.Visible = layer.LayerVisible;
                     layer.Opacity = layer.LayerOpacity;
                     layer.Zoom = layer.LayerZoom;
+                    layer.DefaultOrder = layer.LayerDefaultOrder;
 
                     List<Filter> filters = new List<Filter>();
                     if( layer.Filters != null ) {
