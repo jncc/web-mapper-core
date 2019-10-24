@@ -183,6 +183,8 @@ export class MapService implements OnDestroy {
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach(layerGroupConfig => {
       this.createLayersForLayerGroupConfig(layerGroupConfig);
     });
+    // feature: sort layers by defaultOrder on config load
+    this.dataStore.visibleLayers.sort((a, b) => a.defaultOrder - b.defaultOrder);
     this._visibleLayers.next(this.dataStore.visibleLayers);
   }
 
