@@ -1,7 +1,7 @@
 {
     "name": "prod mapper",
     "logging": false,
-    "apiUrl": "//api.mpa.jncc.gov.uk/api",
+    "apiUrl": "//staging.api.mpa.jncc.gov.uk/api",
     "mapInstance": "MPA",
     "bingMapsApiKey": "Aga4e1A89vNBHNtP4nBTmHkKEECEgu5zxqVOjdpJ9LMSVoakhoOAOnLs4iNDrSOY",
     "defaultBaseLayer": "Bing",
