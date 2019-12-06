@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;//this one is for [NotMapped]
-using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 namespace MapConfig.Models
@@ -103,11 +102,13 @@ namespace MapConfig.Models
         public double LayerCentreLat { get; set; }    //Layer specific Centre Latitude in EPSG:4326 (Y) - overrides Map centre
         [JsonIgnore]
         public int LayerZoom { get; set; }        //Layer specific Zoom Level 1-22 - overrides Map zoom
-        
+        [JsonIgnore]
+        public int LayerDefaultOrder { get; set; }        //Layer default (initial) ordering
+
         //foreign keys
         public long LayerGroupId { get; set; }    //which LayerGroup am I in?
         
-        //not part of the schema, but part of the class
+        //not part of the schema, but part of the class - and what is sent in the JSON
         public LayerGroup LayerGroup { get; set; }
         public List<Filter> Filters { get; set; }
         [NotMapped]
@@ -119,7 +120,9 @@ namespace MapConfig.Models
         [NotMapped]
         public double[] Center { get; set; } = new double[2];       //what's actually sent in the JSON response (an array)
         [NotMapped]
-        public int Zoom { get; set; }   
+        public int Zoom { get; set; } 
+        [NotMapped]
+        public int DefaultOrder { get; set; }  
     }
 
     public class Filter {
