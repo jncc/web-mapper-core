@@ -28,8 +28,8 @@ speed-measure-plugin.json
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/deploy.sh
-!.vscode/deploy_to_live_emodnet.sh
-!.vscode/deploy_to_live_mpa.sh
+!.vscode/deploy_to_staging_emodnet.sh
+!.vscode/deploy_to_staging_mpa.sh
 .history/*
 
 # misc
