@@ -77,7 +77,7 @@ pipeline {
                 sh 'sed -i \'s|WEBAPI_DATABASE_HOST|\'${WEBAPI_DATABASE_HOST}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_DATABASE_USER|\'${WEB_API_CREDENTIALS_USR}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_DATABASE_PASSWORD|\'${WEB_API_CREDENTIALS_PSW}\'|g\' ./master/deployment/web-api-appsettings.template.json'
-                sh 'sed -i \'s|WEBAPI_DATABASE|\'${WEBAPI_DATABASE}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_DATABASE_NAME|\'${WEBAPI_DATABASE}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_TEST_DATA_WMS_URL|\'${WEBAPI_TEST_DATA_WMS_URL}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_MAX_GAZETTEER_RESULTS|\'${WEBAPI_MAX_GAZETTEER_RESULTS}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'cp ./master/deployment/web-api-appsettings.template.json ./master/web-api/.publish/appsettings.json'
@@ -155,14 +155,14 @@ pipeline {
         //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo systemctl daemon-reload"'
         //     }            
         // } 
-        // stage('Remove existing symlink and point to newly deployed directory') {
-        //     steps {
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm ${AWS_INSTANCE_WEB_MAP_DIR}"'
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm ${AWS_INSTANCE_WEB_API_DIR}"'
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published ${AWS_INSTANCE_WEB_MAP_DIR}"'
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published ${AWS_INSTANCE_WEB_API_DIR}"'
-        //     }
-        // }
+        stage('Remove existing symlink and point to newly deployed directory') {
+            steps {
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm ${AWS_INSTANCE_WEB_MAP_DIR}"'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm ${AWS_INSTANCE_WEB_API_DIR}"'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published ${AWS_INSTANCE_WEB_MAP_DIR}"'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published ${AWS_INSTANCE_WEB_API_DIR}"'
+            }
+        }
         // stage('Start newly deployed dotnet service and reload apache') {
         //     steps {
         //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo systemctl restart jncc-web-api"'
