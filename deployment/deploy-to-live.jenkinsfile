@@ -1,5 +1,42 @@
 pipeline {
-    agent { label ' nodejs ' }
+    agent { 
+        label ' nodejs ' 
+    }
+    parameters { 
+        // AWS EC2 Instance Connection Details
+        string(name: 'AWS_REGION', defaultValue: 'eu-west-1', description: 'The AWS region that we are going to deploy into', trim: true)
+        string(name: 'AWS_AVAILABILITY_ZONE', defaultValue: 'eu-west-1a', description: 'The AWS availability zone for the EC2 instance we are deploying to', trim: true)
+        string(name: 'AWS_INSTANCE_ID', defaultValue: '', description: 'The ID of the AWS EC2 instance that we are deploying into', trim: true)
+        string(name: 'AWS_INSTANCE_INTERNAL_IP', defaultValue: '', description: 'The internal IP of the EC2 instance that we are deploying into (the Jenkins build node MUST have SSH access allowed via Security Groups / VPC networking)', trim: true)
+        string(name: 'AWS_INSTANCE_OS_USER', defaultValue: 'ubuntu', description: 'The EC2 instance user that we will SSH in as', trim: true)
+        // AWS EC2 folder locations
+        string(name: 'AWS_INSTANCE_DEPLOY_DIR', defaultValue: '/home/esdm/deployment', description: 'A directory on the EC2 instance that we are going to deploy into', trim: true)
+        string(name: 'AWS_INSTANCE_WEB_API_DIR', defaultValue: '/home/esdm/deployment/web-api', description: 'The location that the deployed web api directory should be symlinked to', trim: true)
+        string(name: 'AWS_INSTANCE_WEB_MAP_DIR', defaultValue: '/home/esdm/deployment/web-map', description: 'The location that the deployed web map directory should be symlinked to', trim: true)        
+        // Dotnet core web API service information (not currently deployed routinely so have commented out for now)
+        // string(name: 'SERVICE_EXEC_START', defaultValue: '/home/esdm/dotnet-published/jncc-web-api/jncc-web-api.dll', description: 'The location of the dotnet service dll to start from the service', trim: true)
+        // string(name: 'SERVICE_WORKING_DIRECTORY', defaultValue: '/home/esdm/dotnet-published/jncc-web-api', description: 'The dotnet service working directory', trim: true)
+        string(name: 'SERVICE_USER', defaultValue: 'esdm', description: 'The dotnet service user to run under', trim: true)
+        string(name: 'SERVICE_GROUP', defaultValue: 'esdm', description: 'The dotnet service group to run under', trim: true)
+        // Web API config
+        string(name: 'WEBAPI_LOG_LEVEL', defaultValue: 'Warning', description: 'Web API logging level', trim: true)
+        string(name: 'WEBAPI_DATABASE_HOST', defaultValue: '', description: 'Web API Database Host URL', trim: true)
+        string(name: 'WEBAPI_DATABASE', defaultValue: '', description: 'Web API Database name', trim: true)
+        credentials(name: 'WEB_API_CREDENTIALS_NAME', description: 'Web API database credentials', defaultValue: '', credentialType: "Username with password", required: true )
+        string(name: 'WEBAPI_TEST_DATA_WMS_URL', defaultValue: '', description: 'Web API WMS endpoint URL', trim: true)
+        string(name: 'WEBAPI_MAX_GAZETTEER_RESULTS', defaultValue: '20', description: 'Default number of results for the web API gazetteer', trim: true)
+        // Web map config
+        string(name: 'WEBMAP_NAME', defaultValue: '', description: 'The name of the web map instance', trim: true)
+        string(name: 'WEBMAP_LOGGING_ENABLED', defaultValue: '', description: 'If the web map has developer logging enabled', trim: true)
+        string(name: 'WEBMAP_API_URL', defaultValue: '', description: 'The URL of the web API for this mapping instance', trim: true)
+        string(name: 'WEBMAP_INSTANCE', defaultValue: '', description: 'The name of this particular mapping instance', trim: true)
+        string(name: 'WEBMAP_BINGMAPS_API_KEY', defaultValue: '', description: 'The bing maps API key for this instance', trim: true)
+        string(name: 'WEBMAP_DEFAULT_BASELAYER', defaultValue: 'OSM', description: 'The default base map for this instance', trim: true)
+        string(name: 'WEBMAP_GAZETTEER_PLACEHOLDER', defaultValue: '', description: 'Placeholder text for the gazetteer search box', trim: true)
+    }    
+    environment {
+        WEB_API_CREDENTIALS = credentials("${params.WEB_API_CREDENTIALS_NAME}")
+    }
     stages {
         stage('Checkout Master Branch') {
             steps {
@@ -31,29 +68,27 @@ pipeline {
         }        
         stage('Apply config to files for deployment') {
             steps {
-                sh 'sed -i \'s|SERVICE_WORKING_DIRECTORY|\'$SERVICE_WORKING_DIRECTORY\'|g\' ./master/deployment/jncc-web-api.service'
-                sh 'sed -i \'s|SERVICE_EXEC_START|\'$SERVICE_EXEC_START\'|g\' ./master/deployment/jncc-web-api.service'
-                sh 'sed -i \'s|SERVICE_USER|\'$SERVICE_USER\'|g\' ./master/deployment/jncc-web-api.service'
-                sh 'sed -i \'s|SERVICE_GROUP|\'$SERVICE_GROUP\'|g\' ./master/deployment/jncc-web-api.service'
+                // sh 'sed -i \'s|SERVICE_WORKING_DIRECTORY|\'${SERVICE_WORKING_DIRECTORY}\'|g\' ./master/deployment/jncc-web-api.service'
+                // sh 'sed -i \'s|SERVICE_EXEC_START|\'${SERVICE_EXEC_START}\'|g\' ./master/deployment/jncc-web-api.service'
+                // sh 'sed -i \'s|SERVICE_USER|\'${SERVICE_USER}\'|g\' ./master/deployment/jncc-web-api.service'
+                // sh 'sed -i \'s|SERVICE_GROUP|\'${SERVICE_GROUP}\'|g\' ./master/deployment/jncc-web-api.service'
 
-                sh 'sed -i \'s|WEBAPI_LOG_LEVEL|\'$WEBAPI_LOG_LEVEL\'|g\' ./master/deployment/web-api-appsettings.template.json'
-                sh 'sed -i \'s|WEBAPI_DATABASE_HOST|\'$WEBAPI_DATABASE_HOST\'|g\' ./master/deployment/web-api-appsettings.template.json'
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'emodnet_web_api_database', usernameVariable: 'WEBAPI_DATABASE_USER', passwordVariable: 'WEBAPI_DATABASE_PASSWORD']]) {
-                    sh 'sed -i \'s|WEBAPI_DATABASE_USER|\'$WEBAPI_DATABASE_USER\'|g\' ./master/deployment/web-api-appsettings.template.json'
-                    sh 'sed -i \'s|WEBAPI_DATABASE_PASSWORD|\'$WEBAPI_DATABASE_PASSWORD\'|g\' ./master/deployment/web-api-appsettings.template.json'
-                }
-                sh 'sed -i \'s|WEBAPI_DATABASE|\'$WEBAPI_DATABASE\'|g\' ./master/deployment/web-api-appsettings.template.json'
-                sh 'sed -i \'s|WEBAPI_TEST_DATA_WMS_URL|\'$WEBAPI_TEST_DATA_WMS_URL\'|g\' ./master/deployment/web-api-appsettings.template.json'
-                sh 'sed -i \'s|WEBAPI_MAX_GAZETTEER_RESULTS|\'$WEBAPI_MAX_GAZETTEER_RESULTS\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_LOG_LEVEL|\'${WEBAPI_LOG_LEVEL}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_DATABASE_HOST|\'${WEBAPI_DATABASE_HOST}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_DATABASE_USER|\'${WEB_API_CREDENTIALS_USR}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_DATABASE_PASSWORD|\'${WEB_API_CREDENTIALS_PSW}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_DATABASE|\'${WEBAPI_DATABASE}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_TEST_DATA_WMS_URL|\'${WEBAPI_TEST_DATA_WMS_URL}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_MAX_GAZETTEER_RESULTS|\'${WEBAPI_MAX_GAZETTEER_RESULTS}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'cp ./master/deployment/web-api-appsettings.template.json ./master/web-api/.publish/appsettings.json'
 
-                sh 'sed -i \'s|WEBMAP_NAME|' + env.WEBMAP_NAME.replace(' ', '\\ ') + '|g\' ./master/deployment/web-map-config.prod.template.json'
-                sh 'sed -i \'s|WEBMAP_LOGGING_ENABLED|\'$WEBMAP_LOGGING_ENABLED\'|g\' ./master/deployment/web-map-config.prod.template.json'
-                sh 'sed -i \'s|WEBMAP_API_URL|\'$WEBMAP_API_URL\'|g\' ./master/deployment/web-map-config.prod.template.json'
-                sh 'sed -i \'s|WEBMAP_INSTANCE|\'$WEBMAP_INSTANCE\'|g\' ./master/deployment/web-map-config.prod.template.json'
-                sh 'sed -i \'s|WEBMAP_BINGMAPS_API_KEY|\'$WEBMAP_BINGMAPS_API_KEY\'|g\' ./master/deployment/web-map-config.prod.template.json'
-                sh 'sed -i \'s|WEBMAP_DEFAULT_BASELAYER|\'$WEBMAP_DEFAULT_BASELAYER\'|g\' ./master/deployment/web-map-config.prod.template.json'
-                sh 'sed -i \'s|WEBMAP_GAZETTEER_PLACEHOLDER|' + env.WEBMAP_GAZETTEER_PLACEHOLDER.replace(' ', '\\ ') + '|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_NAME|' + params.WEBMAP_NAME.replace(' ', '\\ ') + '|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_LOGGING_ENABLED|\'${WEBMAP_LOGGING_ENABLED}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_API_URL|\'${WEBMAP_API_URL}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_INSTANCE|\'${WEBMAP_INSTANCE}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_BINGMAPS_API_KEY|\'${WEBMAP_BINGMAPS_API_KEY}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_DEFAULT_BASELAYER|\'${WEBMAP_DEFAULT_BASELAYER}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_GAZETTEER_PLACEHOLDER|' + params.WEBMAP_GAZETTEER_PLACEHOLDER.replace(' ', '\\ ') + '|g\' ./master/deployment/web-map-config.prod.template.json'
                 sh 'rm ./master/web-map/dist/web-map/assets/config/*.json'
                 sh 'cp ./master/deployment/web-map-config.prod.template.json ./master/web-map/dist/web-map/assets/config/config.prod.json'
 
@@ -108,7 +143,7 @@ pipeline {
         }
         // stage('Ensure Apache2 is installed and running with lets encrypt certs') {
         //     steps {
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "export WEBAPI_SERVER_ADMIN_URL=${WEBAPI_SERVER_ADMIN_URL}; export WEBAPI_URL=${WEBAPI_URL}; export sudo bash ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/deployment/apache/apache-setup.sh"'
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "export WEBAPI_SERVER_ADMIN_URL=${WEBAPI_SERVER_ADMIN_URL}; export WEBAPI_URL=${WEBAPI_URL}; sudo bash ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/deployment/apache/apache-setup.sh"'
         //     }
         // }
         // stage('Deploy/update dotnet systemd file') {
@@ -119,13 +154,13 @@ pipeline {
         //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo cp ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/deployment/jncc-web-api.service /etc/systemd/system/jncc-web-api.service"'
         //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo systemctl daemon-reload"'
         //     }            
-        // }
+        // } 
         // stage('Remove existing symlink and point to newly deployed directory') {
         //     steps {
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm /home/esdm/web-published/jncc-web-map"'
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm /home/esdm/dotnet-published/jncc-web-api"'
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published /home/esdm/web-published/jncc-web-map"'
-        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published /home/esdm/dotnet-published/jncc-web-api"'
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm ${AWS_INSTANCE_WEB_MAP_DIR}"'
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm ${AWS_INSTANCE_WEB_API_DIR}"'
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published ${AWS_INSTANCE_WEB_MAP_DIR}"'
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published ${AWS_INSTANCE_WEB_API_DIR}"'
         //     }
         // }
         // stage('Start newly deployed dotnet service and reload apache') {
@@ -138,6 +173,6 @@ pipeline {
             steps {
                 sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "cd ${AWS_INSTANCE_DEPLOY_DIR} && ls -tp | tail -n +11 | xargs -I {} sudo rm -rf -- {}"'
             }
-        }        
+        }
     }
 }
