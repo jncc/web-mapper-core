@@ -40,6 +40,7 @@ pipeline {
     stages {
         stage('Checkout Master Branch') {
             steps {
+                sh 'rm -rf master'
                 checkout([$class: 'GitSCM', 
                     branches: [[name: '*/master']], 
                     doGenerateSubmoduleConfigurations: false, 
@@ -76,7 +77,7 @@ pipeline {
                 sh 'sed -i \'s|WEBAPI_LOG_LEVEL|\'${WEBAPI_LOG_LEVEL}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_DATABASE_HOST|\'${WEBAPI_DATABASE_HOST}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_DATABASE_USER|\'${WEB_API_CREDENTIALS_USR}\'|g\' ./master/deployment/web-api-appsettings.template.json'
-                sh 'sed -i \'s|WEBAPI_DATABASE_PASSWORD|\'${WEB_API_CREDENTIALS_PSW}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i -e \'s/WEBAPI_DATABASE_PASSWORD/' + env.WEB_API_CREDENTIALS_PSW.replace('\\', '\\\\').replace('\''', '\\\'').replace('&', '\\&') + '/g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_DATABASE_NAME|\'${WEBAPI_DATABASE}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_TEST_DATA_WMS_URL|\'${WEBAPI_TEST_DATA_WMS_URL}\'|g\' ./master/deployment/web-api-appsettings.template.json'
                 sh 'sed -i \'s|WEBAPI_MAX_GAZETTEER_RESULTS|\'${WEBAPI_MAX_GAZETTEER_RESULTS}\'|g\' ./master/deployment/web-api-appsettings.template.json'
