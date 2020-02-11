@@ -28,15 +28,9 @@ import { ILayerConfig } from '../models/layer-config.model';
 export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
-  private zoomInSubscription: Subscription;
-  private zoomOutSubscription: Subscription;
-  private dragZoomInSubscription: Subscription;
-  private dragZoomOutSubscription: Subscription;
-  private zoomSubscription: Subscription;
-  private zoomToExtentSubscription: Subscription;
-  private layersSubscription: Subscription;
-  private baseLayersSubscription: Subscription;
-  private mapConfigSubscription: Subscription;
+  private view: View;
+
+  private subscription = new Subscription();
 
   // Map defaults
   defaultCenter = [-2, 55];
@@ -54,10 +48,24 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setupMap();
-    this.layersSubscription = this.mapService.visibleLayers.subscribe(
-      layers => this.updateLayers(layers)
+    this.subscription.add(this.subscribeToLayers());
+    this.subscription.add(this.subscribeToBaseLayers());
+    this.subscription.add(this.subscribeToMapConfig());
+  }
+
+  private subscribeToMapConfig(): Subscription {
+    return this.mapService.mapConfig.subscribe(
+      mapConfig => {
+        const maxZoom = mapConfig.mapInstance.maxZoom;
+        if (maxZoom > 0) {
+          this.view.setMaxZoom(maxZoom);
+        }
+      }
     );
-    this.baseLayersSubscription = this.mapService.baseLayers.subscribe(
+  }
+
+  private subscribeToBaseLayers(): Subscription {
+    return this.mapService.baseLayers.subscribe(
       baseLayers => {
         const baseLayerCollection = new Collection(baseLayers.map(layer => layer.layer));
         this.baseLayerGroup.setLayers(baseLayerCollection);
@@ -70,19 +78,13 @@ export class MapComponent implements OnInit, OnDestroy {
         this.map.addControl(this.overviewMap);
       }
     );
-    this.mapConfigSubscription = this.mapService.mapConfig.subscribe(
-      mapConfig => {
-        const maxZoom = mapConfig.mapInstance.maxZoom;
-        if (maxZoom > 0) {
-          this.map.getView().setMaxZoom(maxZoom);
-        }
-      }
-    );
   }
 
-  private updateLayers(layersConfig: ILayerConfig[]): void {
-    const layers = layersConfig.slice().reverse().map(layerConfig => layerConfig.layer);
-    this.layerGroup.setLayers(new Collection(layers));
+  private subscribeToLayers(): Subscription {
+    return this.mapService.visibleLayers.subscribe(layersConfig => {
+      const layers = layersConfig.slice().reverse().map(layerConfig => layerConfig.layer);
+      this.layerGroup.setLayers(new Collection(layers));
+    });
   }
 
   private setupMap() {
@@ -90,7 +92,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.baseLayerGroup.setLayers(new Collection([this.defaultBaseLayer]));
     this.layerGroup = new Group();
 
-    const view = new View({
+    this.view = new View({
       center: proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]),
       zoom: this.defaultZoom,
       maxZoom: 17,
@@ -121,13 +123,13 @@ export class MapComponent implements OnInit, OnDestroy {
         this.baseLayerGroup,
         this.layerGroup
       ],
-      view: view
+      view: this.view
     });
 
     this.mapService.mapReady(this.map);
 
     this.setupGetFeatureInfo();
-    this.setupZoomSubscriptions(view);
+    this.setupZoomSubscriptions();
   }
 
   /**
@@ -140,7 +142,7 @@ export class MapComponent implements OnInit, OnDestroy {
    */
   setupGetFeatureInfo() {
     this.map.on('click', (event: MapBrowserEvent) => {
-      const viewResolution = this.map.getView().getResolution();
+      const viewResolution = this.view.getResolution();
       const pixel = this.map.getEventPixel(event.originalEvent);
       const urls = [];
       const baseLayerArray = this.baseLayerGroup.getLayers().getArray();
@@ -168,81 +170,78 @@ export class MapComponent implements OnInit, OnDestroy {
    * There are drag zooms in and out and zoom to centre and zoom level
    * Sets up the interactions and subscriptions to these Subjects in the map service
    *
-   * @param view the map view
    */
-  setupZoomSubscriptions(view: View) {
-    this.zoomInSubscription = this.mapService.zoomInSubject.subscribe(() => this.map.getView().setZoom(this.map.getView().getZoom() + 1));
-    this.zoomOutSubscription = this.mapService.zoomOutSubject.subscribe(() => this.map.getView().setZoom(this.map.getView().getZoom() - 1));
+  setupZoomSubscriptions() {
+    this.subscription.add(this.subscribeToZoomIn());
+    this.subscription.add(this.subscribeToZoomOut());
+    this.subscription.add(this.subscribeToDragZoomIn());
+    this.subscription.add(this.subscribeToDragZoomOut());
+    this.subscription.add(this.subscribeToZoom());
+    this.subscription.add(this.subscribeToZoomToExtent());
+  }
+
+  private subscribeToZoomIn(): Subscription {
+    return this.mapService.zoomInSubject.subscribe(() => this.view.setZoom(this.view.getZoom() + 1))
+  }
+
+  private subscribeToZoomOut(): Subscription {
+    return this.mapService.zoomOutSubject.subscribe(() => this.view.setZoom(this.view.getZoom() - 1));
+  }
+
+  private subscribeToDragZoomIn(): Subscription {
     const dragZoomIn = new DragZoom({
       condition: condition.always,
       out: false
     });
     this.map.addInteraction(dragZoomIn);
     dragZoomIn.setActive(false);
-    this.dragZoomInSubscription = this.mapService.dragZoomInSubject.subscribe((active) => {
+
+    return this.mapService.dragZoomInSubject.subscribe((active) => {
       dragZoomIn.setActive(true);
       dragZoomIn.on('boxend', () => dragZoomIn.setActive(false));
     });
+  }
 
+  private subscribeToDragZoomOut(): Subscription {
     const dragZoomOut = new DragZoom({
       condition: condition.always,
       out: true
     });
     this.map.addInteraction(dragZoomOut);
     dragZoomOut.setActive(false);
-    this.dragZoomOutSubscription = this.mapService.dragZoomOutSubject.subscribe((active) => {
+
+    return this.mapService.dragZoomOutSubject.subscribe((active) => {
       dragZoomOut.setActive(true);
       dragZoomOut.on('boxend', () => dragZoomOut.setActive(false));
     });
+  }
 
-    this.zoomSubscription = this.mapService.zoomSubject.subscribe(data => {
+  private subscribeToZoom(): Subscription {
+    return this.mapService.zoomSubject.subscribe(data => {
       if (data.center && data.center.length === 2 && data.zoom) {
         const center = proj.fromLonLat([data.center[0], data.center[1]]);
-        view.animate({ center: center, zoom: data.zoom });
+        this.view.animate({ center: center, zoom: data.zoom });
       } else {
         this.zoomToMapExtent();
       }
     });
+  }
 
-    this.zoomToExtentSubscription = this.mapService.zoomToExtentSubject.subscribe(data => {
+  private subscribeToZoomToExtent(): Subscription {
+    return this.mapService.zoomToExtentSubject.subscribe(data => {
       const extent = proj.transformExtent([data[0], data[1], data[2], data[3]], 'EPSG:4326', 'EPSG:3857');
-      view.fit(extent, { duration: 1000 });
+      this.view.fit(extent, { duration: 1000 });
     });
-
   }
 
   zoomToMapExtent() {
-    this.map.getView().setCenter(proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]));
-    this.map.getView().setZoom(this.defaultZoom);
+    this.view.setCenter(proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]));
+    this.view.setZoom(this.defaultZoom);
   }
 
   ngOnDestroy() {
-    if (this.zoomInSubscription) {
-      this.zoomInSubscription.unsubscribe();
-    }
-    if (this.zoomOutSubscription) {
-      this.zoomOutSubscription.unsubscribe();
-    }
-    if (this.dragZoomInSubscription) {
-      this.dragZoomInSubscription.unsubscribe();
-    }
-    if (this.dragZoomOutSubscription) {
-      this.dragZoomOutSubscription.unsubscribe();
-    }
-    if (this.zoomSubscription) {
-      this.zoomSubscription.unsubscribe();
-    }
-    if (this.layersSubscription) {
-      this.layersSubscription.unsubscribe();
-    }
-    if (this.zoomToExtentSubscription) {
-      this.zoomToExtentSubscription.unsubscribe();
-    }
-    if (this.baseLayersSubscription) {
-      this.baseLayersSubscription.unsubscribe();
-    }
-    if (this.mapConfigSubscription) {
-      this.mapConfigSubscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }
