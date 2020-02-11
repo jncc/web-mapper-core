@@ -18,7 +18,6 @@ import Attribution from 'ol/control/attribution';
 import condition from 'ol/events/condition';
 
 import { MapService } from '../map.service';
-import { ILayerConfig } from '../models/layer-config.model';
 
 @Component({
   selector: 'app-map',
