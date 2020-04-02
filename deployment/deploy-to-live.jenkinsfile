@@ -1,0 +1,198 @@
+pipeline {
+    agent { 
+        label ' nodejs ' 
+    }
+    parameters { 
+        // AWS EC2 Instance Connection Details
+        string(name: 'AWS_REGION', defaultValue: 'eu-west-1', description: 'The AWS region that we are going to deploy into', trim: true)
+        string(name: 'AWS_AVAILABILITY_ZONE', defaultValue: 'eu-west-1a', description: 'The AWS availability zone for the EC2 instance we are deploying to', trim: true)
+        string(name: 'AWS_INSTANCE_ID', defaultValue: '', description: 'The ID of the AWS EC2 instance that we are deploying into', trim: true)
+        string(name: 'AWS_INSTANCE_INTERNAL_IP', defaultValue: '', description: 'The internal IP of the EC2 instance that we are deploying into (the Jenkins build node MUST have SSH access allowed via Security Groups / VPC networking)', trim: true)
+        string(name: 'AWS_INSTANCE_OS_USER', defaultValue: 'ubuntu', description: 'The EC2 instance user that we will SSH in as', trim: true)
+        // AWS EC2 folder locations
+        string(name: 'AWS_INSTANCE_DEPLOY_DIR', defaultValue: '/home/esdm/deployment', description: 'A directory on the EC2 instance that we are going to deploy into', trim: true)
+        string(name: 'AWS_INSTANCE_WEB_API_DIR', defaultValue: '/home/esdm/deployment/web-api', description: 'The location that the deployed web api directory should be symlinked to', trim: true)
+        string(name: 'AWS_INSTANCE_WEB_MAP_DIR', defaultValue: '/home/esdm/deployment/web-map', description: 'The location that the deployed web map directory should be symlinked to', trim: true)        
+        // Dotnet core web API service information (not currently deployed routinely so have commented out for now)
+        // string(name: 'SERVICE_EXEC_START', defaultValue: '/home/esdm/dotnet-published/jncc-web-api/jncc-web-api.dll', description: 'The location of the dotnet service dll to start from the service', trim: true)
+        // string(name: 'SERVICE_WORKING_DIRECTORY', defaultValue: '/home/esdm/dotnet-published/jncc-web-api', description: 'The dotnet service working directory', trim: true)
+        string(name: 'SERVICE_USER', defaultValue: 'esdm', description: 'The dotnet service user to run under', trim: true)
+        string(name: 'SERVICE_GROUP', defaultValue: 'esdm', description: 'The dotnet service group to run under', trim: true)
+        // Web API config
+        string(name: 'WEBAPI_LOG_LEVEL', defaultValue: 'Warning', description: 'Web API logging level', trim: true)
+        string(name: 'WEBAPI_DATABASE_HOST', defaultValue: '', description: 'Web API Database Host URL', trim: true)
+        string(name: 'WEBAPI_DATABASE', defaultValue: '', description: 'Web API Database name', trim: true)
+        credentials(name: 'WEB_API_CREDENTIALS_NAME', description: 'Web API database credentials', defaultValue: '', credentialType: "Username with password", required: true )
+        string(name: 'WEBAPI_TEST_DATA_WMS_URL', defaultValue: '', description: 'Web API WMS endpoint URL', trim: true)
+        string(name: 'WEBAPI_MAX_GAZETTEER_RESULTS', defaultValue: '20', description: 'Default number of results for the web API gazetteer', trim: true)
+        // Web map config
+        string(name: 'WEBMAP_NAME', defaultValue: '', description: 'The name of the web map instance', trim: true)
+        string(name: 'WEBMAP_LOGGING_ENABLED', defaultValue: '', description: 'If the web map has developer logging enabled', trim: true)
+        string(name: 'WEBMAP_API_URL', defaultValue: '', description: 'The URL of the web API for this mapping instance', trim: true)
+        string(name: 'WEBMAP_INSTANCE', defaultValue: '', description: 'The name of this particular mapping instance', trim: true)
+        string(name: 'WEBMAP_BINGMAPS_API_KEY', defaultValue: '', description: 'The bing maps API key for this instance', trim: true)
+        string(name: 'WEBMAP_DEFAULT_BASELAYER', defaultValue: 'OSM', description: 'The default base map for this instance', trim: true)
+        string(name: 'WEBMAP_GAZETTEER_PLACEHOLDER', defaultValue: '', description: 'Placeholder text for the gazetteer search box', trim: true)
+    }    
+    environment {
+        WEB_API_CREDENTIALS = credentials("${params.WEB_API_CREDENTIALS_NAME}")
+    }
+    stages {
+        stage('Checkout Master Branch') {
+            steps {
+                sh 'rm -rf master'
+                checkout([$class: 'GitSCM', 
+                    branches: [[name: '*/master']], 
+                    doGenerateSubmoduleConfigurations: false, 
+                    extensions: [[$class: 'RelativeTargetDirectory', 
+                                    relativeTargetDir: 'master']], 
+                    submoduleCfg: [], 
+                    userRemoteConfigs: [[url: 'https://github.com/jncc/web-mapper-core.git']]])
+            }
+        }
+        stage('Build Web Mapper') {
+            steps {
+                dir('./master/web-map') {
+                    nvm(version: '13.5.0') {
+                        sh 'npm install'
+                        sh 'ng build --prod --extract-css=false'
+                    }
+                }
+            }
+        }
+        stage('Build Dotnet API') {
+            steps {
+                dir('./master/web-api') {
+                    sh 'dotnet clean && dotnet publish -c Release -o .publish'
+                }
+            }
+        }        
+        stage('Apply config to files for deployment') {
+            steps {
+                // Push parameters into config for Web API to template
+                sh 'sed -i \'s|WEBAPI_LOG_LEVEL|\'${WEBAPI_LOG_LEVEL}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_DATABASE_HOST|\'${WEBAPI_DATABASE_HOST}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_DATABASE_USER|\'${WEB_API_CREDENTIALS_USR}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i -e \'s/WEBAPI_DATABASE_PASSWORD/' + env.WEB_API_CREDENTIALS_PSW.replace('\\', '\\\\').replace('\''', '\\\'').replace('&', '\\&') + '/g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_DATABASE_NAME|\'${WEBAPI_DATABASE}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_TEST_DATA_WMS_URL|\'${WEBAPI_TEST_DATA_WMS_URL}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'sed -i \'s|WEBAPI_MAX_GAZETTEER_RESULTS|\'${WEBAPI_MAX_GAZETTEER_RESULTS}\'|g\' ./master/deployment/web-api-appsettings.template.json'
+                sh 'cp ./master/deployment/web-api-appsettings.template.json ./master/web-api/.publish/appsettings.json'
+
+                // Push parameters into config for Web Map to template 
+                sh 'sed -i \'s|WEBMAP_NAME|' + params.WEBMAP_NAME.replace(' ', '\\ ') + '|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_LOGGING_ENABLED|\'${WEBMAP_LOGGING_ENABLED}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_API_URL|\'${WEBMAP_API_URL}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_INSTANCE|\'${WEBMAP_INSTANCE}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_BINGMAPS_API_KEY|\'${WEBMAP_BINGMAPS_API_KEY}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_DEFAULT_BASELAYER|\'${WEBMAP_DEFAULT_BASELAYER}\'|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'sed -i \'s|WEBMAP_GAZETTEER_PLACEHOLDER|' + params.WEBMAP_GAZETTEER_PLACEHOLDER.replace(' ', '\\ ') + '|g\' ./master/deployment/web-map-config.prod.template.json'
+                sh 'rm ./master/web-map/dist/web-map/assets/config/*.json'
+                sh 'cp ./master/deployment/web-map-config.prod.template.json ./master/web-map/dist/web-map/assets/config/config.prod.json'
+
+                // Push parameters into service file for the Web API service template
+                // sh 'sed -i \'s|SERVICE_WORKING_DIRECTORY|\'${SERVICE_WORKING_DIRECTORY}\'|g\' ./master/deployment/jncc-web-api.service'
+                // sh 'sed -i \'s|SERVICE_EXEC_START|\'${SERVICE_EXEC_START}\'|g\' ./master/deployment/jncc-web-api.service'
+                // sh 'sed -i \'s|SERVICE_USER|\'${SERVICE_USER}\'|g\' ./master/deployment/jncc-web-api.service'
+                // sh 'sed -i \'s|SERVICE_GROUP|\'${SERVICE_GROUP}\'|g\' ./master/deployment/jncc-web-api.service'
+
+                // Push parameters into Apache HTTPD conf file for HTTP site proxy
+                // sh 'sed -i \'s|WEBAPI_URL|${WEBAPI_URL}|g\' ./master/deployment/apache/httpd-live.conf'
+                // sh 'sed -i \'s|WEBAPI_SERVER_ADMIN_EMAIL|${WEBAPI_SERVER_ADMIN_EMAIL}|g\' ./master/deployment/apache/httpd-live.conf'
+                // sh 'sed -i \'s|WEBMAP_URL|${WEBMAP_URL}|g\' ./master/deployment/httpd-live.conf'
+                // sh 'sed -i \'s|WEBMAP_SERVER_ADMIN_EMAIL|${WEBMAP_SERVER_ADMIN_EMAIL}|g\' ./master/deployment/httpd-live.conf'
+                
+                // Push parameters into Apache HTTPD conf file for HTTPS site proxy
+                // sh 'sed -i \'s|WEBMAP_URL|${WEBMAP_URL}|g\' ./master/deployment/httpd-ssl-live.conf'
+                // sh 'sed -i \'s|WEBMAP_SERVER_ADMIN_EMAIL|${WEBMAP_SERVER_ADMIN_EMAIL}|g\' ./master/deployment/httpd-ssl-live.conf'
+                // sh 'sed -i \'s|WEBMAP_LIVE_FOLDER|${WEBMAP_LIVE_FOLDER}|g\' ./master/deployment/httpd-ssl-live.conf'
+                // sh 'sed -i \'s|WEBAPI_URL|${WEBAPI_URL}|g\' ./master/deployment/httpd-ssl-live.conf'
+                // sh 'sed -i \'s|WEBAPI_SERVER_ADMIN_EMAIL|${WEBAPI_SERVER_ADMIN_EMAIL}|g\' ./master/deployment/httpd-ssl-live.conf'
+                // sh 'sed -i \'s|WEBAPI_PROXY_PASS_URL|${WEBAPI_PROXY_PASS_URL}|g\' ./master/deployment/httpd-ssl-live.conf'
+                // sh 'sed -i \'s|WEBAPI_IP_RESTRICT|${WEBAPI_IP_RESTRICT}|g\' ./master/deployment/httpd-ssl-live.conf'
+                // sh 'sed -i \'s|WEBAPI_IP_RESTRICT_ALT|${WEBAPI_IP_RESTRICT_ALT}|g\' ./master/deployment/httpd-ssl-live.conf'
+            }
+        }
+        stage('Create deployment pacakges') {
+            steps {
+                dir('./master/web-api/.publish') {
+                    sh 'tar -zcf ../../dotnet-published-package.tgz .'
+                }
+                dir('./master/web-map/dist/web-map') {
+                    sh 'tar -zcf ../../../web-published-package.tgz .'
+                }
+                // dir('./master/deployment') {
+                //     sh 'tar -zcf ../deployment-package.tgz .'
+                // }
+            }
+        }        
+        stage('Create temp SSH key using ec2-instance-connect') {
+            steps {
+                // Ensure that the target is open to connection from the build agent and has the ec2-instance-connect package installed,
+                // ec2-instance-connect will report success erroneously if it is not installed on the target ec2 instance
+                sh 'rm -f ${WORKSPACE}/temp_key'
+                sh 'ssh-keygen -t rsa -f ${WORKSPACE}/temp_key -q -N ""'
+                sh 'aws ec2-instance-connect send-ssh-public-key --region ${AWS_REGION} --instance-id ${AWS_INSTANCE_ID} --availability-zone ${AWS_AVAILABILITY_ZONE} --instance-os-user ${AWS_INSTANCE_OS_USER} --ssh-public-key file://${WORKSPACE}/temp_key.pub'
+            }
+        }        
+        stage('Upload Mapper and API to instance (working directory)') {
+            steps {
+                // Upload Web API artefact (.tar.gz) and extract to deployment folder tagged with the build number
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "mkdir -p ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published"'
+                sh 'scp -i ${WORKSPACE}/temp_key ${WORKSPACE}/master/dotnet-published-package.tgz ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP}:${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "tar -zxf ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published-package.tgz -C ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published"'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo chown ${SERVICE_USER}:${SERVICE_GROUP} -R ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published"'
+
+                // Upload Web Map artefact (.tar.gz) and extract to deployment folder tagged with the build number
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "mkdir -p ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published"'
+                sh 'scp -i ${WORKSPACE}/temp_key ${WORKSPACE}/master/web-published-package.tgz ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP}:${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "tar -zxf ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published-package.tgz -C ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published"'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo chown ${SERVICE_USER}:${SERVICE_GROUP} -R ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published"'
+
+                // Upload deployment artefacts (.tar.gz) and extract to deployment folder tagged with the build number
+                // sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "mkdir -p ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/deployment"'
+                // sh 'scp -i ${WORKSPACE}/temp_key ${WORKSPACE}/master/deployment-package.tgz ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP}:${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}'
+                // sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "tar -zxf ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/deployment-package.tgz -C ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/deployment"'
+            }
+        }
+        // stage('Ensure Apache2 is installed and running with lets encrypt certs') {
+        //     steps {
+        //         // TODO: Not tested in any way, the apache-setup.sh script is very much under development, but should roughly follow;
+        //         // Install Apache -> Install lets-encrypt -> Create lets-encrypt certs for API/Map -> copy apache conf from deployment
+        //         // folder
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "export WEBAPI_SERVER_ADMIN_URL=${WEBAPI_SERVER_ADMIN_URL}; export WEBAPI_URL=${WEBAPI_URL}; sudo bash ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/deployment/apache/apache-setup.sh"'
+        //     }
+        // }
+        // stage('Deploy/update dotnet systemd file') {
+        //     steps {
+        //         // Stop API service so the systemd service file can be replaced (ignore failures if it does not exist yet)
+        //         catchError {
+        //             sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo systemctl stop jncc-web-api"'
+        //         }
+        //         // Deploy systemd service file to correct location
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo cp ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/deployment/jncc-web-api.service /etc/systemd/system/jncc-web-api.service"'
+        //         // Reload systemctl daemon so it picks up the changed systemd service file
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo systemctl daemon-reload"'
+        //     }            
+        // } 
+        stage('Remove existing version of the web API/Map symlinks and point to newly deployed versions') {
+            steps {
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm ${AWS_INSTANCE_WEB_MAP_DIR}"'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo rm ${AWS_INSTANCE_WEB_API_DIR}"'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/web-published ${AWS_INSTANCE_WEB_MAP_DIR}"'
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo ln -s ${AWS_INSTANCE_DEPLOY_DIR}/${BUILD_NUMBER}/dotnet-published ${AWS_INSTANCE_WEB_API_DIR}"'
+            }
+        }
+        // stage('Start newly deployed dotnet service and reload apache') {
+        //     steps {
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo systemctl restart jncc-web-api"'
+        //         sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "sudo systemctl restart apache2"'
+        //     }         
+        // }
+        stage('Cleanup old deployments (keeps 10 deployments)') {
+            steps {
+                sh 'ssh -i ${WORKSPACE}/temp_key ${AWS_INSTANCE_OS_USER}@${AWS_INSTANCE_INTERNAL_IP} "cd ${AWS_INSTANCE_DEPLOY_DIR} && ls -tp | tail -n +11 | xargs -I {} sudo rm -rf -- {}"'
+            }
+        }
+    }
+}

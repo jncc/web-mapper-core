@@ -1,0 +1,9 @@
+{
+    "name": "WEBMAP_NAME",
+    "logging": WEBMAP_LOGGING_ENABLED,
+    "apiUrl": "WEBMAP_API_URL",
+    "mapInstance": "WEBMAP_INSTANCE",
+    "bingMapsApiKey": "WEBMAP_BINGMAPS_API_KEY",
+    "defaultBaseLayer": "WEBMAP_DEFAULT_BASELAYER",
+    "gazetteerPlaceholder": "WEBMAP_GAZETTEER_PLACEHOLDER"
+}
