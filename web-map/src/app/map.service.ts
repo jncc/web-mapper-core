@@ -57,7 +57,8 @@ export class MapService implements OnDestroy {
         center: [],
         zoom: 0,
         externalWmsUrls: [],
-        maxZoom: 20
+        maxZoom: 20,
+        allowLayerHighlight: false
       }
     },
     layerLookup: [],
@@ -139,7 +140,7 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
-      console.log(this.dataStore.mapConfig.mapInstance);
+      // console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       this.createLayersForConfig();
       this.createBaseLayers();
@@ -336,7 +337,9 @@ export class MapService implements OnDestroy {
       this.dataStore.featureInfos = data;
       this._featureInfos.next(this.dataStore.featureInfos);
     });
-    this.highlightFeature(coordinate, layerIds);
+    if (this.dataStore.mapConfig.mapInstance.allowLayerHighlight) {
+      this.highlightFeature(coordinate, layerIds);
+    }
   }
 
   private highlightFeature(coordinate: [number, number], layerIds: number[]) {
@@ -358,7 +361,9 @@ export class MapService implements OnDestroy {
     this.dataStore.featureInfos = [];
     this._featureInfos.next(this.dataStore.featureInfos);
     this.dataStore.highlightInfo = null;
-    this.featureHighlightService.highlightFeature(this.dataStore.highlightInfo);
+    if (this.dataStore.mapConfig.mapInstance.allowLayerHighlight) {
+       this.featureHighlightService.highlightFeature(this.dataStore.highlightInfo);
+    }
   }
 
   changeLayerVisibility(layerId: number, visible: boolean) {

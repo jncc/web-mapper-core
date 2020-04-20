@@ -204,7 +204,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToZoomIn(): Subscription {
-    return this.mapService.zoomInSubject.subscribe(() => this.view.setZoom(this.view.getZoom() + 1))
+    return this.mapService.zoomInSubject.subscribe(() => this.view.setZoom(this.view.getZoom() + 1));
   }
 
   private subscribeToZoomOut(): Subscription {

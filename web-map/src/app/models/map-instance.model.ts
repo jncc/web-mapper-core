@@ -5,6 +5,7 @@ export interface IMapInstance {
         description: string;
         attribution: string;
         maxZoom: number;
+        allowLayerHighlight: boolean;
         layerGroups: ILayerGroupConfig[];
         baseLayers: [];
         center: number[];

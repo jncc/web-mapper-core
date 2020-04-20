@@ -36,7 +36,7 @@ export class FeatureHighlightService {
       const source = new TileWMS({
         url: highlightedLayer.url,
         params: {
-          'LAYERS': highlightedLayer.layerName, // TODO + _highlight
+          'LAYERS': highlightedLayer.layerName + '_highlight',
           'TILED': 'TRUE',
           'FORMAT': 'image/png8',
           'CQL_FILTER': cqlFilter,
