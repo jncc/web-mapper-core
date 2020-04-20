@@ -10,8 +10,8 @@
         </div>
     </div>
     <div class="feature-info-body">
-        <div *ngFor="let featureInfo of featureInfos$ | async">
-            <div [innerHTML]="featureInfo"></div>
+        <div *ngFor="let featureInfo of featureInfos$ | async; index as i">
+            <div [class.highlighted-layer]="i === 0 && allowLayerHighlight" [innerHTML]="featureInfo"></div>
             <hr>
         </div>
     </div>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
 import { IMapInstance } from './models/map-instance.model';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, of } from 'rxjs';
 import { ILookup } from './models/lookup.model';
 import { IGazetteerResult } from './models/gazetteer-result.model';
 import { map } from 'rxjs/operators';
@@ -31,13 +31,17 @@ export class ApiService {
 
   getFeatureInfoForUrls(urls: string[]): Observable<any[]> {
     const responses = [];
-    urls.forEach(
-      url => responses.push(
-        this.http.get(url, { responseType: 'text' }).pipe(
-          map(response => this.processGetFeatureInfo(response)))
-      )
-    );
-    return forkJoin(responses);
+    if (!urls || urls.length === 0) {
+      return of(responses);
+    } else {
+      urls.forEach(
+        url => responses.push(
+          this.http.get(url, { responseType: 'text' }).pipe(
+            map(response => this.processGetFeatureInfo(response)))
+        )
+      );
+      return forkJoin(responses);
+    }
   }
 
   processGetFeatureInfo(htmlContent: string): string {
