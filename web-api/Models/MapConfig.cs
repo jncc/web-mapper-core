@@ -24,6 +24,8 @@ namespace MapConfig.Models
         [JsonIgnore]
         public string VisibleBaseLayer { get; set; }//which additional BaseLayer is initially visible? (either BaseLayerId or Name)
 
+        public Boolean AllowLayerHighlight { get; set; } //is the mapper allowed to request _hightlight ed layers
+
         [NotMapped]
         public double[] Center { get; set; } = new double[2];       //what's actually sent in the JSON response (an array)
         [NotMapped]

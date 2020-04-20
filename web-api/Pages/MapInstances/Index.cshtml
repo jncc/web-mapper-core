@@ -40,6 +40,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.MapInstance[0].VisibleBaseLayer)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MapInstance[0].AllowLayerHighlight)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -72,6 +75,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.VisibleBaseLayer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AllowLayerHighlight)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.MapInstanceId">Edit</a> |
