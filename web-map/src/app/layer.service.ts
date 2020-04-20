@@ -42,6 +42,7 @@ export class LayerService {
     const layer = new Tile({
       source: source
     });
+    layer.set('layerId', layerConfig.layerId);
     return layer;
   }
 

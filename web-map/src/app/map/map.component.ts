@@ -18,6 +18,8 @@ import Attribution from 'ol/control/attribution';
 import condition from 'ol/events/condition';
 
 import { MapService } from '../map.service';
+import { FeatureHighlightService } from '../feature-highlight.service';
+import { IHighlightInfo } from '../models/highlight-info.model';
 
 @Component({
   selector: 'app-map',
@@ -40,16 +42,20 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private baseLayerGroup: Group;
   private layerGroup: Group;
+  private highlightLayer: Tile;
   private overviewMap: OverviewMap;
 
-  constructor(private mapService: MapService) {
-  }
+  constructor(
+    private mapService: MapService,
+    private featureHighlightService: FeatureHighlightService
+  ) { }
 
   ngOnInit() {
     this.setupMap();
     this.subscription.add(this.subscribeToLayers());
     this.subscription.add(this.subscribeToBaseLayers());
     this.subscription.add(this.subscribeToMapConfig());
+    this.subscription.add(this.subscribeToHighlightLayerSource());
   }
 
   private subscribeToMapConfig(): Subscription {
@@ -86,6 +92,16 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  private subscribeToHighlightLayerSource(): Subscription {
+    return this.featureHighlightService.highlightLayerSource$.subscribe(source => {
+      this.highlightLayer.setVisible(false);
+      this.highlightLayer.setSource(source);
+      if (source) {
+        this.highlightLayer.setVisible(true);
+      }
+    });
+  }
+
   private setupMap() {
     this.baseLayerGroup = new Group();
     this.baseLayerGroup.setLayers(new Collection([this.defaultBaseLayer]));
@@ -97,6 +113,8 @@ export class MapComponent implements OnInit, OnDestroy {
       maxZoom: 17,
       minZoom: 3
     });
+
+    this.highlightLayer = new Tile();
 
     this.map = new Map({
       target: 'map',
@@ -120,7 +138,8 @@ export class MapComponent implements OnInit, OnDestroy {
       ],
       layers: [
         this.baseLayerGroup,
-        this.layerGroup
+        this.layerGroup,
+        this.highlightLayer
       ],
       view: this.view
     });
@@ -145,8 +164,13 @@ export class MapComponent implements OnInit, OnDestroy {
       const pixel = this.map.getEventPixel(event.originalEvent);
       const urls = [];
       const baseLayerArray = this.baseLayerGroup.getLayers().getArray();
+
+      const layerIds: number[] = [];
+      const coordinate = event.coordinate;
+
       this.map.forEachLayerAtPixel(pixel,
         layer => {
+          layerIds.push(layer.get('layerId'));
           const source = (<Tile>layer).getSource();
           if (source instanceof TileWMS) {
             const url = source.getGetFeatureInfoUrl(
@@ -159,9 +183,9 @@ export class MapComponent implements OnInit, OnDestroy {
           }
         },
         this,
-        layer => layer instanceof Tile && baseLayerArray.indexOf(layer) === -1
+        layer => layer instanceof Tile && layer !== this.highlightLayer && baseLayerArray.indexOf(layer) === -1
       );
-      this.mapService.showFeatureInfo(urls);
+      this.mapService.showFeatureInfo(urls, coordinate, layerIds);
     });
   }
 
@@ -180,7 +204,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToZoomIn(): Subscription {
-    return this.mapService.zoomInSubject.subscribe(() => this.view.setZoom(this.view.getZoom() + 1))
+    return this.mapService.zoomInSubject.subscribe(() => this.view.setZoom(this.view.getZoom() + 1));
   }
 
   private subscribeToZoomOut(): Subscription {
