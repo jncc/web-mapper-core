@@ -1,0 +1,11 @@
+<div id="searchLayersContainer">
+    <ng-select #searchLayers
+                (focus)="onFocus()"
+                [items]="layers"
+                bindLabel="name"
+                [placeholder]="placeholder"
+                [(ngModel)]="selectedResult"
+                (change)="onChange()"
+    >
+    </ng-select>
+  </div>

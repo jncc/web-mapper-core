@@ -5,7 +5,6 @@ import TileWMS from 'ol/source/tilewms';
 import OSM from 'ol/source/osm';
 import BingMaps from 'ol/source/bingmaps';
 import Tile from 'ol/layer/tile';
-import XYZ from 'ol/source/xyz';
 import WMSCapabilities from 'ol/format/wmscapabilities';
 
 import { AppConfigService } from './app-config.service';
