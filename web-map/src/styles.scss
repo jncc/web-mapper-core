@@ -35,7 +35,7 @@ h1, h2, h3, h4, h5, h6 {
 body, h1, h2, h3, h4, h5, h6, p, ol, ul {
   margin: 0;
   padding: 0;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 a {
@@ -87,6 +87,7 @@ img {
   border-bottom: 1px solid $border-color;
   border-radius: $container-border-radius;
   cursor: pointer;
+  letter-spacing: 1px;
 }
 
 .controls-container-body {
@@ -98,7 +99,8 @@ img {
 }
 
 .panel-title {
-  padding: 1rem;
+  padding: 0.75rem;
+  letter-spacing: 1px;
   display: flex;
   justify-content: space-between;
   color: white;
