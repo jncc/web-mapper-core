@@ -11,7 +11,7 @@
     transition: margin-right 350ms ease-out;
     height: 100%;
     box-shadow: $container-shadow;
-    overflow: hidden;
+    // overflow: hidden;
 }
 
 #featureInfoPane.show {
@@ -22,6 +22,11 @@
 
 .feature-info-body {
     padding: 1rem;
+    overflow: visible;
+}
+
+.overflow {
+    overflow-x: auto;
 }
 
 .center-y {
@@ -30,6 +35,10 @@
     justify-content: space-around;
 }
 
-.highlighted-layer {
-    border-left: 5px solid red;
+div.highlighted-layer {
+    background-color: aliceblue;
+}
+
+h3.highlighted-layer {
+    font-size: 16px;
 }
