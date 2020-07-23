@@ -11,7 +11,7 @@
     </div>
     <div class="feature-info-body">
         <div *ngFor="let featureInfo of featureInfos$ | async; index as i">
-            <h3 class="highlighted-layer" *ngIf="i === 0 && allowLayerHighlight">Selected Layer</h3>
+            <h3 class="highlighted-layer" *ngIf="i === 0 && allowLayerHighlight">Selected Feature</h3>
             <div class="overflow" [class.highlighted-layer]="i === 0 && allowLayerHighlight" [innerHTML]="featureInfo"></div>
             <hr>
         </div>
