@@ -106,6 +106,8 @@ namespace MapConfig.Models
         public int LayerZoom { get; set; }        //Layer specific Zoom Level 1-22 - overrides Map zoom
         [JsonIgnore]
         public int LayerDefaultOrder { get; set; }        //Layer default (initial) ordering
+        [JsonIgnore]
+        public string LayerDownloadLayer { get; set; } //if the layer is actually a Layer Group in Geoserver then for download as shapefile we need a single layer name
 
         //foreign keys
         public long LayerGroupId { get; set; }    //which LayerGroup am I in?
@@ -124,7 +126,9 @@ namespace MapConfig.Models
         [NotMapped]
         public int Zoom { get; set; } 
         [NotMapped]
-        public int DefaultOrder { get; set; }  
+        public int DefaultOrder { get; set; }
+        [NotMapped]
+        public string DownloadLayer { get; set; } 
     }
 
     public class Filter {
