@@ -59,6 +59,9 @@
                 @Html.DisplayNameFor(model => model.Layer[0].LayerDefaultOrder)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Layer[0].LayerDownloadLayer)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Layer[0].LayerGroup)
             </th>
             <th></th>
@@ -111,6 +114,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LayerDefaultOrder)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LayerDownloadLayer)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LayerGroup.LayerGroupId)
