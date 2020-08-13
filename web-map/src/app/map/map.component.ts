@@ -4,6 +4,10 @@ import { Subscription } from 'rxjs';
 import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
+import Vector from 'ol/layer/vector';
+import VectorSource from 'ol/source/vector';
+import Feature from 'ol/feature';
+import DragBox from 'ol/interaction/dragbox';
 import Group from 'ol/layer/group';
 import OSM from 'ol/source/osm';
 import TileWMS from 'ol/source/tilewms';
@@ -16,10 +20,10 @@ import MousePosition from 'ol/control/mouseposition';
 import Collection from 'ol/collection';
 import Attribution from 'ol/control/attribution';
 import condition from 'ol/events/condition';
+import Polygon from 'ol/geom/polygon';
 
 import { MapService } from '../map.service';
 import { FeatureHighlightService } from '../feature-highlight.service';
-import { IHighlightInfo } from '../models/highlight-info.model';
 
 @Component({
   selector: 'app-map',
@@ -45,6 +49,12 @@ export class MapComponent implements OnInit, OnDestroy {
   private highlightLayer: Tile;
   private overviewMap: OverviewMap;
 
+  // bbox download
+  private bboxLayer: Vector;
+  private bbox: number[];
+  private downloadLayerId: number;
+
+
   constructor(
     private mapService: MapService,
     private featureHighlightService: FeatureHighlightService
@@ -56,6 +66,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.subscription.add(this.subscribeToBaseLayers());
     this.subscription.add(this.subscribeToMapConfig());
     this.subscription.add(this.subscribeToHighlightLayerSource());
+    this.subscription.add(this.subscribeToBbox());
   }
 
   private subscribeToMapConfig(): Subscription {
@@ -116,6 +127,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.highlightLayer = new Tile();
 
+    this.setupBboxLayer();
+
     this.map = new Map({
       target: 'map',
       controls: [
@@ -139,7 +152,8 @@ export class MapComponent implements OnInit, OnDestroy {
       layers: [
         this.baseLayerGroup,
         this.layerGroup,
-        this.highlightLayer
+        this.highlightLayer,
+        this.bboxLayer
       ],
       view: this.view
     });
@@ -261,6 +275,53 @@ export class MapComponent implements OnInit, OnDestroy {
     this.view.setCenter(proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]));
     this.view.setZoom(this.defaultZoom);
   }
+
+  private setupBboxLayer(): void {
+    this.bboxLayer = new Vector({
+      source: new VectorSource({wrapX: false})
+    });
+  }
+
+  private subscribeToBbox(): Subscription {
+    return this.mapService.bboxSubject.subscribe( layerId => {
+      this.downloadLayerId = layerId;
+      const dragBox = new DragBox();
+      this.map.addInteraction(dragBox);
+      dragBox.on('boxend', (event: MapBrowserEvent) => this.onBoxEnd(event));
+      dragBox.on('boxstart', (event: MapBrowserEvent) => this.onBoxStart(event));
+      // console.log('download by bbox ' + layerId);
+    });
+  }
+
+  private onBoxStart(event: MapBrowserEvent) {
+    // console.log(event.coordinate)
+    this.bbox = [];
+    this.bbox.push(event.coordinate[0], event.coordinate[1])
+  }
+
+  private onBoxEnd(event: MapBrowserEvent) {
+    // console.log(event.coordinate)
+    this.bbox.push(event.coordinate[0], event.coordinate[1]);
+    // console.log(this.bbox)
+    const geometry = this.polygonFromBbox(this.bbox);
+    const feature = new Feature(geometry);
+    this.bboxLayer.setSource(new VectorSource({features: [feature]}));
+    this.mapService.onDownloadBboxComplete(feature, this.downloadLayerId)
+    // TODO - prompt user to ok/cancel for download
+    // TODO - do the download
+  }
+
+  private polygonFromBbox(bbox: number[]) {
+    const coordinatesArray: [number, number][][] = [[
+      [bbox[0], bbox[1]],
+      [bbox[2], bbox[1]],
+      [bbox[2], bbox[3]],
+      [bbox[0], bbox[3]],
+      [bbox[0], bbox[1]]
+    ]];
+    return new Polygon(coordinatesArray);
+  }
+
 
   ngOnDestroy() {
     if (this.subscription) {

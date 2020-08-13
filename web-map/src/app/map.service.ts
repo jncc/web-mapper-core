@@ -19,6 +19,8 @@ import { IBaseLayer } from './models/base-layer.model';
 import { IDictionary } from './models/dictionary.model';
 import { IHighlightInfo } from './models/highlight-info.model';
 import { FeatureHighlightService } from './feature-highlight.service';
+import Feature from 'ol/feature';
+import { WfsDownloadService } from './wfs-download.service';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +37,8 @@ export class MapService implements OnDestroy {
   zoomToExtentSubject = new Subject<number[]>();
 
   showLegendSubject = new Subject<{ name: string, legendUrl: string }>();
+
+  bboxSubject = new Subject<number>();
 
   private dataStore: {
     mapConfig: IMapConfig;
@@ -117,7 +121,8 @@ export class MapService implements OnDestroy {
     private layerService: LayerService,
     private permalinkService: PermalinkService,
     private filterService: FilterService,
-    private featureHighlightService: FeatureHighlightService
+    private featureHighlightService: FeatureHighlightService,
+    private wfsDownloadService: WfsDownloadService
   ) {
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
     this._visibleLayers = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.visibleLayers);
@@ -140,7 +145,7 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
-      // console.log(this.dataStore.mapConfig.mapInstance);
+      console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       this.createLayersForConfig();
       this.createBaseLayers();
@@ -487,5 +492,14 @@ export class MapService implements OnDestroy {
     } else {
       this.zoomToMapExtent();
     }
+  }
+
+  startDownloadByBox(layerId: number) {
+    this.bboxSubject.next(layerId);
+  }
+
+  onDownloadBboxComplete(feature: Feature, layerId: number) {
+    const layerConfig = this.getLayerConfig(layerId);
+    this.wfsDownloadService.download(feature, layerConfig);
   }
 }
