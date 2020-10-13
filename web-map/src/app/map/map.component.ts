@@ -24,6 +24,7 @@ import Polygon from 'ol/geom/polygon';
 
 import { MapService } from '../map.service';
 import { FeatureHighlightService } from '../feature-highlight.service';
+import { MeasureService } from '../measure.service';
 
 @Component({
   selector: 'app-map',
@@ -57,6 +58,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
+    private measureService: MeasureService,
     private featureHighlightService: FeatureHighlightService
   ) { }
 
@@ -67,6 +69,22 @@ export class MapComponent implements OnInit, OnDestroy {
     this.subscription.add(this.subscribeToMapConfig());
     this.subscription.add(this.subscribeToHighlightLayerSource());
     this.subscription.add(this.subscribeToBbox());
+    this.subscription.add(this.subscribeToMeasure());
+  }
+
+
+  // when measuring distances/areas remove the feature info click
+  // re-add it when measuring has stopped.
+  private subscribeToMeasure(): Subscription {
+    return this.measureService.measuring$.subscribe(
+      measuring => {
+        if (measuring) {
+          this.removeFeatureInfoClick();
+        } else {
+          this.addFeatureInfoClick();
+        }
+      }
+    )
   }
 
   private subscribeToMapConfig(): Subscription {
@@ -160,8 +178,16 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.mapService.mapReady(this.map);
 
-    this.setupGetFeatureInfo();
+    this.addFeatureInfoClick();
     this.setupZoomSubscriptions();
+  }
+
+  private addFeatureInfoClick() {
+    this.map.on('click', this.onGetFeatureInfo);
+  }
+
+  private removeFeatureInfoClick() {
+    this.map.un('click', this.onGetFeatureInfo);
   }
 
   /**
@@ -172,8 +198,7 @@ export class MapComponent implements OnInit, OnDestroy {
    *  this (not used),
    *  the layer filter (tile layer that isn't in baseLayerGroup)
    */
-  setupGetFeatureInfo() {
-    this.map.on('click', (event: MapBrowserEvent) => {
+  private onGetFeatureInfo = (event: MapBrowserEvent) => {
       const viewResolution = this.view.getResolution();
       const pixel = this.map.getEventPixel(event.originalEvent);
       const urls = [];
@@ -200,7 +225,6 @@ export class MapComponent implements OnInit, OnDestroy {
         layer => layer instanceof Tile && layer !== this.highlightLayer && baseLayerArray.indexOf(layer) === -1
       );
       this.mapService.showFeatureInfo(urls, coordinate, layerIds);
-    });
   }
 
   /**

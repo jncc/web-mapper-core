@@ -10,6 +10,7 @@ import Circle from 'ol/style/circle';
 import Feature from 'ol/feature';
 import Style from 'ol/style/style';
 import { MeasureType } from './measure-type.enum';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +25,15 @@ export class MeasureService {
   private measureLayerStyle: Style;
   private measureFeatureStyle: Style;
 
+  private measuringSubject = new Subject<boolean>();
+  measuring$ = this.measuringSubject.asObservable();
+
   constructor(private mapService: MapService) {
     this.mapService.mapSubject.subscribe(map => this.map = map);
     this.setupStyles();
   }
 
-  private setupInteraction(measureType: MeasureType) {
+  private setupInteraction(measureType: MeasureType): void {
     if (this.drawInteraction) {
       this.map.removeInteraction(this.drawInteraction);
     }
@@ -56,17 +60,18 @@ export class MeasureService {
   }
 
   measureStart(): void {
+    this.measuringSubject.next(true);
     this.setupLayer();
     this.setupInteraction(MeasureType.LineString);
-    // this.map.addLayer(this.measureLayer);
   }
 
-  measureEnd() {
+  measureEnd(): void {
     this.map.removeInteraction(this.drawInteraction);
     this.map.removeLayer(this.measureLayer);
+    this.measuringSubject.next(false);
   }
 
-  private setupLayer() {
+  private setupLayer(): void {
     this.measureSource = new VectorSource();
 
     this.measureLayer = new VectorLayer({
@@ -78,7 +83,7 @@ export class MeasureService {
 
   }
 
-  private setupStyles() {
+  private setupStyles(): void {
     this.measureLayerStyle = new Style({
       fill: new Fill({
         color: 'rgba(255, 255, 255, 0.2)'
