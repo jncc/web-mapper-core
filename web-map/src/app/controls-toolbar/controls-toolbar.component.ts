@@ -17,6 +17,9 @@ export class ControlsToolbarComponent implements OnInit {
   @ViewChild('baseLayersOverlay', { static: true }) baseLayersOverlay: TemplateRef<any>;
   baseLayersOverlayRef: OverlayRef | null;
 
+  @ViewChild('measureOverlay', { static: true }) measureOverlay: TemplateRef<any>;
+  measureOverlayRef: OverlayRef | null;
+
   @ViewChild('mapInfoOverlay', { static: true }) mapInfoOverlay: TemplateRef<any>;
   mapInfoOverlayRef: OverlayRef | null;
 
@@ -73,6 +76,37 @@ export class ControlsToolbarComponent implements OnInit {
     if (this.baseLayersOverlayRef) {
       this.baseLayersOverlayRef.dispose();
       this.baseLayersOverlayRef = null;
+    }
+    if (this.backdropSubscription) {
+      this.backdropSubscription.unsubscribe();
+    }
+  }
+
+  onShowMeasure({ x, y }) {
+    this.closeMeasure();
+    const positionStrategy = this.overlay.position()
+      .flexibleConnectedTo({ x, y })
+      .withPositions([
+        {
+          originX: 'end',
+          originY: 'bottom',
+          overlayX: 'end',
+          overlayY: 'bottom',
+        }
+      ]);
+    this.measureOverlayRef = this.overlay.create({
+      hasBackdrop: true,
+      positionStrategy,
+      scrollStrategy: this.overlay.scrollStrategies.close()
+    });
+    this.measureOverlayRef.attach(new TemplatePortal(this.measureOverlay, this.viewContainerRef));
+    this.backdropSubscription = this.measureOverlayRef.backdropClick().subscribe(() => this.closeMeasure());
+  }
+
+  closeMeasure() {
+    if (this.measureOverlayRef) {
+      this.measureOverlayRef.dispose();
+      this.measureOverlayRef = null;
     }
     if (this.backdropSubscription) {
       this.backdropSubscription.unsubscribe();

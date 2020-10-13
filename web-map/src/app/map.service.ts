@@ -21,13 +21,14 @@ import { IHighlightInfo } from './models/highlight-info.model';
 import { FeatureHighlightService } from './feature-highlight.service';
 import Feature from 'ol/feature';
 import { WfsDownloadService } from './wfs-download.service';
+import olMap from 'ol/map'; // rename the default export
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService implements OnDestroy {
 
-  map: any;
+  map: olMap;
 
   zoomInSubject = new Subject<void>();
   zoomOutSubject = new Subject<void>();
