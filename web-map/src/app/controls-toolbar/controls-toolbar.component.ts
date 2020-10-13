@@ -3,6 +3,7 @@ import { MapService } from '../map.service';
 import { Subscription } from 'rxjs';
 import { OverlayRef, Overlay } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { MeasureService } from '../measure.service';
 
 @Component({
   selector: 'app-controls-toolbar',
@@ -26,7 +27,11 @@ export class ControlsToolbarComponent implements OnInit {
   @ViewChild('permalinkOverlay', { static: true }) permalinkOverlay: TemplateRef<any>;
   permalinkOverlayRef: OverlayRef | null;
 
-  constructor(private mapService: MapService, public overlay: Overlay, public viewContainerRef: ViewContainerRef) { }
+  constructor(
+    private mapService: MapService,
+    public overlay: Overlay,
+    public viewContainerRef: ViewContainerRef
+  ) { }
 
   ngOnInit() {
   }
@@ -82,34 +87,25 @@ export class ControlsToolbarComponent implements OnInit {
     }
   }
 
-  onShowMeasure({ x, y }) {
+  onShowMeasure() {
     this.closeMeasure();
     const positionStrategy = this.overlay.position()
-      .flexibleConnectedTo({ x, y })
-      .withPositions([
-        {
-          originX: 'end',
-          originY: 'bottom',
-          overlayX: 'end',
-          overlayY: 'bottom',
-        }
-      ]);
+      .global()
+      .right('1rem')
+      .bottom('7.5rem');
+
     this.measureOverlayRef = this.overlay.create({
-      hasBackdrop: true,
+      hasBackdrop: false,
       positionStrategy,
       scrollStrategy: this.overlay.scrollStrategies.close()
     });
     this.measureOverlayRef.attach(new TemplatePortal(this.measureOverlay, this.viewContainerRef));
-    this.backdropSubscription = this.measureOverlayRef.backdropClick().subscribe(() => this.closeMeasure());
   }
 
   closeMeasure() {
     if (this.measureOverlayRef) {
       this.measureOverlayRef.dispose();
       this.measureOverlayRef = null;
-    }
-    if (this.backdropSubscription) {
-      this.backdropSubscription.unsubscribe();
     }
   }
 

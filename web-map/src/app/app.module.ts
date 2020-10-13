@@ -44,6 +44,7 @@ import { MapCreditComponent } from './map-credit/map-credit.component';
 import { LayerSortPipe } from './layer-sort.pipe';
 import { GotoXyComponent } from './goto-xy/goto-xy.component';
 import { SearchLayersComponent } from './search-layers/search-layers.component';
+import { MeasureComponent } from './measure/measure.component';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -80,7 +81,8 @@ export function initializeApp(appConfig: AppConfigService) {
     MapCreditComponent,
     LayerSortPipe,
     GotoXyComponent,
-    SearchLayersComponent
+    SearchLayersComponent,
+    MeasureComponent
   ],
   imports: [
     BrowserModule,

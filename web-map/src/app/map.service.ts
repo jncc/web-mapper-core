@@ -30,6 +30,8 @@ export class MapService implements OnDestroy {
 
   map: olMap;
 
+  mapSubject = new BehaviorSubject<olMap>(null);
+
   zoomInSubject = new Subject<void>();
   zoomOutSubject = new Subject<void>();
   dragZoomInSubject = new Subject<void>();
@@ -287,6 +289,7 @@ export class MapService implements OnDestroy {
 
   mapReady(map: any) {
     this.map = map;
+    this.mapSubject.next(this.map);
   }
 
   zoomIn() {

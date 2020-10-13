@@ -1,0 +1,8 @@
+<div>
+    <input type="radio" name="measureType" id="LineString" value="LineString" [(ngModel)]="measureType" (ngModelChange)="onMeasureTypeChange($event)">
+    <label for="LineString">Length</label>
+</div>
+<div>
+    <input type="radio" name="measureType" id="Polygon" value="Polygon" [(ngModel)]="measureType" (ngModelChange)="onMeasureTypeChange($event)">
+    <label for="Polygon">Area</label>
+</div>

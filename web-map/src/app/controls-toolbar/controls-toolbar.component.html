@@ -10,7 +10,7 @@
     <img class="control-icon" tooltip="drag zoom out" src="../../assets/icons/magnify-minus-outline.svg" (click)="onZoomOutToExtent()">
     <div class="divider"></div>
     <img class="control-icon" tooltip="go to long/lat" src="../../assets/icons/crosshairs.svg" (click)="onShowGotoXY()">
-    <img class="control-icon" tooltip="measure" src="../../assets/icons/ruler.svg" (click)="onShowMeasure($event)">
+    <img class="control-icon" tooltip="measure" src="../../assets/icons/ruler.svg" (click)="onShowMeasure()">
 </div>
 
 <ng-template #baseLayersOverlay>
@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="controls-container-body">
-            something in here
+            <app-measure></app-measure>
         </div>
     </div>
 </ng-template>
