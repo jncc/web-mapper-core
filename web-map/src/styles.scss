@@ -94,6 +94,10 @@ img {
   padding: $container-padding;
 }
 
+.controls-container-header {
+  justify-content: space-between;
+}
+
 .controls-container-footer {
   padding: $container-padding;
 }

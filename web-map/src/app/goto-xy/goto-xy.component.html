@@ -12,7 +12,7 @@
         <input type="text" maxlength="10" (keyup.enter)="onGotoXY(x.value, y.value)" #x>
         <span>Lat:</span>
         <input type="text" maxlength="10" (keyup.enter)="onGotoXY(x.value, y.value)" #y>
-        <button type="button" class="dialog-button primary" (click)="onGotoXY(x.value, y.value)">go</button>
+        <button type="button" class="dialog-button primary" (click)="onGotoXY(x.value, y.value)">Go</button>
     </div>
     <div *ngIf="!xValid" class="error">
       {{ xErrorMessage }}

@@ -26,4 +26,8 @@ export class MeasureComponent implements OnInit, OnDestroy {
     this.measureService.changeMeasureType(event);
   }
 
+  onClear() {
+    this.measureService.clearMeasurements();
+  }
+
 }

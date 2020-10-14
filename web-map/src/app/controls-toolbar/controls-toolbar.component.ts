@@ -92,7 +92,7 @@ export class ControlsToolbarComponent implements OnInit {
     const positionStrategy = this.overlay.position()
       .global()
       .right('1rem')
-      .bottom('7.5rem');
+      .top('13rem');
 
     this.measureOverlayRef = this.overlay.create({
       hasBackdrop: false,

@@ -17,6 +17,7 @@ import Overlay from 'ol/overlay';
 import olObservable from 'ol/observable';
 import Sphere from 'ol/sphere';
 import Geometry from 'ol/geom/geometry';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Injectable({
@@ -158,6 +159,16 @@ export class MeasureService {
     // remove tooltips overlay build-up
     const overlaysContainer = document.querySelector('.ol-overlaycontainer-stopevent');
     overlaysContainer.innerHTML = '';
+  }
+
+  clearMeasurements(): void {
+    this.measureSource.clear();
+    this.measureTooltipElement = null;
+      // remove tooltips overlay build-up
+      const overlaysContainer = document.querySelector('.ol-overlaycontainer-stopevent');
+      overlaysContainer.innerHTML = '';
+      this.createMeasureTooltip();
+      this.createHelpTooltip();
   }
 
   private setupLayer(): void {
