@@ -148,7 +148,7 @@ export class MapService implements OnDestroy {
   private subscribeToMapInstanceConfig() {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
-      console.log(this.dataStore.mapConfig.mapInstance);
+      // console.log(this.dataStore.mapConfig.mapInstance);
       this.createMapInstanceConfig();
       this.createLayersForConfig();
       this.createBaseLayers();
