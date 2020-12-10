@@ -63,6 +63,7 @@ export class LayerService {
     // Bing Maps
     const bingLayer = new Tile({
       visible: false,
+      preload: Infinity,
       source: new BingMaps({
         key: AppConfigService.settings.bingMapsApiKey,
         imagerySet: 'Aerial'

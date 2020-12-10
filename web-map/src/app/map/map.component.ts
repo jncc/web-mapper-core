@@ -84,7 +84,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.addFeatureInfoClick();
         }
       }
-    )
+    );
   }
 
   private subscribeToMapConfig(): Subscription {
@@ -320,7 +320,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private onBoxStart(event: MapBrowserEvent) {
     // console.log(event.coordinate)
     this.bbox = [];
-    this.bbox.push(event.coordinate[0], event.coordinate[1])
+    this.bbox.push(event.coordinate[0], event.coordinate[1]);
   }
 
   private onBoxEnd(event: MapBrowserEvent) {
@@ -330,7 +330,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const geometry = this.polygonFromBbox(this.bbox);
     const feature = new Feature(geometry);
     this.bboxLayer.setSource(new VectorSource({features: [feature]}));
-    this.mapService.onDownloadBboxComplete(feature, this.downloadLayerId)
+    this.mapService.onDownloadBboxComplete(feature, this.downloadLayerId);
     // TODO - prompt user to ok/cancel for download
     // TODO - do the download
   }
