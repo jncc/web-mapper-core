@@ -4,6 +4,10 @@ import { Subscription } from 'rxjs';
 import Map from 'ol/map';
 import View from 'ol/view';
 import Tile from 'ol/layer/tile';
+import Vector from 'ol/layer/vector';
+import VectorSource from 'ol/source/vector';
+import Feature from 'ol/feature';
+import DragBox from 'ol/interaction/dragbox';
 import Group from 'ol/layer/group';
 import OSM from 'ol/source/osm';
 import TileWMS from 'ol/source/tilewms';
@@ -16,9 +20,11 @@ import MousePosition from 'ol/control/mouseposition';
 import Collection from 'ol/collection';
 import Attribution from 'ol/control/attribution';
 import condition from 'ol/events/condition';
+import Polygon from 'ol/geom/polygon';
 
 import { MapService } from '../map.service';
-import { ILayerConfig } from '../models/layer-config.model';
+import { FeatureHighlightService } from '../feature-highlight.service';
+import { MeasureService } from '../measure.service';
 
 @Component({
   selector: 'app-map',
@@ -28,15 +34,9 @@ import { ILayerConfig } from '../models/layer-config.model';
 export class MapComponent implements OnInit, OnDestroy {
 
   map: Map;
-  private zoomInSubscription: Subscription;
-  private zoomOutSubscription: Subscription;
-  private dragZoomInSubscription: Subscription;
-  private dragZoomOutSubscription: Subscription;
-  private zoomSubscription: Subscription;
-  private zoomToExtentSubscription: Subscription;
-  private layersSubscription: Subscription;
-  private baseLayersSubscription: Subscription;
-  private mapConfigSubscription: Subscription;
+  private view: View;
+
+  private subscription = new Subscription();
 
   // Map defaults
   defaultCenter = [-2, 55];
@@ -47,17 +47,59 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private baseLayerGroup: Group;
   private layerGroup: Group;
+  private highlightLayer: Tile;
   private overviewMap: OverviewMap;
 
-  constructor(private mapService: MapService) {
-  }
+  // bbox download
+  private bboxLayer: Vector;
+  private bbox: number[];
+  private downloadLayerId: number;
+
+
+  constructor(
+    private mapService: MapService,
+    private measureService: MeasureService,
+    private featureHighlightService: FeatureHighlightService
+  ) { }
 
   ngOnInit() {
     this.setupMap();
-    this.layersSubscription = this.mapService.visibleLayers.subscribe(
-      layers => this.updateLayers(layers)
+    this.subscription.add(this.subscribeToLayers());
+    this.subscription.add(this.subscribeToBaseLayers());
+    this.subscription.add(this.subscribeToMapConfig());
+    this.subscription.add(this.subscribeToHighlightLayerSource());
+    this.subscription.add(this.subscribeToBbox());
+    this.subscription.add(this.subscribeToMeasure());
+  }
+
+
+  // when measuring distances/areas remove the feature info click
+  // re-add it when measuring has stopped.
+  private subscribeToMeasure(): Subscription {
+    return this.measureService.measuring$.subscribe(
+      measuring => {
+        if (measuring) {
+          this.removeFeatureInfoClick();
+        } else {
+          this.addFeatureInfoClick();
+        }
+      }
     );
-    this.baseLayersSubscription = this.mapService.baseLayers.subscribe(
+  }
+
+  private subscribeToMapConfig(): Subscription {
+    return this.mapService.mapConfig.subscribe(
+      mapConfig => {
+        const maxZoom = mapConfig.mapInstance.maxZoom;
+        if (maxZoom > 0) {
+          this.view.setMaxZoom(maxZoom);
+        }
+      }
+    );
+  }
+
+  private subscribeToBaseLayers(): Subscription {
+    return this.mapService.baseLayers.subscribe(
       baseLayers => {
         const baseLayerCollection = new Collection(baseLayers.map(layer => layer.layer));
         this.baseLayerGroup.setLayers(baseLayerCollection);
@@ -70,19 +112,23 @@ export class MapComponent implements OnInit, OnDestroy {
         this.map.addControl(this.overviewMap);
       }
     );
-    this.mapConfigSubscription = this.mapService.mapConfig.subscribe(
-      mapConfig => {
-        const maxZoom = mapConfig.mapInstance.maxZoom;
-        if (maxZoom > 0) {
-          this.map.getView().setMaxZoom(maxZoom);
-        }
-      }
-    );
   }
 
-  private updateLayers(layersConfig: ILayerConfig[]): void {
-    const layers = layersConfig.slice().reverse().map(layerConfig => layerConfig.layer);
-    this.layerGroup.setLayers(new Collection(layers));
+  private subscribeToLayers(): Subscription {
+    return this.mapService.visibleLayers.subscribe(layersConfig => {
+      const layers = layersConfig.slice().reverse().map(layerConfig => layerConfig.layer);
+      this.layerGroup.setLayers(new Collection(layers));
+    });
+  }
+
+  private subscribeToHighlightLayerSource(): Subscription {
+    return this.featureHighlightService.highlightLayerSource$.subscribe(source => {
+      this.highlightLayer.setVisible(false);
+      this.highlightLayer.setSource(source);
+      if (source) {
+        this.highlightLayer.setVisible(true);
+      }
+    });
   }
 
   private setupMap() {
@@ -90,12 +136,16 @@ export class MapComponent implements OnInit, OnDestroy {
     this.baseLayerGroup.setLayers(new Collection([this.defaultBaseLayer]));
     this.layerGroup = new Group();
 
-    const view = new View({
+    this.view = new View({
       center: proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]),
       zoom: this.defaultZoom,
       maxZoom: 17,
       minZoom: 3
     });
+
+    this.highlightLayer = new Tile();
+
+    this.setupBboxLayer();
 
     this.map = new Map({
       target: 'map',
@@ -119,15 +169,25 @@ export class MapComponent implements OnInit, OnDestroy {
       ],
       layers: [
         this.baseLayerGroup,
-        this.layerGroup
+        this.layerGroup,
+        this.highlightLayer,
+        this.bboxLayer
       ],
-      view: view
+      view: this.view
     });
 
     this.mapService.mapReady(this.map);
 
-    this.setupGetFeatureInfo();
-    this.setupZoomSubscriptions(view);
+    this.addFeatureInfoClick();
+    this.setupZoomSubscriptions();
+  }
+
+  private addFeatureInfoClick() {
+    this.map.on('click', this.onGetFeatureInfo);
+  }
+
+  private removeFeatureInfoClick() {
+    this.map.un('click', this.onGetFeatureInfo);
   }
 
   /**
@@ -138,14 +198,18 @@ export class MapComponent implements OnInit, OnDestroy {
    *  this (not used),
    *  the layer filter (tile layer that isn't in baseLayerGroup)
    */
-  setupGetFeatureInfo() {
-    this.map.on('click', (event: MapBrowserEvent) => {
-      const viewResolution = this.map.getView().getResolution();
+  private onGetFeatureInfo = (event: MapBrowserEvent) => {
+      const viewResolution = this.view.getResolution();
       const pixel = this.map.getEventPixel(event.originalEvent);
       const urls = [];
       const baseLayerArray = this.baseLayerGroup.getLayers().getArray();
+
+      const layerIds: number[] = [];
+      const coordinate = event.coordinate;
+
       this.map.forEachLayerAtPixel(pixel,
         layer => {
+          layerIds.push(layer.get('layerId'));
           const source = (<Tile>layer).getSource();
           if (source instanceof TileWMS) {
             const url = source.getGetFeatureInfoUrl(
@@ -158,91 +222,134 @@ export class MapComponent implements OnInit, OnDestroy {
           }
         },
         this,
-        layer => layer instanceof Tile && baseLayerArray.indexOf(layer) === -1
+        layer => layer instanceof Tile && layer !== this.highlightLayer && baseLayerArray.indexOf(layer) === -1
       );
-      this.mapService.showFeatureInfo(urls);
-    });
+      this.mapService.showFeatureInfo(urls, coordinate, layerIds);
   }
 
   /**
    * There are drag zooms in and out and zoom to centre and zoom level
    * Sets up the interactions and subscriptions to these Subjects in the map service
    *
-   * @param view the map view
    */
-  setupZoomSubscriptions(view: View) {
-    this.zoomInSubscription = this.mapService.zoomInSubject.subscribe(() => this.map.getView().setZoom(this.map.getView().getZoom() + 1));
-    this.zoomOutSubscription = this.mapService.zoomOutSubject.subscribe(() => this.map.getView().setZoom(this.map.getView().getZoom() - 1));
+  setupZoomSubscriptions() {
+    this.subscription.add(this.subscribeToZoomIn());
+    this.subscription.add(this.subscribeToZoomOut());
+    this.subscription.add(this.subscribeToDragZoomIn());
+    this.subscription.add(this.subscribeToDragZoomOut());
+    this.subscription.add(this.subscribeToZoom());
+    this.subscription.add(this.subscribeToZoomToExtent());
+  }
+
+  private subscribeToZoomIn(): Subscription {
+    return this.mapService.zoomInSubject.subscribe(() => this.view.setZoom(this.view.getZoom() + 1));
+  }
+
+  private subscribeToZoomOut(): Subscription {
+    return this.mapService.zoomOutSubject.subscribe(() => this.view.setZoom(this.view.getZoom() - 1));
+  }
+
+  private subscribeToDragZoomIn(): Subscription {
     const dragZoomIn = new DragZoom({
       condition: condition.always,
       out: false
     });
     this.map.addInteraction(dragZoomIn);
     dragZoomIn.setActive(false);
-    this.dragZoomInSubscription = this.mapService.dragZoomInSubject.subscribe((active) => {
+
+    return this.mapService.dragZoomInSubject.subscribe((active) => {
       dragZoomIn.setActive(true);
       dragZoomIn.on('boxend', () => dragZoomIn.setActive(false));
     });
+  }
 
+  private subscribeToDragZoomOut(): Subscription {
     const dragZoomOut = new DragZoom({
       condition: condition.always,
       out: true
     });
     this.map.addInteraction(dragZoomOut);
     dragZoomOut.setActive(false);
-    this.dragZoomOutSubscription = this.mapService.dragZoomOutSubject.subscribe((active) => {
+
+    return this.mapService.dragZoomOutSubject.subscribe((active) => {
       dragZoomOut.setActive(true);
       dragZoomOut.on('boxend', () => dragZoomOut.setActive(false));
     });
+  }
 
-    this.zoomSubscription = this.mapService.zoomSubject.subscribe(data => {
+  private subscribeToZoom(): Subscription {
+    return this.mapService.zoomSubject.subscribe(data => {
       if (data.center && data.center.length === 2 && data.zoom) {
         const center = proj.fromLonLat([data.center[0], data.center[1]]);
-        view.animate({ center: center, zoom: data.zoom });
+        this.view.animate({ center: center, zoom: data.zoom });
       } else {
         this.zoomToMapExtent();
       }
     });
+  }
 
-    this.zoomToExtentSubscription = this.mapService.zoomToExtentSubject.subscribe(data => {
+  private subscribeToZoomToExtent(): Subscription {
+    return this.mapService.zoomToExtentSubject.subscribe(data => {
       const extent = proj.transformExtent([data[0], data[1], data[2], data[3]], 'EPSG:4326', 'EPSG:3857');
-      view.fit(extent, { duration: 1000 });
+      this.view.fit(extent, { duration: 1000 });
     });
-
   }
 
   zoomToMapExtent() {
-    this.map.getView().setCenter(proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]));
-    this.map.getView().setZoom(this.defaultZoom);
+    this.view.setCenter(proj.fromLonLat([this.defaultCenter[0], this.defaultCenter[1]]));
+    this.view.setZoom(this.defaultZoom);
   }
 
+  private setupBboxLayer(): void {
+    this.bboxLayer = new Vector({
+      source: new VectorSource({wrapX: false})
+    });
+  }
+
+  private subscribeToBbox(): Subscription {
+    return this.mapService.bboxSubject.subscribe( layerId => {
+      this.downloadLayerId = layerId;
+      const dragBox = new DragBox();
+      this.map.addInteraction(dragBox);
+      dragBox.on('boxend', (event: MapBrowserEvent) => this.onBoxEnd(event));
+      dragBox.on('boxstart', (event: MapBrowserEvent) => this.onBoxStart(event));
+      // console.log('download by bbox ' + layerId);
+    });
+  }
+
+  private onBoxStart(event: MapBrowserEvent) {
+    // console.log(event.coordinate)
+    this.bbox = [];
+    this.bbox.push(event.coordinate[0], event.coordinate[1]);
+  }
+
+  private onBoxEnd(event: MapBrowserEvent) {
+    // console.log(event.coordinate)
+    this.bbox.push(event.coordinate[0], event.coordinate[1]);
+    // console.log(this.bbox)
+    const geometry = this.polygonFromBbox(this.bbox);
+    const feature = new Feature(geometry);
+    this.bboxLayer.setSource(new VectorSource({features: [feature]}));
+    this.mapService.onDownloadBboxComplete(feature, this.downloadLayerId);
+    // TODO - prompt user to ok/cancel for download
+    // TODO - do the download
+  }
+
+  private polygonFromBbox(bbox: number[]) {
+    const coordinatesArray: [number, number][][] = [[
+      [bbox[0], bbox[1]],
+      [bbox[2], bbox[1]],
+      [bbox[2], bbox[3]],
+      [bbox[0], bbox[3]],
+      [bbox[0], bbox[1]]
+    ]];
+    return new Polygon(coordinatesArray);
+  }
+
+
   ngOnDestroy() {
-    if (this.zoomInSubscription) {
-      this.zoomInSubscription.unsubscribe();
-    }
-    if (this.zoomOutSubscription) {
-      this.zoomOutSubscription.unsubscribe();
-    }
-    if (this.dragZoomInSubscription) {
-      this.dragZoomInSubscription.unsubscribe();
-    }
-    if (this.dragZoomOutSubscription) {
-      this.dragZoomOutSubscription.unsubscribe();
-    }
-    if (this.zoomSubscription) {
-      this.zoomSubscription.unsubscribe();
-    }
-    if (this.layersSubscription) {
-      this.layersSubscription.unsubscribe();
-    }
-    if (this.zoomToExtentSubscription) {
-      this.zoomToExtentSubscription.unsubscribe();
-    }
-    if (this.baseLayersSubscription) {
-      this.baseLayersSubscription.unsubscribe();
-    }
-    if (this.mapConfigSubscription) {
-      this.mapConfigSubscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

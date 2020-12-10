@@ -32,3 +32,5 @@ msbuild.wrn
 
 # configs
 appsettings.*.json
+
+.vscode/web-api.zip

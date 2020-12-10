@@ -82,6 +82,8 @@ namespace jnccwebapi.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<long>("Order");
+
                     b.Property<string>("Type");
 
                     b.HasKey("FilterId");
@@ -131,6 +133,8 @@ namespace jnccwebapi.Migrations
                     b.Property<double>("LayerCentreLon");
 
                     b.Property<int>("LayerDefaultOrder");
+
+                    b.Property<string>("LayerDownloadLayer");
 
                     b.Property<long>("LayerGroupId");
 
@@ -211,6 +215,8 @@ namespace jnccwebapi.Migrations
                 {
                     b.Property<long>("MapInstanceId")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("AllowLayerHighlight");
 
                     b.Property<string>("Attribution");
 

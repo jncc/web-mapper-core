@@ -17,13 +17,20 @@ import { FilterService } from './filter.service';
 import { IBaseLayer } from './models/base-layer.model';
 
 import { IDictionary } from './models/dictionary.model';
+import { IHighlightInfo } from './models/highlight-info.model';
+import { FeatureHighlightService } from './feature-highlight.service';
+import Feature from 'ol/feature';
+import { WfsDownloadService } from './wfs-download.service';
+import olMap from 'ol/map'; // rename the default export
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService implements OnDestroy {
 
-  map: any;
+  map: olMap;
+
+  mapSubject = new BehaviorSubject<olMap>(null);
 
   zoomInSubject = new Subject<void>();
   zoomOutSubject = new Subject<void>();
@@ -34,14 +41,40 @@ export class MapService implements OnDestroy {
 
   showLegendSubject = new Subject<{ name: string, legendUrl: string }>();
 
+  bboxSubject = new Subject<number>();
+
   private dataStore: {
     mapConfig: IMapConfig;
     layerLookup: ILayerConfig[];
     visibleLayers: ILayerConfig[];
     baseLayers: IBaseLayer[];
     featureInfos: any[];
+    highlightInfo: IHighlightInfo;
     filterLookups: { [lookupCategory: string]: ILookup[]; };
     activeFilters: IActiveFilter[];
+  } = {
+    mapConfig: {
+      mapInstances: [],
+      mapInstance: {
+        attribution: '',
+        baseLayers: [],
+        name: '',
+        description: '',
+        layerGroups: [],
+        center: [],
+        zoom: 0,
+        externalWmsUrls: [],
+        maxZoom: 20,
+        allowLayerHighlight: false
+      }
+    },
+    layerLookup: [],
+    visibleLayers: [],
+    baseLayers: [],
+    featureInfos: [],
+    highlightInfo: null,
+    filterLookups: {},
+    activeFilters: []
   };
 
   private _mapConfig: BehaviorSubject<IMapConfig>;
@@ -90,30 +123,10 @@ export class MapService implements OnDestroy {
     private apiService: ApiService,
     private layerService: LayerService,
     private permalinkService: PermalinkService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private featureHighlightService: FeatureHighlightService,
+    private wfsDownloadService: WfsDownloadService
   ) {
-    this.dataStore = {
-      mapConfig: {
-        mapInstances: [],
-        mapInstance: {
-          attribution: '',
-          baseLayers: [],
-          name: '',
-          description: '',
-          layerGroups: [],
-          center: [],
-          zoom: 0,
-          externalWmsUrls: [],
-          maxZoom: 20
-        }
-      },
-      layerLookup: [],
-      visibleLayers: [],
-      baseLayers: [],
-      featureInfos: [],
-      filterLookups: {},
-      activeFilters: []
-    };
     this._mapConfig = <BehaviorSubject<IMapConfig>>new BehaviorSubject(this.dataStore.mapConfig);
     this._visibleLayers = <BehaviorSubject<ILayerConfig[]>>new BehaviorSubject(this.dataStore.visibleLayers);
     this._featureInfos = <BehaviorSubject<any[]>>new BehaviorSubject(this.dataStore.featureInfos);
@@ -276,6 +289,7 @@ export class MapService implements OnDestroy {
 
   mapReady(map: any) {
     this.map = map;
+    this.mapSubject.next(this.map);
   }
 
   zoomIn() {
@@ -324,7 +338,7 @@ export class MapService implements OnDestroy {
     this.dragZoomOutSubject.next();
   }
 
-  showFeatureInfo(urls: string[]) {
+  showFeatureInfo(urls: string[], coordinate: [number, number], layerIds: number[]) {
     if (this.featureInfoSubscription) {
       this.featureInfoSubscription.unsubscribe();
     }
@@ -332,14 +346,37 @@ export class MapService implements OnDestroy {
       this.dataStore.featureInfos = data;
       this._featureInfos.next(this.dataStore.featureInfos);
     });
+    if (this.dataStore.mapConfig.mapInstance.allowLayerHighlight) {
+      this.highlightFeature(coordinate, layerIds);
+    }
+  }
+
+  private highlightFeature(coordinate: [number, number], layerIds: number[]) {
+      if (layerIds && layerIds.length) {
+        // selected layer is the top layer
+        const highlightedLayer = this.dataStore.visibleLayers.find(l => l.layerId === layerIds[0]);
+        const highlightInfo: IHighlightInfo = {
+          coordinate,
+          highlightedLayer
+        };
+        this.dataStore.highlightInfo = highlightInfo;
+      } else {
+        this.dataStore.highlightInfo = null;
+      }
+      this.featureHighlightService.highlightFeature(this.dataStore.highlightInfo);
   }
 
   clearFeatureInfo() {
     this.dataStore.featureInfos = [];
     this._featureInfos.next(this.dataStore.featureInfos);
+    this.dataStore.highlightInfo = null;
+    if (this.dataStore.mapConfig.mapInstance.allowLayerHighlight) {
+       this.featureHighlightService.highlightFeature(this.dataStore.highlightInfo);
+    }
   }
 
   changeLayerVisibility(layerId: number, visible: boolean) {
+    this.clearFeatureInfo();
     const layerConfig = this.getLayerConfig(layerId);
     if (layerConfig) {
       layerConfig.layer.setVisible(visible);
@@ -351,7 +388,6 @@ export class MapService implements OnDestroy {
         }
       } else {
         this.dataStore.visibleLayers = this.dataStore.visibleLayers.filter(visibleLayerConfig => visibleLayerConfig !== layerConfig);
-
         // client requested to keep filter active when layer removed
         // this.dataStore.activeFilters = this.dataStore.activeFilters.filter(f => f.layerId !== layerId);
         // this._activeFilters.next(this.dataStore.activeFilters);
@@ -375,6 +411,7 @@ export class MapService implements OnDestroy {
   }
 
   reorderVisibleLayers(previousIndex: number, currentIndex: number) {
+    this.clearFeatureInfo();
     moveItemInArray(this.dataStore.visibleLayers, previousIndex, currentIndex);
     this._visibleLayers.next(this.dataStore.visibleLayers);
   }
@@ -459,5 +496,14 @@ export class MapService implements OnDestroy {
     } else {
       this.zoomToMapExtent();
     }
+  }
+
+  startDownloadByBox(layerId: number) {
+    this.bboxSubject.next(layerId);
+  }
+
+  onDownloadBboxComplete(feature: Feature, layerId: number) {
+    const layerConfig = this.getLayerConfig(layerId);
+    this.wfsDownloadService.download(feature, layerConfig);
   }
 }

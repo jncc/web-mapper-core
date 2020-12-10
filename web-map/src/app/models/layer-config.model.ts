@@ -18,5 +18,6 @@ export interface ILayerConfig {
     metadataDescription: string;
     downloadURL: string;
     legendLayerName: string;
+    downloadLayer?: string;
     filters: IFilterConfig[];
 }

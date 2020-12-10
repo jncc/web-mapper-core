@@ -7,8 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  cssUrl = '/assets/map-styles.css';
-
   showLayers = true;
   showGotoXY = false;
 
@@ -18,7 +16,6 @@ export class AppComponent {
 
   onShowGotoXY() {
     this.showGotoXY = true;
-    console.log(this.showGotoXY);
   }
 
   onCloseGotoXY() {

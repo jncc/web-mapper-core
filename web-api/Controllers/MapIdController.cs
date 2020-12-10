@@ -98,12 +98,13 @@ namespace MapConfig.Controllers
                     //becomes an array
                     layer.Center[0] = layer.LayerCentreLon;
                     layer.Center[1] = layer.LayerCentreLat;
-                    //these need no conversion
+                    //these need no conversion, just mapping from DB schema name to JSON delivery name
                     layer.Order = layer.LayerOrder;
                     layer.Visible = layer.LayerVisible;
                     layer.Opacity = layer.LayerOpacity;
                     layer.Zoom = layer.LayerZoom;
                     layer.DefaultOrder = layer.LayerDefaultOrder;
+                    layer.DownloadLayer = layer.LayerDownloadLayer;
 
                     List<Filter> filters = new List<Filter>();
                     if( layer.Filters != null ) {

@@ -55,6 +55,10 @@ export class ActiveLayerComponent implements OnInit, OnDestroy {
     this.openFilter.emit();
   }
 
+  onDownloadBbox(layer: ILayerConfig) {
+    this.mapService.startDownloadByBox(layer.layerId);
+  }
+
   ngOnDestroy() {
     this.activeFiltersSubscription.unsubscribe();
   }

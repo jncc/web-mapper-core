@@ -38,21 +38,12 @@ export class FilterControlsComponent implements OnInit {
         });
     });
     this.mapService.createLayerFilter(this.layer.layerId, activeFilters);
+    this.closeFilter.emit();
   }
 
   onFilterCleared() {
     this.mapService.clearFilterLayer(this.layer);
   }
-
-  // onFilterCleared() {
-  //   let paramName = '';
-  //   if (this.isComplexFilter()) {
-  //     paramName = 'viewParams';
-  //   } else {
-  //     paramName = 'CQL_FILTER';
-  //   }
-  //   this.mapService.clearFilterLayer(this.layer.layerId, paramName);
-  // }
 
   onCloseFilter() {
     this.closeFilter.emit();

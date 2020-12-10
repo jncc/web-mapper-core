@@ -1,5 +1,6 @@
 import { APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -42,6 +43,9 @@ import { PermalinkComponent } from './permalink/permalink.component';
 import { MapCreditComponent } from './map-credit/map-credit.component';
 import { LayerSortPipe } from './layer-sort.pipe';
 import { GotoXyComponent } from './goto-xy/goto-xy.component';
+import { SearchLayersComponent } from './search-layers/search-layers.component';
+import { MeasureComponent } from './measure/measure.component';
+import { FilterSortPipe } from './filter-sort.pipe';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -77,10 +81,14 @@ export function initializeApp(appConfig: AppConfigService) {
     PermalinkComponent,
     MapCreditComponent,
     LayerSortPipe,
-    GotoXyComponent
+    GotoXyComponent,
+    SearchLayersComponent,
+    MeasureComponent,
+    FilterSortPipe
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([]),

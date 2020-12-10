@@ -1,0 +1,15 @@
+{
+    "Logging": {
+        "LogLevel": {
+            "Default": "WEBAPI_LOG_LEVEL"
+        }
+    },
+    "AllowedHosts": "*",
+    "ConnectionStrings": {
+        "JNCCWebApiDatabase": "Host=WEBAPI_DATABASE_HOST;Database=WEBAPI_DATABASE_NAME;Username=WEBAPI_DATABASE_USER;Password=WEBAPI_DATABASE_PASSWORD;SSL Mode=Require;Trust Server Certificate=true"
+    },
+    "WebApiConfig": {
+        "TestDataWMSUrl": "WEBAPI_TEST_DATA_WMS_URL",
+        "MaxGazetteerResults": WEBAPI_MAX_GAZETTEER_RESULTS
+    }
+}

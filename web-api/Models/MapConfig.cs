@@ -24,6 +24,8 @@ namespace MapConfig.Models
         [JsonIgnore]
         public string VisibleBaseLayer { get; set; }//which additional BaseLayer is initially visible? (either BaseLayerId or Name)
 
+        public Boolean AllowLayerHighlight { get; set; } //is the mapper allowed to request _hightlight ed layers
+
         [NotMapped]
         public double[] Center { get; set; } = new double[2];       //what's actually sent in the JSON response (an array)
         [NotMapped]
@@ -104,6 +106,8 @@ namespace MapConfig.Models
         public int LayerZoom { get; set; }        //Layer specific Zoom Level 1-22 - overrides Map zoom
         [JsonIgnore]
         public int LayerDefaultOrder { get; set; }        //Layer default (initial) ordering
+        [JsonIgnore]
+        public string LayerDownloadLayer { get; set; } //if the layer is actually a Layer Group in Geoserver then for download as shapefile we need a single layer name
 
         //foreign keys
         public long LayerGroupId { get; set; }    //which LayerGroup am I in?
@@ -122,7 +126,9 @@ namespace MapConfig.Models
         [NotMapped]
         public int Zoom { get; set; } 
         [NotMapped]
-        public int DefaultOrder { get; set; }  
+        public int DefaultOrder { get; set; }
+        [NotMapped]
+        public string DownloadLayer { get; set; } 
     }
 
     public class Filter {
@@ -135,7 +141,8 @@ namespace MapConfig.Models
         public string Attribute { get; set; }       //name of the WMS attribute to send
         public string LookupCategory { get; set; }  //name of the Filter Category to lookup
         public Boolean IsComplex { get; set; }      //is this complex filter, using SQL view viewparams instead of OGC?
-         
+        public long Order { get; set; }             //filter order
+
         //foreign keys
         public long LayerId { get; set; }           //which Layer do I belong to?
         public Layer Layer { get; set; }

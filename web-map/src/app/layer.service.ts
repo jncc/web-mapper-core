@@ -5,7 +5,6 @@ import TileWMS from 'ol/source/tilewms';
 import OSM from 'ol/source/osm';
 import BingMaps from 'ol/source/bingmaps';
 import Tile from 'ol/layer/tile';
-import XYZ from 'ol/source/xyz';
 import WMSCapabilities from 'ol/format/wmscapabilities';
 
 import { AppConfigService } from './app-config.service';
@@ -42,6 +41,7 @@ export class LayerService {
     const layer = new Tile({
       source: source
     });
+    layer.set('layerId', layerConfig.layerId);
     return layer;
   }
 
@@ -63,6 +63,7 @@ export class LayerService {
     // Bing Maps
     const bingLayer = new Tile({
       visible: false,
+      preload: Infinity,
       source: new BingMaps({
         key: AppConfigService.settings.bingMapsApiKey,
         imagerySet: 'Aerial'

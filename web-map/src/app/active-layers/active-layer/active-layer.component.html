@@ -8,6 +8,11 @@
                 {{layer.name}}
             </div>
             <div class="active-layer-body">
+                <!-- hide for now until feature complete -->
+                <!-- <div *ngIf="layer.downloadLayer" (click)="onDownloadBbox(layer)">
+                    <img src="../../../assets/icons/download.svg" tooltip="download by bbox"
+                        class="active-layer-control">
+                </div> -->
                 <div (click)="onShowOpacity($event)">
                     <img src="../../../assets/icons/contrast-circle.svg" [tooltip]="'opacity ' + layer.opacity"
                         class="active-layer-control">
