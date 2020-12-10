@@ -138,14 +138,14 @@ export class MapService implements OnDestroy {
     this.subscribeToMapInstanceConfig();
   }
 
-  private subscribeToConfig() {
+  private subscribeToConfig(): void {
     this.apiService.getConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstances = data;
       this._mapConfig.next(this.dataStore.mapConfig);
     }, error => console.error('Could not load map config from API.'));
   }
 
-  private subscribeToMapInstanceConfig() {
+  private subscribeToMapInstanceConfig(): void {
     this.apiService.getMapInstanceConfig().subscribe((data) => {
       this.dataStore.mapConfig.mapInstance = data;
       // console.log(this.dataStore.mapConfig.mapInstance);
@@ -158,7 +158,7 @@ export class MapService implements OnDestroy {
   }
 
   // transform map instance config received from api into hierarchy of layergroups, sublayergroups, layers
-  private createMapInstanceConfig() {
+  private createMapInstanceConfig(): void {
     // sort layer groups by config values
     this.dataStore.mapConfig.mapInstance.layerGroups.sort((a, b) => a.order - b.order);
     this.dataStore.mapConfig.mapInstance.layerGroups.forEach((layerGroupConfig: ILayerGroupConfig) => {
@@ -166,7 +166,7 @@ export class MapService implements OnDestroy {
     });
   }
 
-  private createSubLayerGroups(layerGroupConfig: ILayerGroupConfig) {
+  private createSubLayerGroups(layerGroupConfig: ILayerGroupConfig): void {
     // get all sublayergroups in the layer group config
     const subLayerGroups: ISubLayerGroupConfig[] = layerGroupConfig.layers.
       map((layer) => layer.subLayerGroup).
@@ -201,7 +201,7 @@ export class MapService implements OnDestroy {
     this._visibleLayers.next(this.dataStore.visibleLayers);
   }
 
-  private createLayersForLayerGroupConfig(layerGroupConfig: ILayerGroupConfig, format = 'image/png8') {
+  private createLayersForLayerGroupConfig(layerGroupConfig: ILayerGroupConfig, format = 'image/png8'): void {
     if (layerGroupConfig.layers.length) {
       layerGroupConfig.layers.forEach((layerConfig: ILayerConfig) => {
         layerConfig.layer = this.layerService.createLayer(layerConfig, format);
@@ -221,7 +221,7 @@ export class MapService implements OnDestroy {
     this._baseLayers.next(this.dataStore.baseLayers);
   }
 
-  private createFilterLookups() {
+  private createFilterLookups(): void {
     const filterLookups = this.dataStore.filterLookups;
     const lookupCategories: string[] = [];
     this.dataStore.layerLookup.forEach(layerConfig =>
@@ -238,7 +238,7 @@ export class MapService implements OnDestroy {
     });
   }
 
-  applyActiveFilters(activeFilters: IActiveFilter[]) {
+  applyActiveFilters(activeFilters: IActiveFilter[]): void {
     const layerIds = Array.from(new Set(activeFilters.map(activeFilter => activeFilter.layerId)));
     layerIds.forEach(layerId => {
       const activeFiltersForLayer = activeFilters.filter(activeFilter => activeFilter.layerId === layerId);
@@ -246,7 +246,7 @@ export class MapService implements OnDestroy {
     });
   }
 
-  createLayerFilter(layerId: number, activeFilters: IActiveFilter[]) {
+  createLayerFilter(layerId: number, activeFilters: IActiveFilter[]): void {
     const layerConfig = this.getLayerConfig(layerId);
     if (layerConfig) {
       const filterParameters = this.filterService.createFilterParametersForLayer(layerConfig, activeFilters, this.dataStore.filterLookups);
@@ -256,7 +256,7 @@ export class MapService implements OnDestroy {
     }
   }
 
-  filterLayer(layerConfig: ILayerConfig, filterParameters: IDictionary<string>, activeFilters: IActiveFilter[]) {
+  filterLayer(layerConfig: ILayerConfig, filterParameters: IDictionary<string>, activeFilters: IActiveFilter[]): void {
     const source = layerConfig.layer.getSource();
     const params = source.getParams();
     Object.keys(filterParameters).forEach(key => delete params[key]);
@@ -276,7 +276,7 @@ export class MapService implements OnDestroy {
     this._activeFilters.next(this.dataStore.activeFilters);
   }
 
-  clearFilterLayer(layerConfig: ILayerConfig) {
+  clearFilterLayer(layerConfig: ILayerConfig): void {
     const source = layerConfig.layer.getSource();
     const params = source.getParams();
     delete params['viewParams'];
@@ -287,26 +287,26 @@ export class MapService implements OnDestroy {
     this._activeFilters.next(this.dataStore.activeFilters);
   }
 
-  mapReady(map: any) {
+  mapReady(map: any): void {
     this.map = map;
     this.mapSubject.next(this.map);
   }
 
-  zoomIn() {
+  zoomIn(): void {
     this.zoomInSubject.next();
   }
 
-  zoomOut() {
+  zoomOut(): void {
     this.zoomOutSubject.next();
   }
 
-  zoomToMapExtent() {
+  zoomToMapExtent(): void {
     const center = this.dataStore.mapConfig.mapInstance.center;
     const zoom = this.dataStore.mapConfig.mapInstance.zoom;
     this.zoomSubject.next({ center: center, zoom: zoom });
   }
 
-  zoomToLayerExtent(layerId: number) {
+  zoomToLayerExtent(layerId: number): void {
     const layerConfig = this.getLayerConfig(layerId);
     // check for null and undefined
     if (layerConfig.extent != null) {
@@ -316,29 +316,29 @@ export class MapService implements OnDestroy {
     }
   }
 
-  zoomToCenterZoom(center: number[], zoom: number) {
+  zoomToCenterZoom(center: number[], zoom: number): void {
     this.zoomSubject.next({ center: center, zoom: zoom });
   }
 
-  panToLonLat(lon: number, lat: number) {
+  panToLonLat(lon: number, lat: number): void {
     const zoom = this.map.getView().getZoom();
     const center  = [lon, lat];
     this.zoomSubject.next({ center: center, zoom: zoom });
   }
 
-  zoomToExtent(extent: number[]) {
+  zoomToExtent(extent: number[]): void {
     this.zoomToExtentSubject.next(extent);
   }
 
-  dragZoomIn() {
+  dragZoomIn(): void {
     this.dragZoomInSubject.next();
   }
 
-  dragZoomOut() {
+  dragZoomOut(): void {
     this.dragZoomOutSubject.next();
   }
 
-  showFeatureInfo(urls: string[], coordinate: [number, number], layerIds: number[]) {
+  showFeatureInfo(urls: string[], coordinate: [number, number], layerIds: number[]): void {
     if (this.featureInfoSubscription) {
       this.featureInfoSubscription.unsubscribe();
     }
@@ -351,7 +351,7 @@ export class MapService implements OnDestroy {
     }
   }
 
-  private highlightFeature(coordinate: [number, number], layerIds: number[]) {
+  private highlightFeature(coordinate: [number, number], layerIds: number[]): void {
       if (layerIds && layerIds.length) {
         // selected layer is the top layer
         const highlightedLayer = this.dataStore.visibleLayers.find(l => l.layerId === layerIds[0]);
@@ -366,7 +366,7 @@ export class MapService implements OnDestroy {
       this.featureHighlightService.highlightFeature(this.dataStore.highlightInfo);
   }
 
-  clearFeatureInfo() {
+  clearFeatureInfo(): void {
     this.dataStore.featureInfos = [];
     this._featureInfos.next(this.dataStore.featureInfos);
     this.dataStore.highlightInfo = null;
@@ -375,7 +375,7 @@ export class MapService implements OnDestroy {
     }
   }
 
-  changeLayerVisibility(layerId: number, visible: boolean) {
+  changeLayerVisibility(layerId: number, visible: boolean): void {
     this.clearFeatureInfo();
     const layerConfig = this.getLayerConfig(layerId);
     if (layerConfig) {
@@ -399,30 +399,30 @@ export class MapService implements OnDestroy {
     }
   }
 
-  removeAllVisibleLayers() {
+  removeAllVisibleLayers(): void {
     const layersToRemove = [...this.dataStore.visibleLayers];
     layersToRemove.forEach(layer => this.changeLayerVisibility(layer.layerId, false));
   }
 
-  changeLayerOpacity(layerId: number, opacity: number) {
+  changeLayerOpacity(layerId: number, opacity: number): void {
     const layerConfig = this.getLayerConfig(layerId);
     layerConfig.layer.setOpacity(opacity);
     layerConfig.opacity = opacity;
   }
 
-  reorderVisibleLayers(previousIndex: number, currentIndex: number) {
+  reorderVisibleLayers(previousIndex: number, currentIndex: number): void {
     this.clearFeatureInfo();
     moveItemInArray(this.dataStore.visibleLayers, previousIndex, currentIndex);
     this._visibleLayers.next(this.dataStore.visibleLayers);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.featureInfoSubscription) {
       this.featureInfoSubscription.unsubscribe();
     }
   }
 
-  showLegend(layerId: number) {
+  showLegend(layerId: number): void {
     const layerConfig = this.getLayerConfig(layerId);
     if (layerConfig) {
       this.clearFeatureInfo();
@@ -438,7 +438,7 @@ export class MapService implements OnDestroy {
     }
   }
 
-  hideLegend() {
+  hideLegend(): void {
     this.showLegendSubject.next(null);
   }
 
@@ -451,7 +451,7 @@ export class MapService implements OnDestroy {
    *
    * @param baseLayerId the id provided for the visible baselayer
    */
-  setBaseLayer(baseLayerId: number) {
+  setBaseLayer(baseLayerId: number): void {
     if (this.dataStore.baseLayers.find(baseLayer => baseLayer.baseLayerId === baseLayerId)) {
       this.dataStore.baseLayers.forEach(baseLayer => {
         if (baseLayer.baseLayerId === baseLayerId) {
@@ -463,7 +463,7 @@ export class MapService implements OnDestroy {
     }
   }
 
-  addExternalLayerGroupConfig(layerGroupConfig: ILayerGroupConfig) {
+  addExternalLayerGroupConfig(layerGroupConfig: ILayerGroupConfig): void {
     const format = 'image/png';
     this.createSubLayerGroups(layerGroupConfig);
     this.createLayersForLayerGroupConfig(layerGroupConfig, format);
@@ -483,7 +483,7 @@ export class MapService implements OnDestroy {
     return permalink;
   }
 
-  applyPermalink() {
+  applyPermalink(): void {
     const permalink: IPermalink = this.permalinkService.readPermalink();
     if (permalink) {
       this.zoomSubject.next({ center: permalink.center, zoom: permalink.zoom });
@@ -498,11 +498,11 @@ export class MapService implements OnDestroy {
     }
   }
 
-  startDownloadByBox(layerId: number) {
+  startDownloadByBox(layerId: number): void {
     this.bboxSubject.next(layerId);
   }
 
-  onDownloadBboxComplete(feature: Feature, layerId: number) {
+  onDownloadBboxComplete(feature: Feature, layerId: number): void {
     const layerConfig = this.getLayerConfig(layerId);
     this.wfsDownloadService.download(feature, layerConfig);
   }
