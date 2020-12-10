@@ -35,6 +35,9 @@
                 @Html.DisplayNameFor(model => model.Filter[0].IsComplex)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Filter[0].Order)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Filter[0].Layer)
             </th>
             <th></th>
@@ -63,6 +66,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsComplex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Layer.LayerId)

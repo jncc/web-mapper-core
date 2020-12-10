@@ -141,7 +141,8 @@ namespace MapConfig.Models
         public string Attribute { get; set; }       //name of the WMS attribute to send
         public string LookupCategory { get; set; }  //name of the Filter Category to lookup
         public Boolean IsComplex { get; set; }      //is this complex filter, using SQL view viewparams instead of OGC?
-         
+        public long Order { get; set; }             //filter order
+
         //foreign keys
         public long LayerId { get; set; }           //which Layer do I belong to?
         public Layer Layer { get; set; }
