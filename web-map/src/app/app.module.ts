@@ -45,6 +45,7 @@ import { LayerSortPipe } from './layer-sort.pipe';
 import { GotoXyComponent } from './goto-xy/goto-xy.component';
 import { SearchLayersComponent } from './search-layers/search-layers.component';
 import { MeasureComponent } from './measure/measure.component';
+import { FilterSortPipe } from './filter-sort.pipe';
 
 export function initializeApp(appConfig: AppConfigService) {
   return () => appConfig.load();
@@ -82,7 +83,8 @@ export function initializeApp(appConfig: AppConfigService) {
     LayerSortPipe,
     GotoXyComponent,
     SearchLayersComponent,
-    MeasureComponent
+    MeasureComponent,
+    FilterSortPipe
   ],
   imports: [
     BrowserModule,

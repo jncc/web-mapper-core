@@ -9,4 +9,5 @@ export interface IFilterConfig {
     attribute: string;
     lookupCategory: string;
     lookupValues: ILookup[];
+    order: number;
 }

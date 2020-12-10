@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="controls-container-body">
-        <app-filter-control *ngFor="let filter of layer.filters" [filterConfig]="filter"
+        <app-filter-control *ngFor="let filter of layer.filters | filterSort" [filterConfig]="filter"
             [filterLookup]="filterLookup[filter.lookupCategory]" [activeFilters]="activeFilters">
         </app-filter-control>
         <div class="controls-container-footer">
