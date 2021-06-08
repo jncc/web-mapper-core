@@ -1,25 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Buffers;
-using System.Threading.Tasks;
-using System.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Newtonsoft.Json;
-
 using Config.Options;
 using MapConfig.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace JNCCMapConfigEditor
 {
@@ -55,15 +45,23 @@ namespace JNCCMapConfigEditor
                     builder => builder.AllowAnyOrigin());
     
             });
+
+            // services.AddControllers()
+            // .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            // .AddNewtonsoftJson(options => {
+            //     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            // });
+
             services.AddMvc()
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddJsonOptions(options => {
+            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            .AddMvcOptions(options => { options.EnableEndpointRouting = false; })
+            .AddNewtonsoftJson(options => {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope()) {
