@@ -91,7 +91,7 @@ export function initializeApp(appConfig: AppConfigService) {
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot([]),
+    RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
     DragDropModule,
     OverlayModule,
     Ng5SliderModule,
