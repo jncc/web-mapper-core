@@ -36,8 +36,8 @@ namespace JNCCMapConfigEditor
             //grab anything we need from the config section WebApiConfig
             services.Configure<WebApiConfig>(Configuration.GetSection("WebApiConfig"));
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<MapConfigContext>(config =>
-                config.UseNpgsql(Configuration.GetConnectionString("JNCCWebApiDatabase")));
+            services.AddDbContext<MapConfigContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("JNCCWebApiDatabase")));
 
             services.AddCors(options => 
             {
