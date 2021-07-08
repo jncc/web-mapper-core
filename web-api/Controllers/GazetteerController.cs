@@ -25,22 +25,17 @@ namespace MapConfig.Controllers
             _webapiconfig = webapiconfig;
         }
 
-        // GET: api/Gazetteer
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Gazetteer>>> GetGazetteer()
-        {
-            //return await _context.Gazetteer.ToListAsync();
-            List<Gazetteer> gazetteer = new List<Gazetteer>();
-            return Json( gazetteer );
-        }
-
         // GET: api/Gazetteer/name
-        [HttpGet("{name}")]
-        public async Task<ActionResult<Gazetteer>> GetGazetteer(string name)
+        [HttpGet("{name?}")]
+        public async Task<ActionResult<Gazetteer>> GetGazetteer(string name = null)
         {
+            List<Gazetteer> gazetteer = new List<Gazetteer>();
+            if(String.IsNullOrWhiteSpace(name))
+            {
+                return Json( gazetteer );
+            }
 
             int limit = _webapiconfig.Value.MaxGazetteerResults;
-            List<Gazetteer> gazetteer;
             gazetteer = await _context.Gazetteer
                 .Where(g => g.Name.ToUpper().Contains(name.ToUpper()))
                 .OrderBy(g => g.Name.ToUpper().IndexOf(name.ToUpper()))
