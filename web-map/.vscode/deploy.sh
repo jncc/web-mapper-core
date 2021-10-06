@@ -1,7 +1,7 @@
 #!/bin/bash
 
 project="jncc-web-map"
-host="esdm-xen1-04.esdm.co.uk"
+host="jnccdev-map.esdm.co.uk"
 user="esdm"
 remotepath="/home/esdm/web-published"
 

@@ -26,31 +26,31 @@
                 "panel": "new"
             }
         },
-        {
-            "label": "Deploy from Test to EMODnet Staging Server",
-            "type": "shell",
-            "command": ".vscode/deploy_to_staging_emodnet.sh",
-            "windows": {
-                "command": ".vscode\\\\deploy_to_staging_emodnet.sh"
-            },
-            "group": "test",
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            }
-        },
-        {
-            "label": "Deploy from Test to MPA Staging Server",
-            "type": "shell",
-            "command": ".vscode/deploy_to_staging_mpa.sh",
-            "windows": {
-                "command": ".vscode\\\\deploy_to_staging_mpa.sh"
-            },
-            "group": "test",
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            }
-        }
+        // {
+        //     "label": "Deploy from Test to EMODnet Staging Server",
+        //     "type": "shell",
+        //     "command": ".vscode/deploy_to_staging_emodnet.sh",
+        //     "windows": {
+        //         "command": ".vscode\\\\deploy_to_staging_emodnet.sh"
+        //     },
+        //     "group": "test",
+        //     "presentation": {
+        //         "reveal": "always",
+        //         "panel": "new"
+        //     }
+        // },
+        // {
+        //     "label": "Deploy from Test to MPA Staging Server",
+        //     "type": "shell",
+        //     "command": ".vscode/deploy_to_staging_mpa.sh",
+        //     "windows": {
+        //         "command": ".vscode\\\\deploy_to_staging_mpa.sh"
+        //     },
+        //     "group": "test",
+        //     "presentation": {
+        //         "reveal": "always",
+        //         "panel": "new"
+        //     }
+        // }
     ]
 }
