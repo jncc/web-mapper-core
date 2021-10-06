@@ -1,7 +1,7 @@
 #!/bin/bash
 
 project="jncc-web-api"
-host="esdm-xen1-04.esdm.co.uk"
+host="jnccdev-api.esdm.co.uk"
 user="esdm"
 remotepath="/home/esdm/dotnet-published"
 
