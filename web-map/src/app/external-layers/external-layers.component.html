@@ -19,7 +19,7 @@
         <div class="external-service-text">
             <input type="text" [(ngModel)]="url">
         </div>
-        <div>(Or enter a WMS URL in the format: https://jnccdev-geo.esdm.co.uk/geoserver/emodnet/wms)</div>
+        <div>(Or enter a WMS URL in the format: https://www.geoserver-url.com/wms)</div>
         <button (click)="onGetExternalLayers()" class="primary dialog-button" [disabled]="!url">Get layers</button>
         <div *ngIf="layerGroupConfig$ | async as layerGroupConfig">
             <div *ngIf="layerGroupConfig.layers.length; else noLayers" class="external-layers-container">
